@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_social"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Social"
+        />
+
+    <item
+        android:id="@+id/navigation_cards"
+        android:icon="@drawable/ic_filter_none_black_24dp"
+        android:title="Cards"
+        />
+    <item
+        android:id="@+id/navigation_video"
+        android:icon="@drawable/ic_desktop_windows_black_24dp"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_brightness_7_black_24dp"
+        android:title="Settings"/>
+
+</menu>

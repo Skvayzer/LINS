@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_word"
+        android:text="Time"
+        android:gravity="center_horizontal"
+        android:textSize="50dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/background_dark"/>
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_volume_up_black_24dp"
+        android:background="@null"
+        android:paddingLeft="20dp"
+        android:paddingVertical="20dp"
+        android:layout_toRightOf="@id/current_word"
+        android:id="@+id/sound_btn"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@id/current_word"
+        android:id="@+id/linesep"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/word_list"
+        android:layout_above="@id/addToDict_btn"
+        android:layout_below="@id/current_word"
+        android:clickable="false"
+        android:contextClickable="false"
+        android:textColor="@android:color/background_dark"
+        >
+    </ListView>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Добавить в словарь"
+        android:textSize="20dp"
+        android:id="@+id/addToDict_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>

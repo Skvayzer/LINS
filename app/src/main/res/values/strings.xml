@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MP1.1</string>
+    <string name="swipe_left">Помню </string>
+    <string name="swipe_right">Повторять </string>
+    <string name="view_swiped_right">Вправо </string>
+    <string name="view_swiped_left">Влево </string>
+    <string name="stack_empty">Пусто</string>
+    <string name="stack_reset">Сбросить</string>
+    <string name="dummy_text">делай проект дебил </string>
+    <string name="dummy_fab">прошу улучшай меня каждый день </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

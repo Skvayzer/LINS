@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "419796071813",
+    "firebase_url": "https://memory-palace-428ff.firebaseio.com",
+    "project_id": "memory-palace-428ff",
+    "storage_bucket": "memory-palace-428ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419796071813:android:8b6488565642e5f9",
+        "android_client_info": {
+          "package_name": "com.example.mp11"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419796071813-sem3ockqesbt0oitcc6f6vblfrjojbjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mp11",
+            "certificate_hash": "d8744f751996668e4da37dbaa3a32c01360ae650"
+          }
+        },
+        {
+          "client_id": "419796071813-0tbpg08hh46t81c399m88ggpjumckqc2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn8mU1prKsXHV_Zf6J1QMNPVRSF8va5f4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419796071813-0tbpg08hh46t81c399m88ggpjumckqc2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
