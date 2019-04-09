@@ -2,6 +2,7 @@ package com.example.mp11;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -17,6 +18,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +47,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private SurfaceHolder vidHolder;
     private SurfaceView vidSurface;
     TextView tv;
-
+    Button btn;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -89,7 +91,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_video_player, container, false);
+
 //        vidSurface = (SurfaceView) view.findViewById(R.id.surfView);
 //        vidHolder = vidSurface.getHolder();
 //        vidHolder.addCallback(this);
@@ -100,54 +102,65 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //
 //
 //        PlayVideo();
-        tv=(TextView)view.findViewById(R.id.captiontv);
-        foo();
+        View view= inflater.inflate(R.layout.fragment_settings, container, false);
+        btn=(Button)view.findViewById(R.id.govideo);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getContext(), VideoPlayer.class);
+
+                startActivity(i);
+            }
+        });
+
 
 
         return view;
     }
-    private void foo() {
-        SpannableString link = makeLinkSpan("click here", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "YOU CLICKED", Toast.LENGTH_SHORT).show();
-            }
-        });
+//    private void foo() {
+//        SpannableString link = makeLinkSpan("click here", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(), "YOU CLICKED", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        tv.setText("To perform action, ");
+//
+//        tv.append(link);
+//        tv.append(".");
+//        makeLinksFocusable(tv);
+//    }
+//    private SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
+//        SpannableString link = new SpannableString(text);
+//        link.setSpan(new ClickableString(listener), 0, text.length(),
+//                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+//        return link;
+//    }
+//
+//    private void makeLinksFocusable(TextView tv) {
+//        MovementMethod m = tv.getMovementMethod();
+//        if ((m == null) || !(m instanceof LinkMovementMethod)) {
+//            if (tv.getLinksClickable()) {
+//                tv.setMovementMethod(LinkMovementMethod.getInstance());
+//            }
+//        }
+//    }
+//
+//
+//
+//    private static class ClickableString extends ClickableSpan {
+//        private View.OnClickListener mListener;
+//        public ClickableString(View.OnClickListener listener) {
+//            mListener = listener;
+//        }
+//        @Override
+//        public void onClick(View v) {
+//            mListener.onClick(v);
+//        }
+//    }
 
-        tv.setText("To perform action, ");
 
-        tv.append(link);
-        tv.append(".");
-        makeLinksFocusable(tv);
-    }
-    private SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
-        SpannableString link = new SpannableString(text);
-        link.setSpan(new ClickableString(listener), 0, text.length(),
-                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        return link;
-    }
-
-    private void makeLinksFocusable(TextView tv) {
-        MovementMethod m = tv.getMovementMethod();
-        if ((m == null) || !(m instanceof LinkMovementMethod)) {
-            if (tv.getLinksClickable()) {
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
-            }
-        }
-    }
-
-
-
-    private static class ClickableString extends ClickableSpan {
-        private View.OnClickListener mListener;
-        public ClickableString(View.OnClickListener listener) {
-            mListener = listener;
-        }
-        @Override
-        public void onClick(View v) {
-            mListener.onClick(v);
-        }
-    }
 //    private void PlayVideo()
 //    {
 //        try

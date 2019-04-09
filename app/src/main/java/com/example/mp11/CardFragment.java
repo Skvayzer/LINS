@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +17,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.MyDatabase.MyCustomAdapter;
+import com.example.mp11.MyDatabase.MyDbHelper;
+import com.example.mp11.MyDatabase.WordModel;
+import com.example.mp11.views.TranslationAdapter;
+import com.example.mp11.views.TranslationItem;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import link.fls.swipestack.SwipeStack;
 
@@ -48,6 +58,10 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     private SwipeStackAdapter mAdapter;
     private TextView word, anword;
     boolean visibility=false;
+    ListView list;
+    MyDbHelper databaseHelper;
+    private ArrayList<WordModel> wordModelArrayList;
+    private MyCustomAdapter customAdapter;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -97,12 +111,16 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mButtonLeft = (Button) view.findViewById(R.id.buttonSwipeLeft);
         mButtonRight = (Button) view.findViewById(R.id.buttonSwipeRight);
         mFab = (FloatingActionButton) view.findViewById(R.id.fabAdd);
-       showbtn=(ImageButton)view.findViewById(R.id.showwordbtn);
-        word=(TextView) view.findViewById(R.id.current_word_card) ;
-        anword=(TextView) view.findViewById(R.id.textViewCardanother);
+
+
+
+
+
+
 
         mButtonLeft.setOnClickListener(this);
         mButtonRight.setOnClickListener(this);
+
         mFab.setOnClickListener(this);
 
         mData = new ArrayList<>();
@@ -110,22 +128,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mSwipeStack.setAdapter(mAdapter);
         mSwipeStack.setListener(this);
 
-//        showbtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(!visibility){
-//                    anword.setVisibility(View.VISIBLE);
-//                    word.setVisibility(View.INVISIBLE);
-//
-//                }else{
-//                    anword.setVisibility(View.INVISIBLE);
-//                    word.setVisibility(View.VISIBLE);
-//                }
-//                visibility=!visibility;
-//            }
-//        });
 
-        fillWithTestData();
         return view;
     }
 
@@ -196,12 +199,16 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     public void onViewSwipedToLeft(int position) {
         String swipedElement = mAdapter.getItem(position);
         Toast.makeText(getActivity(), getString(R.string.view_swiped_left) +" "+ swipedElement, Toast.LENGTH_SHORT).show();
+        showbtn.setVisibility(View.VISIBLE);
+        list.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onViewSwipedToRight(int position) {
         String swipedElement = mAdapter.getItem(position);
         Toast.makeText(getActivity(), getString(R.string.view_swiped_right)+ " "+ swipedElement, Toast.LENGTH_SHORT).show();
+        showbtn.setVisibility(View.VISIBLE);
+        list.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -245,16 +252,59 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         public long getItemId(int position) {
             return position;
         }
+        public void update(){
 
+        }
+
+        public View getView(View view){
+
+            return view;
+        }
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
+        public View getView(int position, View convertView, final ViewGroup parent) {
+
                 convertView = getLayoutInflater().inflate(R.layout.card, parent, false);
-            }
+
 
             TextView textViewCard = (TextView) convertView.findViewById(R.id.current_word_card);
             textViewCard.setText(mData.get(position));
 
+            anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
+            list=(ListView)convertView.findViewById(R.id.word_list_card);
+            MyDbHelper databaseHelper = new MyDbHelper(getContext());
+
+            wordModelArrayList = databaseHelper.getAllWords();
+            Random random = new Random();
+            int randomNumber = random.nextInt(wordModelArrayList.size());
+            String curword=wordModelArrayList.get(randomNumber).getWord();
+            customAdapter = new MyCustomAdapter(getContext(),wordModelArrayList,curword);
+            list.setAdapter(customAdapter);
+
+            textViewCard.setText(wordModelArrayList.get(0).getWord());
+            showbtn=(ImageButton)convertView.findViewById(R.id.showwordbtn);
+            final View view= convertView;
+            final ViewGroup parent1=parent;
+
+            showbtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                        if(list.getVisibility()!=View.VISIBLE){
+                            list.setVisibility(View.VISIBLE);
+                            showbtn.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getContext(),"lol",Toast.LENGTH_SHORT).show();
+
+                           // mSwipeStack.removeView(view);
+
+
+                            getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
+
+
+
+                        }
+
+                }
+            });
             return convertView;
         }
     }

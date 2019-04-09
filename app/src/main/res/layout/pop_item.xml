@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/meanings"
-        android:text="WORD"
+        android:text="MEANINGS"
         android:textSize="30dp"
         android:textColor="@android:color/background_dark"
         />
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/syn_item"
-        android:text="MEANING"
+        android:text="SYNS"
         android:textSize="20dp"
         android:layout_below="@id/meanings"
         android:textColor="@android:color/background_dark"/>

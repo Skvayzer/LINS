@@ -87,15 +87,15 @@ public class SettingsFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)   {
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
-        btn=(Button)view.findViewById(R.id.govideo);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(getContext(), VideoPlayer.class);
-
-                startActivity(i);
-            }
-        });
+//        btn=(Button)view.findViewById(R.id.govideo);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i=new Intent(getContext(), VideoPlayer.class);
+//
+//                startActivity(i);
+//            }
+//        });
 
 
         return view;

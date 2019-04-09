@@ -37,7 +37,7 @@ public class SwipeStackAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         convertView = inflater.inflate(R.layout.card, parent, false);
-        TextView textViewCard = (TextView) convertView.findViewById(R.id.textViewCard);
+        TextView textViewCard = (TextView) convertView.findViewById(R.id.current_word_card);
         textViewCard.setText(mData.get(position));
 
         return convertView;

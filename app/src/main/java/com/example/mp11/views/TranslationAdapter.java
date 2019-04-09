@@ -27,13 +27,13 @@ public class TranslationAdapter extends ArrayAdapter<TranslationItem> {
         String s="";
         if(item.meanings!=null) {
             for (String a : item.meanings) s += a + ", ";
-            ((TextView) convertView.findViewById(R.id.meanings)).setText(item.index + "   " + s.substring(0,s.length()-2));
+            if(!s.equals(""))((TextView) convertView.findViewById(R.id.meanings)).setText(item.index + "   " + s.substring(0,s.length()-2));
         }
 
         s="";
         if(item.syn!= null) {
             for (String a : item.syn) s += a + ", ";
-            ((TextView) convertView.findViewById(R.id.syn_item)).setText(String.valueOf("(" + s.substring(0,s.length()-2) + ")"));
+            if(!s.equals(""))((TextView) convertView.findViewById(R.id.syn_item)).setText(String.valueOf("(" + s.substring(0,s.length()-2) + ")"));
         }
         s="";
         if(item.ex!= null) {

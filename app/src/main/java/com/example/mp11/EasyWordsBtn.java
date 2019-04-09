@@ -6,8 +6,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -22,11 +24,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.ForDatabases.DbHelper;
+import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
 import com.example.mp11.yandex.dictslate.Model;
@@ -254,8 +259,18 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                     }
 
                 }
+                final MyDbHelper databaseHelper = new MyDbHelper(getApplicationContext());
 
-                ArrayList<TranslationItem> result = new ArrayList<>();
+
+                String meanings="";
+                String syns="(";
+                String ex="";
+
+                final ArrayList<String> defmean=new ArrayList<>();
+                final ArrayList<String> defsyns=new ArrayList<>();
+                final ArrayList<String> defex=new ArrayList<>();
+
+                final ArrayList<TranslationItem> result = new ArrayList<>();
                 String transcription="";
                 for (int i = 0; i < response.body().def.length; i++) {
                     TranslationItem item = new TranslationItem();
@@ -264,9 +279,11 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
                         Model.Def.Tr cur = response.body().def[i].tr[j];
                         item.meanings.add(cur.text);
+                        meanings+=cur.text + ", ";
                         if(cur.syn!=null)
                             for (Model.Def.Tr.Syn a : cur.syn) {
                                 item.meanings.add(a.text);
+                                meanings+=a.text+", ";
                             }
                         if(cur.mean!=null)
                             for (Model.Def.Tr.Mean a : cur.mean) {
@@ -278,14 +295,23 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                                         break;
                                     }
                                 }
-                                if(isEnglish) item.syn.add(now);
-                                else item.meanings.add(now);
+                                if(isEnglish){
+                                    item.syn.add(now);
+                                    syns+=now+", ";
+                                }
+                                else{
+                                    item.meanings.add(now);
+                                    meanings+=now+", ";
+                                }
 
                             }
                         if(cur.ex!=null)
                             for (Model.Def.Ex a : cur.ex) {
-                                for (Model.Def.Tr b : a.tr)
+                                for (Model.Def.Tr b : a.tr){
                                     item.ex.put(a.text, b.text);
+                                    ex+=a.text + " - " + b.text + '\n';
+                                }
+
                             }
 
 
@@ -293,10 +319,21 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                     transcription="["+response.body().def[i].ts+"]";
                     item.index=i+1;
                     result.add(item);
+                    defmean.add(meanings);
+                    meanings="";
+                    defsyns.add(syns);
+                    syns="";
+                    defex.add(ex);
+                    ex="";
+
+
 
                 }
+//                final String meanin=meanings;
+//                final String synin=syns;
+//                final String exin=ex;
                 AlertDialog.Builder pop = new AlertDialog.Builder(getApplicationContext());
-                AlertDialog kek=pop.create();
+                final AlertDialog kek=pop.create();
                 kek.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
 //                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
@@ -312,6 +349,20 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), result.toArray(new TranslationItem[result.size()]));
                 lv.setAdapter(adapter);
 
+                Button btn=(Button)view.findViewById(R.id.addToDict_btn);
+                final ArrayList<TranslationItem> result1 = result;
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        for(int q=0;q<defmean.size();q++){
+                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
+                        }
+
+
+                        kek.hide();
+                    }
+                });
 
                   kek.show();
 

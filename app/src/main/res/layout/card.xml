@@ -39,10 +39,11 @@
             android:layout_below="@id/current_word_card"
             android:layout_centerHorizontal="true"
             android:padding="20dp"
+            android:visibility="invisible"
             />
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:background="@android:color/darker_gray"
             android:layout_below="@id/current_word_card"
             android:id="@+id/linesepcard"/>
@@ -50,11 +51,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/word_list_card"
-
-            android:layout_below="@id/current_word_card"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:listSelector="@android:color/transparent"
+            android:layout_below="@id/linesepcard"
             android:clickable="false"
             android:contextClickable="false"
             android:textColor="@android:color/background_dark"
+
+
             >
         </ListView>
 

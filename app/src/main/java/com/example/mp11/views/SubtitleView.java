@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -471,6 +472,15 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
                 TranslationAdapter adapter = new TranslationAdapter(getContext(), result.toArray(new TranslationItem[result.size()]));
                 lv.setAdapter(adapter);
+                Button btn=(Button)view.findViewById(R.id.addToDict_btn);
+                btn.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+
+                    }
+                });
 
                 pop.show();
                 //Toast.makeText(getApplicationContext(),"Вот дерьмо",Toast.LENGTH_SHORT).show();
