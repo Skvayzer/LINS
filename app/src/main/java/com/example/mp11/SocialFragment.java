@@ -1,6 +1,7 @@
 package com.example.mp11;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,8 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.mp11.MyDatabase.MyDbHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,6 +42,10 @@ public class SocialFragment extends Fragment {
     private EditText editText;
     private ListView lv;
     private MessageListAdapter adapter;
+
+    private Button btnStore, btnGetall;
+    private EditText etword, etdefinition, etsyns;
+    private MyDbHelper databaseHelper;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -80,23 +89,51 @@ boolean test=true;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_social, container, false);
-        sendbtn=(FloatingActionButton) view.findViewById(R.id.sendbtn);
-        editText=(EditText)view.findViewById(R.id.usermessage);
-        lv=(ListView)view.findViewById(R.id.message_list);
-        adapter=new MessageListAdapter(getContext());
-        lv.setAdapter(adapter);
-        sendbtn.setOnClickListener(new View.OnClickListener() {
+//        sendbtn=(FloatingActionButton) view.findViewById(R.id.sendbtn);
+//        editText=(EditText)view.findViewById(R.id.usermessage);
+//        lv=(ListView)view.findViewById(R.id.message_list);
+//        adapter=new MessageListAdapter(getContext());
+//        lv.setAdapter(adapter);
+//        sendbtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sendMessage();
+//            }
+//        });
+
+        databaseHelper = new MyDbHelper(getContext());
+
+        btnStore = (Button) view.findViewById(R.id.btnstore);
+        btnGetall = (Button) view.findViewById(R.id.btnget);
+        etword = (EditText) view.findViewById(R.id.etword);
+        etdefinition = (EditText) view.findViewById(R.id.etdefinition);
+        etsyns = (EditText) view.findViewById(R.id.etsyns);
+
+        btnStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendMessage();
+                databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),"");
+                etword.setText("");
+                etdefinition.setText("");
+                etsyns.setText("");
+                Toast.makeText(getContext(), "Stored Successfully!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        btnGetall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext() , GetAllWordsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
     public void sendMessage() {
         String message = editText.getText().toString();
         if (message.length() > 0) {
-            //что-то сделаешь потом
+
             String date=getCurrentTimeUsingDate();
             adapter.add(new Message(message, new MemberData("Соня ТкаченКО-КО-КО","#66FF88"), test, date));
             test=!test;

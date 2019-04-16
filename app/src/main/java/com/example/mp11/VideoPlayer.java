@@ -695,19 +695,27 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
 
         currentTrackIndex=0;
 
-        video_type = new String[]{"others","others","others", "others", "hls","hls"};
-        video_url = new String[]{"https://emerald.rev.lavenderhosted.com/s5e12.mp4",
+        video_type = new String[]{"others","others","others","others","others", "others", "others","hls"};
+        video_url = new String[]{"https://breadnut.fruithosted.net/dl/n/4I3DEjSfXbjPH6xz/tcrnesctbqdkslsp/82_zH9d__JDgiWRc3hfHFHpsa9rX_Ry--sR88kKCMZVwe93ig2fgvZFpPuJKqJ9w_28Oyj5Ic3_4HDh9wT_xftI-wvwl2jFlfUk8XD49WySnxmfBnF13Bbj1X-Yotif4pQgb8IfOWJWAMHMY_3ZRN_tzw7JGGc6AIub9AJFzCuHym583-QLCmLGyoPTL0kByjLBY-JyRU3-itejsGSvqntMAPHwGqVY2oCFwOLgT6DbEUnlJ6ciMWfHphn89DyajXzfyjJj0forVNTls8ikD4nTP4MKq5qC3r_SiWSQwpkhAjT5NMzJRX8gcLfNfGkZL7w7lkqS5PrxFkhIdUe4lJpJ7nxVT11r2qnZ_NKj7vDvAMKX7PRphh5hq8j57OJplLCSGGKrahqpeKhCmAtwA0WOHdiiV-kYFj2j82kj2mL8/Frozen_eng.mp4",
+                "https://lychee.fruithosted.net/dl/n/cQZKAlBk6K8UbJ9J/oqbmsqebbdooeqmf/aZ3E28RrONyLKb632pEYQaFdvpxTCWOJ52lmKumkcZ6507cUYhI681B8rGShiP2vC__5d3AKQ_13O6FdJjKZKt5UMPY4wwY3HDA2QvWbXpxpWwtkcBYmyGVacCOMoSGFZQLE0XHseSa_II4QH_U9iJsNmvytRe9weAL_pMbgkx80vF82jfhe7aXRYcqGX-55Kt8rHW6HRwRntvMONyIDyHLuhYBLTmV2SQIdnFCdtlP8ADTWg4cg5nR81u7ZTfW3BgJBFzoGnx0VX9v6K7czFDBJWoaxatxrULSEWTtenJGuhgLY_2EGlhC9IfO6WnVHxMhUjsROA-UREPV2o0npvG76_iAppfe5QICcLg24B6YvaB2yp9qQDSEsU_J_xoP5KO5UZGDXXUL86Z5a7zvedHjdCi-yeWUVcQaCMwMGxrB29VpkxV5E0SNp3RBy5B5C2YrEeZS6v-hqDfMHf8pUWw/The-Big-Bang-Theory-s03-e22-2009_eng.mp4",
+                "https://emerald.rev.lavenderhosted.com/s5e12.mp4",
                 "https://emerald.rev.lavenderhosted.com/s5e26.mp4",
                 "https://emerald.rev.lavenderhosted.com/s5e17.mp4",
                 "https://emerald.rev.lavenderhosted.com/s5e29.mp4",
-                "https://imbe.fruithosted.net/dl/n/Qfx81379DzL7cM5B/pbblksnqaasbomms/hNZsdLMlRC12NI6a4VVoW2tQ4_5OQUmU5NkVVVBmIaXlD28VMPRgoEWCJuCYG9QXzTG3qp7pCAr_QS1czfKvxx2UxP-9ih0_WPe9mKti4aljJ27Vyv0fC9iPv04y6LT4ORM4FDah2wOPbP222gXznkYuPypYjMXBNI7GlUBu8nBlyS0PtyATGR1SCoOO6bUBhHsG1G95nIA6-315X8A3GrwrC8DR8CmV3RQKXZwKlHEFJoSZDzu_YyQXif6K3riHsnjABPiUshOBo6kSDjpU5cJ2j-RCtqRggkT1PsK_xi-j1DNLhB7HRnJsbONNmUP1mqJintS6qav-5eM7CslDBLN7m6i4X80b33GIDQ5bxl0ifMcagOkloolsA2OghkVSutvFOYbl1FTjOqhF1hPghMlN6BmDjhJyN87bZJjvNZg/tangled_2010_eng.mp4",
+                "https://imbe.fruithosted.net/dl/n/IaCTH8y9d3XR5eo5/pbblksnqaasbomms/hfIxJalINkfuhQ5V3Uxpe9XMcTxGHfoN8q61wBMI84Ko4EGmwEbXXYXJ7G3htUkkKzjk1ahvyU3tg2unq1Awh_EQN2mhGHSyJ8FAs9x_PUod_3H17AI6InXxQ_NFnDZB3SY8np7kHNr34bc-cfnpHRa0aADVtUGynMDUCSQlvjdtXjrWHRDDP6QuzRZZyXo0NSi-qQasmazC08pgxQjkY8cNca2q3-IYMiE6xae8lkP-THWE9lnbeag0iaReEcRVLdj0JgtX_ZC8QRYKBcmCtSu2OqnRibjZVo4hYAXHZsFhJDuLYqvnARbGtr9vvXrRnVaC4SxMEN23S-B_gGlyBcbyQOAFh6cXDt8Kf4ia28Tmue2R7IagdMefIdqxEnPWHoh-x4Fq_5pizc5b-qHu86P3c8tyt4_5zTWzwisXfj0/tangled_2010_eng.mp4",
                 "http://playertest.longtailvideo.com/adaptive/bbbfull/bbbfull.m3u8",
         };
 
-        video_title = new String[]{"Jungle Moon","Familiar","Can't go back","Change Your Mind","Tangled","Big Bunny"};
-        subs_source=new String[]{"sub1","sub2","sub6","sub3","sub4","sub5"};
+        video_title = new String[]{"Frozen","Big Bang Theory","Jungle Moon","Familiar","Can't go back","Change Your Mind","Tangled","Big Bunny"};
+        subs_source=new String[]{"subsfrozen","bbtsubs","sub1","sub2","sub6","sub3","sub4","sub5"};
 
-
+//        video_type=new String[]{"others","others"};
+//        video_url=new String[5];
+//        video_title=new String[]{"","",""};
+//        subs_source=new String[5];
+//
+//        video_url[0]=getIntent().getExtras().getString("videourl");
+//        subs_source[0]=getIntent().getExtras().getString("subsurl");
         txt_title.setText(video_title[currentTrackIndex]);
 
         mainHandler = new Handler();
@@ -861,11 +869,31 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
         //subView.setSubSource(getResources().getIdentifier(subs_source[currentTrackIndex],"raw",getPackageName()),MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
 
         subView.setPlayer(playerControl);
-        if(currentTrackIndex==0) subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-        if(currentTrackIndex==1) subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-        if(currentTrackIndex==2) subView.setSubSource(R.raw.sub5,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-        if(currentTrackIndex==3) subView.setSubSource(R.raw.sub3,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-        if(currentTrackIndex==4) subView.setSubSource(R.raw.sub4,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+        if(currentTrackIndex==0){
+            subView.setSubSource(R.raw.subsfrozen,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=0;
+        }
+        if(currentTrackIndex==1){
+            subView.setSubSource(R.raw.bbt1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=0;
+        }
+        if(currentTrackIndex==2){
+            subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=22500;
+        }
+        if(currentTrackIndex==3){
+            subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=22500;
+        }
+        if(currentTrackIndex==4){
+            subView.setSubSource(R.raw.sub5,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=22500;
+        }
+        if(currentTrackIndex==5){
+            subView.setSubSource(R.raw.sub3,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            subView.dt=0;
+        }
+        if(currentTrackIndex==6) subView.setSubSource(R.raw.sub4,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
 
         if(player!=null) {
             hpLibRendererBuilder = getHpLibRendererBuilder();

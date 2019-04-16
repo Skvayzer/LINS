@@ -7,7 +7,9 @@ import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -18,11 +20,27 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 /**
@@ -41,13 +59,16 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private static final String ARG_PARAM2 = "param2";
 
     private static ProgressDialog progressDialog;
-    String videourl="https://youtu.be/KV4v-yNR7NU";
-    VideoView videoView ;
+
+
     private MediaPlayer mediaPlayer;
     private SurfaceHolder vidHolder;
     private SurfaceView vidSurface;
     TextView tv;
     Button btn;
+    String cururl;
+    WebView mWebView;
+    String videourl;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -102,14 +123,44 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //
 //
 //        PlayVideo();
-        View view= inflater.inflate(R.layout.fragment_settings, container, false);
-        btn=(Button)view.findViewById(R.id.govideo);
+
+        View view= inflater.inflate(R.layout.fragment_video_player, container, false);
+        mWebView = (WebView) view.findViewById(R.id.webview);
+        btn=(Button)view.findViewById(R.id.watch);
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        final Handler handler = new Handler();
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                final String url = "https://english-films.com/westerns/171-nazad-v-buduschee-3-back-to-the-future-part-iii-1990-hd-720-ru-eng.html";
+                mWebView.loadUrl(url);
+                mWebView.setWebViewClient(new WebViewClient());
+                cururl = mWebView.getUrl();
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String cururl = mWebView.getUrl();
+                        new MyTask().execute();
+                        Toast.makeText(getContext(),"g",Toast.LENGTH_SHORT).show();
+
+
+
+                    }
+
+
+                });
+
+
+            }
+        });
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getContext(), VideoPlayer.class);
 
-                startActivity(i);
+
             }
         });
 
@@ -260,5 +311,145 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+
+    class MyTask extends AsyncTask<Void, String, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String res="";
+            Document doc=null;
+            try {
+                //doc = Jsoup.connect(cururl).get();
+                doc = Jsoup.connect(cururl).header("Accept-Encoding", "gzip, deflate")
+                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+                        .maxBodySize(0)
+                        .get();
+                Elements vids = doc.getElementsByTag("iframe");
+                for (Element vid : vids) {
+                    //if(vid.attr("src").contains("openload")  || vid.attr("src").contains("streamango"))
+                    if (vid.attr("src").contains("streamango")) {
+                        res = vid.attr("src");
+                        Document doc1 = null;
+
+                        //doc = Jsoup.connect(cururl).get();
+
+                        doc1 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
+                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+                                .maxBodySize(0)
+                                .get();
+
+
+                        Elements vidu = doc1.getElementsByTag("video");
+                        res = vidu.first().attr("src");
+                        Document doc2 = null;
+
+                        //doc = Jsoup.connect(cururl).get();
+
+                        doc2 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
+                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+                                .maxBodySize(0)
+                                .get();
+
+
+                        Elements vidfi = doc2.getElementsByTag("meta");
+                        for (Element vidnow : vidfi) {
+                            if (vidnow.attr("name").equals("src")) {
+                                res = vidnow.attr("content");
+                                break;
+
+                            }
+                        }
+
+
+                    }
+                }
+
+
+
+
+
+
+//                Elements links = doc.select("video");
+//                Log.d("URL: ", links.first().text());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+            Elements subs = doc.getElementsByTag("a");
+            for (Element sub : subs) {
+                if(sub.attr("href").contains("srt")){
+                    res+=" "+sub.attr("href");
+                    break;
+                }
+
+            }
+
+            return res + " " +doc.title();
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            videourl=result;
+            Intent i=new Intent(getContext(), DynVideoPlayer.class);
+            String[] s=videourl.split(" ");
+            i.putExtra("videourl",s[0]);
+            i.putExtra("subsurl",s[1]);
+            i.putExtra("title",s[2]);
+
+            startActivity(i);
+        }
+    }
+    public boolean downloadFile(final String path)
+    {
+        try
+        {
+            URL url = new URL(path);
+
+            URLConnection ucon = url.openConnection();
+            ucon.setReadTimeout(5000);
+            ucon.setConnectTimeout(10000);
+
+            InputStream is = ucon.getInputStream();
+            BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
+
+            File file = new File(getContext().getDir("filesdir", Context.MODE_PRIVATE) + "/subs.sqr");
+
+            if (file.exists())
+            {
+                file.delete();
+                downloadFile(path);
+            }
+            file.createNewFile();
+
+            FileOutputStream outStream = new FileOutputStream(file);
+            byte[] buff = new byte[5 * 1024];
+
+            int len;
+            while ((len = inStream.read(buff)) != -1)
+            {
+                outStream.write(buff, 0, len);
+            }
+
+            outStream.flush();
+            outStream.close();
+            inStream.close();
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

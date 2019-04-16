@@ -75,17 +75,28 @@ public class MyCustomAdapter extends BaseAdapter {
 //            }
 //        }
         //holder.tvWord.setText(WordModelArrayList.get(position).getWord());
-        if (WordModelArrayList.get(position).getWord().equals(curword)) {
-            holder.tvMeanings.setText(WordModelArrayList.get(position).getdefinition());
-            holder.tvSyns.setText(WordModelArrayList.get(position).getSyns());
-            holder.tvEx.setText(WordModelArrayList.get(position).getEx());
-        }else {
-//            holder.tvMeanings.setText("");
-//            holder.tvSyns.setText("");
-//            holder.tvEx.setText("");
-            convertView.setLayoutParams(new AbsListView.LayoutParams(-1,1));
-            convertView.setVisibility(View.INVISIBLE);
+   //     if (WordModelArrayList.get(position).getWord().equals(curword)) {
+        String def=WordModelArrayList.get(position).getdefinition();
+        String syns=WordModelArrayList.get(position).getSyns();
+        if( syns!=null &&!syns.equals("")){
+            syns="("+syns.substring(0,syns.length()-2)+")";
+            holder.tvSyns.setText(syns);
         }
+        String ex=WordModelArrayList.get(position).getEx();
+        if( ex!=null && !ex.equals("")){
+            holder.tvEx.setText(ex.substring(0,ex.length()-2));
+        }
+            holder.tvMeanings.setText(def.substring(0,def.length()-2));
+
+
+
+//        }else {
+////            holder.tvMeanings.setText("");
+////            holder.tvSyns.setText("");
+////            holder.tvEx.setText("");
+//            convertView.setLayoutParams(new AbsListView.LayoutParams(-1,1));
+//            convertView.setVisibility(View.INVISIBLE);
+//        }
 
 
 //        holder.tvMeanings.setText(definition.substring(0,definition.length()-3));

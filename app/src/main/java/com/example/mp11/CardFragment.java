@@ -198,17 +198,14 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     @Override
     public void onViewSwipedToLeft(int position) {
         String swipedElement = mAdapter.getItem(position);
-        Toast.makeText(getActivity(), getString(R.string.view_swiped_left) +" "+ swipedElement, Toast.LENGTH_SHORT).show();
-        showbtn.setVisibility(View.VISIBLE);
-        list.setVisibility(View.INVISIBLE);
-    }
+        Toast.makeText(getActivity(), getString(R.string.view_swiped_left) + " " + swipedElement, Toast.LENGTH_SHORT).show();
 
+    }
     @Override
     public void onViewSwipedToRight(int position) {
         String swipedElement = mAdapter.getItem(position);
         Toast.makeText(getActivity(), getString(R.string.view_swiped_right)+ " "+ swipedElement, Toast.LENGTH_SHORT).show();
-        showbtn.setVisibility(View.VISIBLE);
-        list.setVisibility(View.INVISIBLE);
+
     }
 
     @Override
@@ -274,13 +271,21 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
             MyDbHelper databaseHelper = new MyDbHelper(getContext());
 
             wordModelArrayList = databaseHelper.getAllWords();
-            Random random = new Random();
-            int randomNumber = random.nextInt(wordModelArrayList.size());
+
+           int randomNumber = (int)(Math.random()*(wordModelArrayList.size()));
+           // Random random=new Random();
+            //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
             String curword=wordModelArrayList.get(randomNumber).getWord();
-            customAdapter = new MyCustomAdapter(getContext(),wordModelArrayList,curword);
+            ArrayList<WordModel> nowlist = new ArrayList<WordModel>();
+            for(WordModel p: wordModelArrayList){
+                if(p.getWord().equals(curword)){
+                    nowlist.add(p);
+                }
+            }
+            customAdapter = new MyCustomAdapter(getContext(),nowlist,curword);
             list.setAdapter(customAdapter);
 
-            textViewCard.setText(wordModelArrayList.get(0).getWord());
+            textViewCard.setText(curword);
             showbtn=(ImageButton)convertView.findViewById(R.id.showwordbtn);
             final View view= convertView;
             final ViewGroup parent1=parent;
@@ -297,7 +302,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                            // mSwipeStack.removeView(view);
 
 
-                            getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
+                            //getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
 
 
 

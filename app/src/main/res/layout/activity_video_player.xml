@@ -448,6 +448,7 @@
             android:text="HELLO"
             android:textSize="30dp"
             android:gravity="center"
+
             />
     </LinearLayout>
 </RelativeLayout>

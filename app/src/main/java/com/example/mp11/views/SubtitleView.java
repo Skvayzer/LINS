@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.PopActivity;
 import com.example.mp11.R;
 import com.example.mp11.VideoPlayer;
@@ -31,10 +33,17 @@ import com.example.mp11.yandex.dictslate.TranslateApi;
 import com.google.android.exoplayer.util.PlayerControl;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
@@ -316,7 +325,12 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         else
             throw new UnsupportedOperationException("Parser only built for SRT subs");
     }
-
+    public void setSubSource(Uri uri, String mime) {
+        if (mime.equals(MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP))
+            track = getSubtitleFile(uri);
+        else
+            throw new UnsupportedOperationException("Parser only built for SRT subs");
+    }
 
     public static TreeMap<Long, Line> parse(InputStream is) throws IOException {
         LineNumberReader r = new LineNumberReader(new InputStreamReader(is, "UTF-8"));
@@ -337,7 +351,25 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         }
         return track;
     }
+    public static TreeMap<Long, Line> parse(InputStreamReader is) throws IOException {
+        LineNumberReader r = new LineNumberReader(is);
+        TreeMap<Long, Line> track = new TreeMap<>();
 
+        while ((r.readLine()) != null) /*Read cue number*/ {
+            String timeString = r.readLine();
+            String lineString = "";
+            String s;
+            while (!((s = r.readLine()) == null || s.trim().equals(""))) {
+                lineString += s + "\n";
+            }
+            long startTime = parse(timeString.split("-->")[0]);
+            long endTime = parse(timeString.split("-->")[1]);
+            track.put(startTime, new Line(startTime, endTime, lineString));
+            //if(lineString!=null&&lineString!="") translate(lineString);
+            //trlate.put(startTime,new Line(startTime,endTime,translation));
+        }
+        return track;
+    }
     private static long parse(String in) {
         long hours = Long.parseLong(in.split(":")[0].trim());
         long minutes = Long.parseLong(in.split(":")[1].trim());
@@ -352,6 +384,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         InputStream inputStream = null;
         try {
             inputStream = getResources().openRawResource(resId);
+
             return parse(inputStream);
         } catch (Exception e) {
             e.printStackTrace();
@@ -366,7 +399,34 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         }
         return null;
     }
+    private TreeMap<Long, Line> getSubtitleFile(Uri uri)  {
 
+        File file=new File(uri.toString());
+        FileInputStream fileInputStream=null;
+        try {
+            fileInputStream = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        InputStream inputStream=null;
+        try {
+            inputStream = fileInputStream;
+            return parse(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
     public static class Line {
         long from;
         long to;
@@ -421,6 +481,14 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
                 }
 
+                final MyDbHelper databaseHelper = new MyDbHelper(getContext());
+                String meanings="";
+                String syns="(";
+                String ex="";
+
+                final ArrayList<String> defmean=new ArrayList<>();
+                final ArrayList<String> defsyns=new ArrayList<>();
+                final ArrayList<String> defex=new ArrayList<>();
                 ArrayList<TranslationItem> result = new ArrayList<>();
                 String transcription="";
                 for (int i = 0; i < response.body().def.length; i++) {
@@ -430,9 +498,11 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
                         Model.Def.Tr cur = response.body().def[i].tr[j];
                         item.meanings.add(cur.text);
+                        meanings+=cur.text + ", ";
                         if(cur.syn!=null)
                         for (Model.Def.Tr.Syn a : cur.syn) {
                             item.meanings.add(a.text);
+                            meanings+=a.text+", ";
                         }
                         if(cur.mean!=null)
                         for (Model.Def.Tr.Mean a : cur.mean) {
@@ -444,14 +514,23 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                                     break;
                                 }
                             }
-                           if(isEnglish) item.syn.add(now);
-                           else item.meanings.add(now);
+                           if(isEnglish){
+                               item.syn.add(now);
+                               syns+=now+", ";
+                           }
+                           else {
+                               item.meanings.add(now);
+                               meanings+=now+", ";
+                           }
 
                         }
                         if(cur.ex!=null)
                         for (Model.Def.Ex a : cur.ex) {
-                            for (Model.Def.Tr b : a.tr)
+                            for (Model.Def.Tr b : a.tr){
                                 item.ex.put(a.text, b.text);
+                                ex+=a.text + " - " + b.text + '\n';
+                            }
+
                         }
 
 
@@ -459,13 +538,19 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                     transcription="["+response.body().def[i].ts+"]";
                     item.index=i+1;
                     result.add(item);
+                    defmean.add(meanings);
+                    meanings="";
+                    defsyns.add(syns);
+                    syns="";
+                    defex.add(ex);
+                    ex="";
 
                 }
                 AlertDialog.Builder pop = new AlertDialog.Builder(getContext());
-
+                final AlertDialog kek=pop.create();
                 View view = inflater.inflate(R.layout.pop_word, null);
 
-                pop.setView(view);
+                kek.setView(view);
 
                 ListView lv = (ListView) view.findViewById(R.id.word_list);
                 ((TextView)view.findViewById(R.id.current_word)).setText(text+" "+transcription);
@@ -476,13 +561,18 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        for(int q=0;q<defmean.size();q++){
+                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
+                        }
 
+
+                        kek.hide();
 
 
                     }
                 });
 
-                pop.show();
+                kek.show();
                 //Toast.makeText(getApplicationContext(),"Вот дерьмо",Toast.LENGTH_SHORT).show();
 
             }

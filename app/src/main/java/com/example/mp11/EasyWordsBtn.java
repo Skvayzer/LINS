@@ -350,7 +350,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 lv.setAdapter(adapter);
 
                 Button btn=(Button)view.findViewById(R.id.addToDict_btn);
-                final ArrayList<TranslationItem> result1 = result;
+                //final ArrayList<TranslationItem> result1 = result;
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
