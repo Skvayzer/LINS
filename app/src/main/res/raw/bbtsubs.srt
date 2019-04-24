@@ -1,0 +1,1863 @@
+﻿1
+00:00:01,752 --> 00:00:04,287
+Okay, Babydoll Pink, let's see
+if you can cover up the fact
+
+2
+00:00:04,304 --> 00:00:06,438
+that I got my dad's feet.
+
+3
+00:00:06,439 --> 00:00:08,507
+It's just two degrees, Sheldon.
+
+4
+00:00:08,508 --> 00:00:10,908
+I just want to turn up the
+thermostat two degrees!
+
+5
+00:00:11,082 --> 00:00:14,185
+Let me point out that two
+degrees can be the difference
+
+6
+00:00:14,186 --> 00:00:16,220
+between water and steam.
+
+7
+00:00:16,221 --> 00:00:18,455
+Yes, if we lived in a teakettle.
+
+8
+00:00:18,456 --> 00:00:20,157
+This is the temperature
+you agreed to
+
+9
+00:00:20,158 --> 00:00:21,525
+in the roommate agreement.
+
+10
+00:00:21,526 --> 00:00:23,561
+Aw, screw the roommate agreement!
+
+11
+00:00:23,562 --> 00:00:25,596
+No, you don't screw the
+roommate agreement.
+
+12
+00:00:25,597 --> 00:00:28,332
+The roommate agreement screws you.
+
+13
+00:00:28,333 --> 00:00:30,734
+You know what, go to Hell
+and set their thermostat.
+
+14
+00:00:30,735 --> 00:00:32,403
+I don't have to go to Hell.
+
+15
+00:00:32,404 --> 00:00:36,340
+At 73 degrees, I'm there already!
+
+16
+00:00:37,709 --> 00:00:41,946
+Who is it?
+
+17
+00:00:41,947 --> 00:00:43,314
+Leonard.
+
+18
+00:00:43,315 --> 00:00:45,316
+Hang on.
+
+19
+00:00:49,332 --> 00:00:51,767
+Can I sleep on your couch tonight?
+
+20
+00:00:51,768 --> 00:00:53,035
+Uh, well, you can try,
+
+21
+00:00:53,036 --> 00:00:55,237
+but the people across the
+hall are being very noisy.
+
+22
+00:00:55,238 --> 00:00:57,673
+You heard that, huh?
+
+23
+00:00:57,674 --> 00:01:00,709
+Apparently, the one fella tried
+to adjust the thermostat,
+
+24
+00:01:00,710 --> 00:01:03,312
+then the other fella
+went bat-crap crazy.
+
+25
+00:01:03,313 --> 00:01:05,481
+So you agree, he's nuts.
+
+26
+00:01:05,482 --> 00:01:08,717
+Well, not as nuts as the guy
+who chooses to live with him.
+
+27
+00:01:08,718 --> 00:01:10,786
+Believe it or not,
+he was worse when I met him.
+
+28
+00:01:10,787 --> 00:01:13,155
+Oh, I do not believe that.
+
+29
+00:01:13,156 --> 00:01:15,658
+You are so naive.
+
+30
+00:01:15,659 --> 00:01:17,927
+Just like I was seven years ago.
+
+31
+00:01:18,962 --> 00:01:21,897
+<i>I'd just started at the university.</i>
+
+32
+00:01:26,469 --> 00:01:28,170
+Excuse me, I'm looking
+
+33
+00:01:28,171 --> 00:01:30,639
+for Sheldon Cooper's apartment.
+
+34
+00:01:30,640 --> 00:01:32,541
+Oh, I bet you're here to
+check out the room for rent.
+
+35
+00:01:32,542 --> 00:01:34,977
+Yeah. Run away, dude.
+
+36
+00:01:36,213 --> 00:01:37,513
+What?!
+
+37
+00:01:37,514 --> 00:01:40,916
+Run fast, run far.
+
+38
+00:01:40,917 --> 00:01:43,919
+That should have
+been my first clue.
+
+39
+00:01:44,988 --> 00:01:48,591
+♪ Our whole universe was
+in a hot, dense state ♪
+
+40
+00:01:48,592 --> 00:01:51,927
+♪ Then nearly 14 billion years
+ago expansion started... Wait! ♪
+
+41
+00:01:51,928 --> 00:01:53,562
+♪ The Earth began to cool ♪
+
+42
+00:01:53,563 --> 00:01:56,098
+♪ The autotrophs began to drool,
+Neanderthals developed tools ♪
+
+43
+00:01:56,099 --> 00:01:58,767
+♪ We built the Wall ♪ ♪ <i>We
+built the pyramids</i> ♪
+
+44
+00:01:58,768 --> 00:02:01,503
+♪ Math, Science, History,
+unraveling the mystery ♪
+
+45
+00:02:01,504 --> 00:02:03,339
+♪ That all started
+with a big bang ♪
+
+46
+00:02:03,340 --> 00:02:05,307
+♪ <i>Bang!</i> ♪
+
+47
+00:02:05,317 --> 00:02:08,317
+<font color=#7FFF00>The Big Bang Theory 3x22</font>
+<font color=#FFFF00>The Staircase Implementation</font>
+Original Air Date on May 17, 2010
+
+48
+00:02:08,327 --> 00:02:10,927
+-- Sync, corrected by <font color=#00FF00>elderman</font> --
+-- for <font color=#00FFFF>www.addic7ed.com</font> --
+
+49
+00:02:10,984 --> 00:02:13,353
+So Sheldon's last roommate
+tried to warn you off?
+
+50
+00:02:13,751 --> 00:02:17,086
+For all I knew,
+he was the crazy one.
+
+51
+00:02:17,087 --> 00:02:19,589
+He had this really deranged look.
+
+52
+00:02:19,590 --> 00:02:22,625
+Well, yeah, he'd been
+living with Sheldon.
+
+53
+00:02:22,626 --> 00:02:25,895
+Sure, it makes sense <i>now.</i>
+
+54
+00:02:28,165 --> 00:02:31,100
+<i>Anyway, I went upstairs</i>
+<i>and knocked on the door.</i>
+
+55
+00:02:36,874 --> 00:02:38,474
+Yeah?
+
+56
+00:02:47,451 --> 00:02:49,185
+Dr. Cooper?
+
+57
+00:02:49,186 --> 00:02:52,488
+No, you want the crazy
+guy across the hall.
+
+58
+00:02:56,093 --> 00:02:59,662
+<i>In retrospect, that was clue
+number two.</i>
+
+59
+00:03:05,736 --> 00:03:07,036
+Yes?
+
+60
+00:03:07,037 --> 00:03:08,638
+I'm Leonard Hofstadter.
+
+61
+00:03:08,639 --> 00:03:10,473
+I called you about the apartment.
+You said...
+
+62
+00:03:10,474 --> 00:03:11,574
+I know what I said.
+
+63
+00:03:11,575 --> 00:03:12,809
+I know what you said.
+
+64
+00:03:12,810 --> 00:03:15,378
+I know what my mother
+said on March 5, 1992.
+
+65
+00:03:16,513 --> 00:03:18,748
+What is the sixth noble gas?
+
+66
+00:03:18,749 --> 00:03:21,251
+What? You said you're a scientist.
+
+67
+00:03:21,252 --> 00:03:23,052
+What is the sixth noble gas?
+
+68
+00:03:23,053 --> 00:03:24,287
+Uh, radon?
+
+69
+00:03:24,288 --> 00:03:27,557
+Are you asking me or telling me?
+
+70
+00:03:27,558 --> 00:03:29,559
+Telling you?
+
+71
+00:03:31,495 --> 00:03:34,364
+Telling you.
+
+72
+00:03:34,365 --> 00:03:36,566
+All right, next question.
+
+73
+00:03:36,567 --> 00:03:38,268
+Kirk or Picard?
+
+74
+00:03:38,269 --> 00:03:40,837
+Oh, uh, well, that's tricky.
+
+75
+00:03:40,838 --> 00:03:44,240
+Um, Original Series over
+<i>Next Generation,</i>
+
+76
+00:03:44,241 --> 00:03:46,075
+but Picard over Kirk.
+
+77
+00:03:46,076 --> 00:03:47,944
+Correct.
+
+78
+00:03:49,079 --> 00:03:51,381
+You've passed the first
+barrier to roommate-hood.
+
+79
+00:03:52,082 --> 00:03:53,750
+You may enter.
+
+80
+00:03:53,751 --> 00:03:56,185
+Oh, this is pretty nice.
+
+81
+00:04:03,360 --> 00:04:05,561
+Uh, the bedrooms are back there?
+
+82
+00:04:05,562 --> 00:04:06,729
+That depends.
+
+83
+00:04:06,730 --> 00:04:07,764
+I don't understand--
+
+84
+00:04:07,765 --> 00:04:10,233
+their existence is conditional?
+
+85
+00:04:10,234 --> 00:04:13,670
+No, but your ability to perceive
+their existence is conditional
+
+86
+00:04:13,671 --> 00:04:16,239
+on you passing the second
+and third barriers.
+
+87
+00:04:16,240 --> 00:04:17,774
+There's three?
+
+88
+00:04:17,775 --> 00:04:20,209
+Each more daunting than the last.
+
+89
+00:04:21,545 --> 00:04:22,578
+Have a seat.
+
+90
+00:04:22,579 --> 00:04:24,147
+Okay.
+
+91
+00:04:24,148 --> 00:04:26,616
+No! That's where I sit!
+
+92
+00:04:29,753 --> 00:04:32,221
+What's the difference?
+
+93
+00:04:32,222 --> 00:04:34,457
+This seat is ideally located
+
+94
+00:04:34,458 --> 00:04:36,759
+both in relation to the
+heat source in the winter
+
+95
+00:04:36,760 --> 00:04:38,695
+and a cross breeze in the summer.
+
+96
+00:04:38,696 --> 00:04:41,164
+It also faces the television
+at a direct angle--
+
+97
+00:04:41,165 --> 00:04:44,200
+allowing me to immerse myself
+in entertainment or game play
+
+98
+00:04:44,201 --> 00:04:45,968
+without being subjected
+to conversation.
+
+99
+00:04:45,969 --> 00:04:50,773
+As a result, I've placed it
+in a state of eternal dibs.
+
+100
+00:04:50,774 --> 00:04:53,076
+Can you do that?
+
+101
+00:04:53,077 --> 00:04:56,279
+<i>Cathedra mea, regulae meae.</i>
+
+102
+00:04:57,214 --> 00:05:00,383
+That's Latin for "my chair,
+my rules."
+
+103
+00:05:01,785 --> 00:05:04,554
+Now, you said on the phone
+
+104
+00:05:04,555 --> 00:05:07,790
+that your area of study is physics.
+
+105
+00:05:07,791 --> 00:05:09,225
+Uh, yeah, experimental physics.
+
+106
+00:05:09,226 --> 00:05:11,828
+Hmm...
+
+107
+00:05:11,829 --> 00:05:13,763
+What is that?
+
+108
+00:05:13,764 --> 00:05:14,997
+Doesn't concern you.
+
+109
+00:05:14,998 --> 00:05:16,232
+You'll be going
+
+110
+00:05:16,233 --> 00:05:18,735
+to the university every day? Yes.
+
+111
+00:05:18,736 --> 00:05:20,036
+And you have a vehicle?
+A car, yeah.
+
+112
+00:05:20,037 --> 00:05:21,471
+And you'll be willing to drive me?
+
+113
+00:05:21,472 --> 00:05:22,772
+Can't you drive?
+
+114
+00:05:22,773 --> 00:05:24,741
+I can.
+
+115
+00:05:26,610 --> 00:05:29,011
+I choose not to.
+
+116
+00:05:29,012 --> 00:05:31,914
+Okay, I suppose I could drive you.
+
+117
+00:05:32,816 --> 00:05:34,951
+That's a point in my favor, right?
+
+118
+00:05:34,952 --> 00:05:37,353
+Why don't you let me do this.
+
+119
+00:05:37,354 --> 00:05:39,355
+Come on, I just asked.
+
+120
+00:05:43,627 --> 00:05:44,861
+Last question.
+
+121
+00:05:44,862 --> 00:05:46,129
+In a post-apocalyptic world,
+
+122
+00:05:46,130 --> 00:05:49,198
+which task would you assign
+the highest priority?
+
+123
+00:05:49,199 --> 00:05:51,367
+Locating a sustainable food source,
+
+124
+00:05:51,368 --> 00:05:53,035
+reestablishing a
+functioning government,
+
+125
+00:05:53,036 --> 00:05:55,872
+procreating, or preserving
+the knowledge of mankind?
+
+126
+00:05:55,873 --> 00:05:59,275
+Uh, I'm gonna go with...
+preserving the knowledge.
+
+127
+00:05:59,276 --> 00:06:00,443
+That's correct.
+
+128
+00:06:01,678 --> 00:06:05,948
+FYI, I would have accepted any
+answer other than procreating.
+
+129
+00:06:07,184 --> 00:06:09,385
+Come, I'll show you the
+rest of the apartment.
+
+130
+00:06:09,386 --> 00:06:10,520
+Oh, good.
+
+131
+00:06:10,521 --> 00:06:11,854
+I passed the barriers.
+
+132
+00:06:11,855 --> 00:06:14,457
+The second barrier.
+Don't get cocky.
+
+133
+00:06:16,960 --> 00:06:19,662
+This is the bathroom.
+
+134
+00:06:19,663 --> 00:06:21,397
+Are you fairly regular?
+
+135
+00:06:23,567 --> 00:06:25,902
+Uh, I guess.
+
+136
+00:06:25,903 --> 00:06:28,337
+This isn't going to
+work if you're guessing.
+
+137
+00:06:29,106 --> 00:06:31,841
+When do you evacuate your bowels?
+
+138
+00:06:31,842 --> 00:06:34,343
+When I have to.
+
+139
+00:06:34,344 --> 00:06:35,912
+When you have to?
+
+140
+00:06:35,913 --> 00:06:37,747
+I'm sorry, I don't rent to hippies.
+
+141
+00:06:41,518 --> 00:06:43,152
+I-I'm sorry, uh, in the morning.
+
+142
+00:06:43,153 --> 00:06:44,654
+Around 8:00.
+
+143
+00:06:44,655 --> 00:06:48,691
+I can't give you 8:00.
+I can give you 7:30.
+
+144
+00:06:48,692 --> 00:06:50,493
+Fine. I'll take it.
+
+145
+00:06:50,494 --> 00:06:52,395
+Third barrier passed.
+
+146
+00:06:53,297 --> 00:06:55,698
+You have won the right
+to see your room.
+
+147
+00:06:55,699 --> 00:06:57,366
+Huzzah.
+
+148
+00:07:00,070 --> 00:07:01,737
+Is this it?
+
+149
+00:07:01,738 --> 00:07:03,105
+No, this is my room.
+
+150
+00:07:03,106 --> 00:07:04,874
+People don't go in my room.
+
+151
+00:07:04,875 --> 00:07:08,311
+So where do you sleep?
+
+152
+00:07:08,312 --> 00:07:10,112
+I don't understand.
+
+153
+00:07:10,113 --> 00:07:13,783
+If people don't go in there,
+and you're people, and...
+
+154
+00:07:13,784 --> 00:07:16,452
+You are people, aren't you?
+
+155
+00:07:17,254 --> 00:07:18,921
+Making a joke.
+
+156
+00:07:18,922 --> 00:07:20,623
+Do you do this often?
+
+157
+00:07:20,624 --> 00:07:23,359
+On occasion.
+
+158
+00:07:27,331 --> 00:07:29,131
+Your room.
+
+159
+00:07:36,907 --> 00:07:39,308
+You may want to repaint.
+
+160
+00:07:41,245 --> 00:07:44,413
+And after all that,
+you just moved in?
+
+161
+00:07:44,414 --> 00:07:45,515
+I didn't just move in.
+
+162
+00:07:45,516 --> 00:07:47,683
+First we had to iron
+out a few details.
+
+163
+00:07:47,684 --> 00:07:51,187
+"Roommates agree that Friday
+nights shall be reserved
+
+164
+00:07:51,188 --> 00:07:52,154
+"for watching Joss Whedon's
+
+165
+00:07:52,155 --> 00:07:54,790
+brilliant new series <i>Firefly."</i>
+
+166
+00:07:54,791 --> 00:07:58,027
+Does that really need
+to be in the agreement?
+
+167
+00:07:58,028 --> 00:08:01,864
+We might as well settle it now;
+it's going to be on for years.
+
+168
+00:08:01,865 --> 00:08:04,333
+Initial here.
+
+169
+00:08:05,469 --> 00:08:11,073
+All right, that's
+television and movies.
+
+170
+00:08:11,074 --> 00:08:14,143
+Section nine: miscellany.
+
+171
+00:08:14,144 --> 00:08:15,645
+The apartment's flag
+
+172
+00:08:15,646 --> 00:08:19,949
+is a gold lion rampant
+on a field of azure.
+
+173
+00:08:19,950 --> 00:08:21,751
+We have a flag?
+
+174
+00:08:31,662 --> 00:08:33,362
+Never fly it upside down.
+
+175
+00:08:34,665 --> 00:08:36,499
+Unless the apartment's in distress.
+
+176
+00:08:36,500 --> 00:08:37,767
+And next.
+
+177
+00:08:37,768 --> 00:08:40,136
+"If either of us ever
+invents time travel,
+
+178
+00:08:40,137 --> 00:08:44,173
+"we agree our first stop
+will be this meeting today
+
+179
+00:08:44,174 --> 00:08:46,442
+in precisely five seconds."
+
+180
+00:08:47,978 --> 00:08:50,112
+Okay.
+
+181
+00:09:00,157 --> 00:09:02,458
+That's disappointing.
+
+182
+00:09:04,761 --> 00:09:06,996
+Why on earth did you
+agree to all that?
+
+183
+00:09:06,997 --> 00:09:08,931
+It was the best apartment I'd seen,
+
+184
+00:09:08,932 --> 00:09:10,933
+the rent was very reasonable
+
+185
+00:09:10,934 --> 00:09:12,935
+and after you've passed
+the first three barriers
+
+186
+00:09:12,936 --> 00:09:15,004
+you kind of want to
+take it all the way.
+
+187
+00:09:15,005 --> 00:09:19,775
+Well, I'm sorry, Leonard,
+it's very hard to feel sympathy for you.
+
+188
+00:09:19,776 --> 00:09:22,011
+Okay, how about this?
+Let me tell you about the first time
+
+189
+00:09:22,012 --> 00:09:22,945
+I brought a girl over.
+
+190
+00:09:22,946 --> 00:09:25,314
+Leonard?
+
+191
+00:09:26,483 --> 00:09:29,218
+Shh. Just pretend we're not here.
+
+192
+00:09:30,554 --> 00:09:33,122
+Leonard?
+
+193
+00:09:33,123 --> 00:09:35,391
+I'm sure he'll go away.
+
+194
+00:09:37,494 --> 00:09:40,630
+I'm just going to keep
+knocking till you answer.
+
+195
+00:09:40,631 --> 00:09:41,731
+Leonard?
+
+196
+00:09:41,732 --> 00:09:43,199
+Leonard?
+
+197
+00:09:43,200 --> 00:09:44,367
+Leonard?
+
+198
+00:09:44,368 --> 00:09:45,868
+What do you want?!
+
+199
+00:09:45,869 --> 00:09:48,070
+I didn't say come in!
+
+200
+00:09:48,071 --> 00:09:49,972
+You asked what I wanted.
+
+201
+00:09:49,973 --> 00:09:51,607
+I wanted to come in.
+
+202
+00:09:51,608 --> 00:09:53,376
+I'm here
+
+203
+00:09:53,377 --> 00:09:55,544
+because you violated
+our roommate agreement.
+
+204
+00:09:55,545 --> 00:09:57,546
+Specifically, section eight--
+
+205
+00:09:57,547 --> 00:10:01,117
+visitors, subsection C;
+females, paragraph four-- coitus.
+
+206
+00:10:01,118 --> 00:10:03,152
+"Roommates shall give each other
+
+207
+00:10:03,153 --> 00:10:06,722
+12 hours notice of
+impending coitus."
+
+208
+00:10:06,723 --> 00:10:09,925
+I didn't even know
+her 12 hours ago.
+
+209
+00:10:09,926 --> 00:10:11,360
+That's it! I'm out of here!
+
+210
+00:10:11,361 --> 00:10:12,728
+But, Joyce, come on.
+
+211
+00:10:12,729 --> 00:10:14,363
+12 hours?
+
+212
+00:10:17,000 --> 00:10:18,701
+Oh, my God.
+
+213
+00:10:18,702 --> 00:10:20,269
+Do I get some sympathy now?
+
+214
+00:10:20,270 --> 00:10:22,304
+A little bit.
+
+215
+00:10:26,123 --> 00:10:27,143
+Okay. Let me get this straight.
+
+216
+00:10:27,153 --> 00:10:28,273
+You move in with this guy,
+
+217
+00:10:28,706 --> 00:10:30,875
+he makes you sign a
+ridiculous roommate agreement,
+
+218
+00:10:31,029 --> 00:10:32,863
+then he walks into your bedroom
+
+219
+00:10:32,864 --> 00:10:35,499
+while you're doing this Joyce Kim,
+and you still stay?
+
+220
+00:10:35,500 --> 00:10:38,268
+Actually, I couldn't get too
+mad at him about Joyce Kim.
+
+221
+00:10:38,269 --> 00:10:39,603
+Why not?
+
+222
+00:10:39,604 --> 00:10:42,172
+Well, I was doing some
+government research at the time,
+
+223
+00:10:42,173 --> 00:10:44,108
+you know, military, rocket fuel.
+
+224
+00:10:44,109 --> 00:10:45,375
+It's kind of secret.
+
+225
+00:10:45,376 --> 00:10:47,177
+What does that have
+to do with Joyce Kim?
+
+226
+00:10:47,178 --> 00:10:50,481
+As it turns out,
+she was a North Korean spy.
+
+227
+00:10:51,883 --> 00:10:53,851
+Luckily, Sheldon drove her out
+
+228
+00:10:53,852 --> 00:10:55,819
+before I revealed
+anything important.
+
+229
+00:10:55,820 --> 00:10:58,689
+Which I-I'm not
+saying I would have.
+
+230
+00:10:59,791 --> 00:11:00,858
+So, what, that's it?
+
+231
+00:11:00,859 --> 00:11:02,459
+You've stayed with
+Sheldon all this time
+
+232
+00:11:02,460 --> 00:11:04,561
+because he kept you from
+going to federal prison?
+
+233
+00:11:04,562 --> 00:11:05,996
+That was part of it.
+
+234
+00:11:05,997 --> 00:11:08,665
+The other part is what
+happened with the elevator.
+
+235
+00:11:08,666 --> 00:11:09,833
+Oh, yeah, I'm wondering about that.
+
+236
+00:11:09,834 --> 00:11:11,668
+You said it was working
+when you moved in.
+
+237
+00:11:11,669 --> 00:11:14,938
+It was, but one night,
+Sheldon came home from work...
+
+238
+00:11:24,249 --> 00:11:26,850
+What is going on here?
+
+239
+00:11:26,851 --> 00:11:28,051
+Hey, Sheldon.
+
+240
+00:11:28,052 --> 00:11:29,186
+This is Howard and Raj.
+
+241
+00:11:29,187 --> 00:11:30,454
+They work at the university, too.
+
+242
+00:11:30,455 --> 00:11:31,722
+Hey. Hey.
+
+243
+00:11:31,723 --> 00:11:33,157
+I'll get to you later.
+
+244
+00:11:34,092 --> 00:11:35,859
+What are you sitting on?
+
+245
+00:11:35,860 --> 00:11:39,496
+I can't speak for these guys,
+but I'm sitting on my tushie.
+
+246
+00:11:40,832 --> 00:11:41,865
+It's a joke.
+
+247
+00:11:41,866 --> 00:11:43,600
+Not a good idea.
+
+248
+00:11:43,601 --> 00:11:45,536
+"Tushie" is buttocks, right?
+
+249
+00:11:45,537 --> 00:11:48,572
+Right. Hilarious.
+
+250
+00:11:48,573 --> 00:11:50,641
+Explain the couch.
+
+251
+00:11:50,642 --> 00:11:51,775
+Oh, well, there were some people
+
+252
+00:11:51,776 --> 00:11:53,010
+on the first floor moving out,
+
+253
+00:11:53,011 --> 00:11:54,411
+and they sold it to me for $100.
+
+254
+00:11:54,412 --> 00:11:56,046
+Howard and Raj helped
+me bring it up.
+
+255
+00:11:56,047 --> 00:11:59,049
+But what's wrong with
+the furniture we have?
+
+256
+00:11:59,050 --> 00:12:02,019
+They're lawn chairs.
+
+257
+00:12:02,020 --> 00:12:03,720
+And there was no place for company.
+
+258
+00:12:03,721 --> 00:12:07,391
+Did it occur to you
+that was by design?
+
+259
+00:12:07,392 --> 00:12:08,992
+According to the
+roommate agreement,
+
+260
+00:12:08,993 --> 00:12:10,694
+I'm entitled to allocate 50%
+
+261
+00:12:10,695 --> 00:12:12,796
+of the cubic footage
+of the common areas.
+
+262
+00:12:12,797 --> 00:12:14,965
+But you didn't notify me by e-mail,
+
+263
+00:12:14,966 --> 00:12:17,201
+so this is still a breach.
+
+264
+00:12:17,202 --> 00:12:19,036
+I did notify you.
+
+265
+00:12:19,037 --> 00:12:21,471
+Oh, you did, did you?
+
+266
+00:12:36,187 --> 00:12:37,955
+Oh, drat!
+
+267
+00:12:39,824 --> 00:12:43,026
+Hoisted by my own spam filter.
+
+268
+00:12:43,027 --> 00:12:45,028
+What am I doing in
+your spam folder?
+
+269
+00:12:45,029 --> 00:12:46,663
+I put you there after
+you forwarded me
+
+270
+00:12:46,664 --> 00:12:48,365
+a picture of a cat
+playing the piano,
+
+271
+00:12:48,366 --> 00:12:49,900
+entitled "This is funny."
+
+272
+00:12:50,768 --> 00:12:52,336
+Oh, yeah, I saw that.
+
+273
+00:12:52,337 --> 00:12:54,538
+That was hilarious.
+
+274
+00:12:54,539 --> 00:12:56,440
+Okay, what does all this
+have to do with the elevator?
+
+275
+00:12:56,441 --> 00:12:57,741
+I'm getting to it.
+
+276
+00:12:57,742 --> 00:12:59,643
+I assure you, you'll be sorry
+
+277
+00:12:59,644 --> 00:13:01,979
+you wasted your money on an iPod
+
+278
+00:13:01,980 --> 00:13:04,815
+when Microsoft comes
+out with theirs.
+
+279
+00:13:06,517 --> 00:13:09,052
+Okay, do you have an
+opinion about everything?
+
+280
+00:13:09,053 --> 00:13:11,722
+Yes.
+
+281
+00:13:11,723 --> 00:13:14,291
+And you just assume
+you're always right?
+
+282
+00:13:14,292 --> 00:13:16,860
+It's not an assumption.
+
+283
+00:13:17,662 --> 00:13:19,296
+Change seats with me.
+
+284
+00:13:19,297 --> 00:13:21,298
+Why? I don't like this spot.
+
+285
+00:13:21,299 --> 00:13:23,033
+I have to keep turning my head.
+
+286
+00:13:23,034 --> 00:13:24,835
+Fine.
+
+287
+00:13:25,937 --> 00:13:27,804
+Ooh, it's time for <i>Babylon 5!</i>
+
+288
+00:13:27,805 --> 00:13:30,407
+We don't watch <i>Babylon 5</i>
+in this apartment.
+
+289
+00:13:30,408 --> 00:13:31,475
+Why not?
+
+290
+00:13:31,476 --> 00:13:33,610
+Because no one likes <i>Babylon 5.</i>
+
+291
+00:13:33,611 --> 00:13:34,745
+I like it.
+
+292
+00:13:34,746 --> 00:13:35,879
+Me, too. So do I.
+
+293
+00:13:35,880 --> 00:13:37,447
+There you go-- three against one.
+
+294
+00:13:37,448 --> 00:13:38,715
+They don't get a vote.
+
+295
+00:13:38,716 --> 00:13:39,883
+It's one against one.
+
+296
+00:13:39,884 --> 00:13:41,785
+And according to the
+roommate agreement,
+
+297
+00:13:41,786 --> 00:13:44,655
+all ties will be settled by me.
+
+298
+00:13:44,656 --> 00:13:46,890
+But I said no to that.
+
+299
+00:13:46,891 --> 00:13:49,092
+And I said yes.
+
+300
+00:13:49,093 --> 00:13:51,795
+And I settle all ties.
+
+301
+00:13:55,266 --> 00:13:56,933
+Change seats with me.
+
+302
+00:13:56,934 --> 00:13:58,135
+Why?
+
+303
+00:13:58,136 --> 00:13:59,636
+There's a draft on
+my neck over here.
+
+304
+00:13:59,637 --> 00:14:01,338
+So, I get the draft?
+
+305
+00:14:01,339 --> 00:14:03,807
+You're protected
+by your turtleneck.
+
+306
+00:14:04,642 --> 00:14:06,343
+Fine.
+
+307
+00:14:07,979 --> 00:14:10,180
+And it's a dickey.
+
+308
+00:14:16,854 --> 00:14:19,556
+Hmm...
+
+309
+00:14:19,557 --> 00:14:21,825
+I'm still not comfortable.
+
+310
+00:14:21,826 --> 00:14:23,093
+Of course.
+
+311
+00:14:23,094 --> 00:14:24,761
+There's too many people here.
+
+312
+00:14:26,230 --> 00:14:27,531
+We can fix that.
+
+313
+00:14:27,532 --> 00:14:29,399
+Let's leave.
+
+314
+00:14:29,400 --> 00:14:31,735
+Yeah, we can go over to my place.
+
+315
+00:14:31,736 --> 00:14:32,803
+Wait.
+
+316
+00:14:32,804 --> 00:14:34,338
+Let me get my jacket.
+
+317
+00:14:36,240 --> 00:14:38,608
+You're not going with us. Why not?
+
+318
+00:14:38,609 --> 00:14:41,578
+You're the guy we're
+trying to get away from.
+
+319
+00:14:41,579 --> 00:14:43,246
+Oh.
+
+320
+00:14:43,247 --> 00:14:45,782
+Well, in that case,
+I don't need my jacket.
+
+321
+00:14:47,018 --> 00:14:48,919
+And for the record,
+the correct syntax is:
+
+322
+00:14:48,920 --> 00:14:51,355
+I'm the guy from whom
+you're trying to get away.
+
+323
+00:15:00,431 --> 00:15:02,999
+Oh, yes.
+
+324
+00:15:05,837 --> 00:15:08,772
+This is definitely
+going to be my spot.
+
+325
+00:15:08,773 --> 00:15:10,173
+<i>Okay.</i>
+
+326
+00:15:10,174 --> 00:15:12,175
+How do you know he said that?
+You left the room.
+
+327
+00:15:12,176 --> 00:15:16,079
+Hey, do you want me to finish
+working on your man feet or not?
+
+328
+00:15:16,914 --> 00:15:19,349
+Fine. Go ahead.
+
+329
+00:15:19,350 --> 00:15:22,586
+MRS. WOLOWITZ Howard,
+are you having a playdate?
+
+330
+00:15:22,587 --> 00:15:24,721
+I don't have playdates!
+
+331
+00:15:24,722 --> 00:15:26,590
+I have colleagues!
+
+332
+00:15:26,591 --> 00:15:30,227
+Do their parents know they're here?
+
+333
+00:15:30,228 --> 00:15:34,064
+No, but if you keep screaming,
+maybe they'll hear you!
+
+334
+00:15:38,503 --> 00:15:40,070
+That your dad?
+
+335
+00:15:42,306 --> 00:15:45,409
+She grows any more
+hair on her face, yes.
+
+336
+00:15:46,511 --> 00:15:47,677
+Oh, man.
+
+337
+00:15:47,678 --> 00:15:49,713
+Is that a two-stage rocket?
+
+338
+00:15:49,714 --> 00:15:52,416
+Three. I designed
+the engine myself.
+
+339
+00:15:52,417 --> 00:15:54,684
+Cool. Can it break Mach 1?
+
+340
+00:15:54,685 --> 00:15:57,721
+Oh, probably, if I could get
+my hands on that new fuel
+
+341
+00:15:57,722 --> 00:15:59,656
+the government's been working on.
+
+342
+00:15:59,657 --> 00:16:01,658
+Oh, this just might
+be your lucky day.
+
+343
+00:16:01,659 --> 00:16:03,860
+MRS. WOLOWITZ: Howard,
+what happened to the Oreos
+
+344
+00:16:03,861 --> 00:16:06,430
+I left on the counter?!
+
+345
+00:16:07,832 --> 00:16:10,967
+I haven't seen your Oreos!
+
+346
+00:16:10,968 --> 00:16:14,538
+Just take your bath without them!
+
+347
+00:16:18,276 --> 00:16:19,976
+So, why was it his lucky day?
+
+348
+00:16:19,977 --> 00:16:20,977
+Well, it turns out I had
+
+349
+00:16:20,978 --> 00:16:22,245
+a little rocket fuel
+in the apartment.
+
+350
+00:16:22,246 --> 00:16:24,948
+What were you doing with
+rocket fuel in your apartment?
+
+351
+00:16:24,949 --> 00:16:26,650
+Mm, Joyce Kim was kind of curious
+
+352
+00:16:26,651 --> 00:16:28,251
+about what I did for a living,
+
+353
+00:16:28,252 --> 00:16:31,121
+and I was going to
+kind of show it to her.
+
+354
+00:16:32,857 --> 00:16:34,090
+It's not important. The point is,
+
+355
+00:16:34,091 --> 00:16:36,126
+the guys and I went
+back to the apartment.
+
+356
+00:16:36,127 --> 00:16:37,694
+Are we ever going to
+get to the elevator?
+
+357
+00:16:37,695 --> 00:16:38,728
+Yeah, we're really close.
+
+358
+00:16:38,729 --> 00:16:39,930
+Uh, uh, we're at the apartment.
+
+359
+00:16:39,931 --> 00:16:42,065
+The trick is to mix it into Tovex
+
+360
+00:16:42,066 --> 00:16:43,900
+in order to create
+a combustible gel
+
+361
+00:16:43,901 --> 00:16:46,970
+that will generate over 8,
+000 kilonewtons of thrust.
+
+362
+00:16:46,971 --> 00:16:48,104
+Cool. Nice.
+
+363
+00:16:48,105 --> 00:16:49,406
+Won't work.
+
+364
+00:16:50,708 --> 00:16:53,343
+Excuse me, but I've been
+working on this a long time.
+
+365
+00:16:53,344 --> 00:16:54,678
+Trust me-- it'll work.
+
+366
+00:16:54,679 --> 00:16:56,780
+You don't see your mistake, do you?
+
+367
+00:16:56,781 --> 00:16:58,381
+There's no mistake.
+
+368
+00:16:58,382 --> 00:17:01,117
+This is for a full-scale rocket,
+not a model.
+
+369
+00:17:01,118 --> 00:17:02,752
+Well, I've adjusted the formula.
+
+370
+00:17:02,753 --> 00:17:05,021
+Not correctly.
+
+371
+00:17:05,022 --> 00:17:06,990
+Okay, I've had it with you.
+
+372
+00:17:06,991 --> 00:17:08,758
+You might be an expert
+
+373
+00:17:08,759 --> 00:17:10,627
+on theoretical physics and
+science-fiction programs
+
+374
+00:17:10,628 --> 00:17:12,929
+and where to sit on
+a freaking couch,
+
+375
+00:17:12,930 --> 00:17:14,731
+but this is applied physics.
+
+376
+00:17:14,732 --> 00:17:18,335
+And when it comes to
+applied physic... uh-oh.
+
+377
+00:17:18,336 --> 00:17:19,503
+What's happening?
+
+378
+00:17:19,504 --> 00:17:21,304
+A bad thing. A very bad thing.
+
+379
+00:17:21,305 --> 00:17:22,372
+Get the door.
+
+380
+00:17:22,373 --> 00:17:23,874
+Get the door! Get the door!
+
+381
+00:17:23,875 --> 00:17:26,243
+Get the door! Get the door!
+
+382
+00:17:35,987 --> 00:17:38,355
+You're waiting for the elevator?!
+
+383
+00:17:38,356 --> 00:17:40,223
+Oh. Right.
+
+384
+00:17:40,224 --> 00:17:41,791
+Wait. It's here.
+
+385
+00:17:46,230 --> 00:17:47,964
+Give me that.
+
+386
+00:17:51,402 --> 00:17:53,136
+What'd you do that for?
+I had plenty of time...
+
+387
+00:17:58,509 --> 00:18:00,443
+You're welcome.
+
+388
+00:18:03,314 --> 00:18:05,181
+Not only did Sheldon save my life,
+
+389
+00:18:05,182 --> 00:18:07,017
+he didn't rat me out
+to the landlord.
+
+390
+00:18:07,018 --> 00:18:08,184
+Or the police.
+
+391
+00:18:08,185 --> 00:18:10,487
+Or Homeland Security.
+
+392
+00:18:10,488 --> 00:18:12,355
+Okay, so, basically,
+you're the reason
+
+393
+00:18:12,356 --> 00:18:15,191
+I have to walk up and down three
+flights of stairs every day?
+
+394
+00:18:15,192 --> 00:18:16,459
+So I did something stupid.
+
+395
+00:18:16,460 --> 00:18:18,495
+I'm sure you did stupid
+things when you were younger.
+
+396
+00:18:18,496 --> 00:18:20,030
+What were you doing
+seven years ago?
+
+397
+00:18:20,031 --> 00:18:21,665
+Excuse me, I was in high school.
+
+398
+00:18:21,666 --> 00:18:23,700
+Studying, keeping my nose clean,
+
+399
+00:18:23,701 --> 00:18:25,835
+doing volunteer work
+for the community.
+
+400
+00:18:28,306 --> 00:18:30,674
+Not pregnant.
+
+401
+00:18:30,675 --> 00:18:32,842
+Yes!
+
+402
+00:18:40,585 --> 00:18:42,820
+Oh, Ubuntu,
+
+403
+00:18:42,821 --> 00:18:46,991
+you are my favorite
+Linux-based operating system.
+
+404
+00:18:46,992 --> 00:18:48,159
+Hey.
+
+405
+00:18:48,160 --> 00:18:50,161
+Hello.
+
+406
+00:18:51,429 --> 00:18:53,330
+Why do I smell methacrylate?
+
+407
+00:18:53,331 --> 00:18:54,999
+Oh, uh, clear nail polish.
+
+408
+00:18:55,000 --> 00:18:56,600
+I had a mani-pedi.
+
+409
+00:18:57,469 --> 00:18:59,503
+Men can get those.
+
+410
+00:19:00,739 --> 00:19:02,473
+Anyway, I may owe you an apology.
+
+411
+00:19:02,474 --> 00:19:05,709
+There's doubt?
+
+412
+00:19:05,710 --> 00:19:07,411
+I did agree to the
+thermostat setting,
+
+413
+00:19:07,412 --> 00:19:09,547
+and I shouldn't have
+tried to change it.
+
+414
+00:19:09,548 --> 00:19:11,415
+That's not an apology.
+
+415
+00:19:11,416 --> 00:19:14,585
+Simply an acknowledgement
+that I was right.
+
+416
+00:19:14,586 --> 00:19:15,819
+Okay, I'm sorry.
+
+417
+00:19:15,820 --> 00:19:17,688
+There you go.
+
+418
+00:19:17,689 --> 00:19:19,023
+So, we're good?
+
+419
+00:19:19,024 --> 00:19:21,892
+Good what?
+
+420
+00:19:21,893 --> 00:19:23,494
+Never mind.
+
+421
+00:19:23,495 --> 00:19:25,462
+Okay if I watch some TV?
+
+422
+00:19:25,463 --> 00:19:27,231
+Go ahead.
+
+423
+00:19:27,232 --> 00:19:29,567
+<i>Up next</i> Babylon 5.
+
+424
+00:19:31,236 --> 00:19:33,270
+You're not even watching!
+
+425
+00:19:33,271 --> 00:19:34,505
+I can hear it!
+
+426
+00:19:34,506 --> 00:19:36,440
+Oh, so the dialogue offends you?
+
+427
+00:19:36,441 --> 00:19:38,642
+I would hardly call that dialogue!
+
+428
+00:19:38,643 --> 00:19:40,110
+You're insane, you know that?!
+
+429
+00:19:40,111 --> 00:19:41,812
+Don't make me turn
+that flag upside down,
+
+430
+00:19:41,813 --> 00:19:43,414
+'cause you know I'll do it!
+
+431
+00:19:44,115 --> 00:19:47,649
+-- Sync, corrected by <font color=#00FF00>elderman</font> --
+-- for <font color=#00FFFF>www.addic7ed.com</font> --
