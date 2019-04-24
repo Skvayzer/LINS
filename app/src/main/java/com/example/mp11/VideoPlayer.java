@@ -904,7 +904,7 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
             controlsState = ControlsMode.FULLCONTORLS;
 
         }
-
+//
     }
 
     private HpLib_RendererBuilder getHpLibRendererBuilder() {
