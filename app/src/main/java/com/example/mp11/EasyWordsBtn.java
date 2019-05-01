@@ -30,12 +30,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.FirebaseDbHelper.FirebaseDbHelper;
 import com.example.mp11.ForDatabases.DbHelper;
 import com.example.mp11.MyDatabase.MyDbHelper;
+import com.example.mp11.views.StringTranslation;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
 import com.example.mp11.yandex.dictslate.Model;
 import com.example.mp11.yandex.dictslate.RestApi;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -259,7 +269,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                     }
 
                 }
-                final MyDbHelper databaseHelper = new MyDbHelper(getApplicationContext());
+
 
 
                 String meanings="";
@@ -270,19 +280,22 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 final ArrayList<String> defsyns=new ArrayList<>();
                 final ArrayList<String> defex=new ArrayList<>();
 
-                final ArrayList<TranslationItem> result = new ArrayList<>();
+                //final ArrayList<TranslationItem> result = new ArrayList<>();
+                final ArrayList<StringTranslation> stringDict=new ArrayList<>();
                 String transcription="";
+               // String strmeanings="",strex="",strsyns="";
                 for (int i = 0; i < response.body().def.length; i++) {
-                    TranslationItem item = new TranslationItem();
+                    //TranslationItem item = new TranslationItem();
+                    StringTranslation item=new StringTranslation();
 
                     for (int j = 0; j < response.body().def[i].tr.length; j++) {
 
                         Model.Def.Tr cur = response.body().def[i].tr[j];
-                        item.meanings.add(cur.text);
+                        //item.meanings.add(cur.text);
                         meanings+=cur.text + ", ";
                         if(cur.syn!=null)
                             for (Model.Def.Tr.Syn a : cur.syn) {
-                                item.meanings.add(a.text);
+                               // item.meanings.add(a.text);
                                 meanings+=a.text+", ";
                             }
                         if(cur.mean!=null)
@@ -296,11 +309,11 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                                     }
                                 }
                                 if(isEnglish){
-                                    item.syn.add(now);
+                                    //item.syn.add(now);
                                     syns+=now+", ";
                                 }
                                 else{
-                                    item.meanings.add(now);
+                                    //item.meanings.add(now);
                                     meanings+=now+", ";
                                 }
 
@@ -308,7 +321,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                         if(cur.ex!=null)
                             for (Model.Def.Ex a : cur.ex) {
                                 for (Model.Def.Tr b : a.tr){
-                                    item.ex.put(a.text, b.text);
+                                    //item.ex.put(a.text, b.text);
                                     ex+=a.text + " - " + b.text + '\n';
                                 }
 
@@ -318,20 +331,25 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                     }
                     transcription="["+response.body().def[i].ts+"]";
                     item.index=i+1;
-                    result.add(item);
+                    item.word=text;
+                    //result.add(item);
                     defmean.add(meanings);
+                    if(meanings.length()!=0)item.meaning=meanings.substring(0,meanings.length()-2);
                     meanings="";
                     defsyns.add(syns);
+                    if(syns.length()!=0) item.syns=syns.substring(0,syns.length()-2);
                     syns="";
                     defex.add(ex);
+                    if(ex.length()!=0)item.ex=ex;
                     ex="";
-
+                    stringDict.add(item);
 
 
                 }
 //                final String meanin=meanings;
 //                final String synin=syns;
 //                final String exin=ex;
+
                 AlertDialog.Builder pop = new AlertDialog.Builder(getApplicationContext());
                 final AlertDialog kek=pop.create();
                 kek.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
@@ -346,18 +364,31 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 ListView lv = (ListView) view.findViewById(R.id.word_list);
                 ((TextView)view.findViewById(R.id.current_word)).setText(text+" "+transcription);
 
-                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), result.toArray(new TranslationItem[result.size()]));
+//                strmeanings=strmeanings.substring(0,strmeanings.length()-2);
+//                strex=strex.substring(0,strex.length()-2);
+//                strsyns=strsyns.substring(0,strsyns.length()-2);
+                //TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), result.toArray(new TranslationItem[result.size()]));
+                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stringDict.toArray(new StringTranslation[stringDict.size()]));
                 lv.setAdapter(adapter);
 
+
+                //myRef.setValue("TEST MESSAGE");
                 Button btn=(Button)view.findViewById(R.id.addToDict_btn);
                 //final ArrayList<TranslationItem> result1 = result;
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
+                        MyDbHelper databaseHelper = new MyDbHelper(getApplicationContext(), "TED");
                         for(int q=0;q<defmean.size();q++){
+
                             databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
                         }
+
+
+                        FirebaseDbHelper.AddWord(text,stringDict);
+
+
 
 
                         kek.hide();

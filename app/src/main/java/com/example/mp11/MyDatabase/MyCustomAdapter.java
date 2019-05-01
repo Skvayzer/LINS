@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.mp11.R;
+import com.example.mp11.views.StringTranslation;
 
 import java.util.ArrayList;
 
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 public class MyCustomAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<WordModel> WordModelArrayList;
+    private ArrayList<StringTranslation> WordModelArrayList;
     private String curword;
 
-    public MyCustomAdapter(Context context, ArrayList<WordModel> WordModelArrayList,String curword) {
+    public MyCustomAdapter(Context context, ArrayList<StringTranslation> WordModelArrayList,String curword) {
 
         this.context = context;
         this.WordModelArrayList = WordModelArrayList;

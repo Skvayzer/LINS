@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.FirebaseDbHelper.FirebaseDbHelper;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.PopActivity;
 import com.example.mp11.R;
@@ -481,7 +482,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
                 }
 
-                final MyDbHelper databaseHelper = new MyDbHelper(getContext());
+                final MyDbHelper databaseHelper = new MyDbHelper(getContext(), "TED");
                 String meanings="";
                 String syns="(";
                 String ex="";
@@ -489,19 +490,21 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 final ArrayList<String> defmean=new ArrayList<>();
                 final ArrayList<String> defsyns=new ArrayList<>();
                 final ArrayList<String> defex=new ArrayList<>();
-                ArrayList<TranslationItem> result = new ArrayList<>();
+                //ArrayList<TranslationItem> result = new ArrayList<>();
+                final ArrayList<StringTranslation> stringDict=new ArrayList<>();
                 String transcription="";
+                //String strmeanings="",strex="",strsyns="";
                 for (int i = 0; i < response.body().def.length; i++) {
-                    TranslationItem item = new TranslationItem();
+                    StringTranslation item = new StringTranslation();
 
                     for (int j = 0; j < response.body().def[i].tr.length; j++) {
 
                         Model.Def.Tr cur = response.body().def[i].tr[j];
-                        item.meanings.add(cur.text);
+                       // item.meanings.add(cur.text);
                         meanings+=cur.text + ", ";
                         if(cur.syn!=null)
                         for (Model.Def.Tr.Syn a : cur.syn) {
-                            item.meanings.add(a.text);
+                           // item.meanings.add(a.text);
                             meanings+=a.text+", ";
                         }
                         if(cur.mean!=null)
@@ -515,11 +518,11 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                                 }
                             }
                            if(isEnglish){
-                               item.syn.add(now);
+                               //item.syn.add(now);
                                syns+=now+", ";
                            }
                            else {
-                               item.meanings.add(now);
+                               //item.meanings.add(now);
                                meanings+=now+", ";
                            }
 
@@ -527,7 +530,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                         if(cur.ex!=null)
                         for (Model.Def.Ex a : cur.ex) {
                             for (Model.Def.Tr b : a.tr){
-                                item.ex.put(a.text, b.text);
+                                //item.ex.put(a.text, b.text);
                                 ex+=a.text + " - " + b.text + '\n';
                             }
 
@@ -537,13 +540,18 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                     }
                     transcription="["+response.body().def[i].ts+"]";
                     item.index=i+1;
-                    result.add(item);
+                    item.word=text;
+                    //result.add(item);
                     defmean.add(meanings);
+                    if(meanings.length()!=0)item.meaning=meanings.substring(0,meanings.length()-2);
                     meanings="";
                     defsyns.add(syns);
+                    if(syns.length()!=0) item.syns=syns.substring(0,syns.length()-2);
                     syns="";
                     defex.add(ex);
+                    if(ex.length()!=0)item.ex=ex;
                     ex="";
+                    stringDict.add(item);
 
                 }
                 AlertDialog.Builder pop = new AlertDialog.Builder(getContext());
@@ -555,7 +563,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 ListView lv = (ListView) view.findViewById(R.id.word_list);
                 ((TextView)view.findViewById(R.id.current_word)).setText(text+" "+transcription);
 
-                TranslationAdapter adapter = new TranslationAdapter(getContext(), result.toArray(new TranslationItem[result.size()]));
+                TranslationAdapter adapter = new TranslationAdapter(getContext(), stringDict.toArray(new StringTranslation[stringDict.size()]));
                 lv.setAdapter(adapter);
                 Button btn=(Button)view.findViewById(R.id.addToDict_btn);
                 btn.setOnClickListener(new OnClickListener() {
@@ -564,6 +572,8 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                         for(int q=0;q<defmean.size();q++){
                             databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
                         }
+
+                        FirebaseDbHelper.AddWord(text,stringDict);
 
 
                         kek.hide();

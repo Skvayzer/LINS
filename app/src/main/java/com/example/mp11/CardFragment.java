@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.example.mp11.MyDatabase.MyCustomAdapter;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.MyDatabase.WordModel;
+import com.example.mp11.views.StringTranslation;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
 
@@ -60,7 +61,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     boolean visibility=false;
     ListView list;
     MyDbHelper databaseHelper;
-    private ArrayList<WordModel> wordModelArrayList;
+    private ArrayList<StringTranslation> wordModelArrayList;
     private MyCustomAdapter customAdapter;
 
     // TODO: Rename and change types of parameters
@@ -268,24 +269,27 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
             list=(ListView)convertView.findViewById(R.id.word_list_card);
-            MyDbHelper databaseHelper = new MyDbHelper(getContext());
+            MyDbHelper databaseHelper = new MyDbHelper(getContext(),"TED");
 
-            wordModelArrayList = databaseHelper.getAllWords();
 
-           int randomNumber = (int)(Math.random()*(wordModelArrayList.size()));
+            //if(wordModelArrayList.size()!=0) {}
+               int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+               String r = databaseHelper.getAllWords().get(randomNumber).getWord();
+            wordModelArrayList = databaseHelper.getWord(r);
            // Random random=new Random();
             //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
-            String curword=wordModelArrayList.get(randomNumber).getWord();
-            ArrayList<WordModel> nowlist = new ArrayList<WordModel>();
-            for(WordModel p: wordModelArrayList){
-                if(p.getWord().equals(curword)){
-                    nowlist.add(p);
-                }
-            }
-            customAdapter = new MyCustomAdapter(getContext(),nowlist,curword);
+           // String curword=wordModelArrayList.get(randomNumber).getWord();
+           // ArrayList<StringTranslation> nowlist = new ArrayList<StringTranslation>();
+//            for(WordModel p: wordModelArrayList){
+//                if(p.getWord().equals(curword)){
+//                    nowlist.add(p);
+//                }
+//            }
+
+            customAdapter = new MyCustomAdapter(getContext(),wordModelArrayList,r);
             list.setAdapter(customAdapter);
 
-            textViewCard.setText(curword);
+            textViewCard.setText(r);
             showbtn=(ImageButton)convertView.findViewById(R.id.showwordbtn);
             final View view= convertView;
             final ViewGroup parent1=parent;

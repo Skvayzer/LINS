@@ -12,35 +12,38 @@ import com.example.mp11.yandex.dictslate.Model;
 
 import java.util.Map;
 
-public class TranslationAdapter extends ArrayAdapter<TranslationItem> {
-    public TranslationAdapter(Context context, TranslationItem[] arr) {
+public class TranslationAdapter extends ArrayAdapter<StringTranslation> {
+    public TranslationAdapter(Context context, StringTranslation[] arr) {
         super(context, R.layout.pop_item, arr);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final TranslationItem item = getItem(position);
+        final StringTranslation item = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.pop_item, null);
         }
-        String s="";
-        if(item.meanings!=null) {
-            for (String a : item.meanings) s += a + ", ";
-            if(!s.equals(""))((TextView) convertView.findViewById(R.id.meanings)).setText(item.index + "   " + s.substring(0,s.length()-2));
-        }
-
-        s="";
-        if(item.syn!= null) {
-            for (String a : item.syn) s += a + ", ";
-            if(!s.equals(""))((TextView) convertView.findViewById(R.id.syn_item)).setText(String.valueOf("(" + s.substring(0,s.length()-2) + ")"));
-        }
-        s="";
-        if(item.ex!= null) {
-            for (Map.Entry<String,String> entry: item.ex.entrySet())
-            ((TextView) convertView.findViewById(R.id.ex)).setText(entry.getKey()+" - "+entry.getValue() + '\n');
-        }
-
+//        String s="";
+//        if(item.meanings!=null) {
+//            for (String a : item.meanings) s += a + ", ";
+//            if(!s.equals(""))((TextView) convertView.findViewById(R.id.meanings)).setText(item.index + "   " + s.substring(0,s.length()-2));
+//        }
+//
+//        s="";
+//        if(item.syn!= null) {
+//            for (String a : item.syn) s += a + ", ";
+//            if(!s.equals(""))((TextView) convertView.findViewById(R.id.syn_item)).setText(String.valueOf("(" + s.substring(0,s.length()-2) + ")"));
+//        }
+//        s="";
+//        if(item.ex!= null) {
+//            for (Map.Entry<String,String> entry: item.ex.entrySet()) {
+//                ((TextView) convertView.findViewById(R.id.ex)).setText(entry.getKey()+" - "+entry.getValue() + '\n');
+//            }
+//        }
+        ((TextView) convertView.findViewById(R.id.meanings)).setText(item.index + "  " +item.meaning);
+        ((TextView) convertView.findViewById(R.id.syn_item)).setText(item.syns + ")");
+        ((TextView) convertView.findViewById(R.id.ex)).setText("\n"+item.ex);
 
 
         return convertView;

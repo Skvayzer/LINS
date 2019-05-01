@@ -9,8 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.mp11.R;
+import com.example.mp11.views.StringTranslation;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 
 public class DbCustomAdapter extends BaseAdapter {
@@ -23,6 +25,11 @@ public class DbCustomAdapter extends BaseAdapter {
         this.context = context;
         this.WordModelArrayList = WordModelArrayList;
     }
+//    public DbCustomAdapter(Context context, ArrayList<StringTranslation> WordModelArrayList) {
+//
+//        this.context = context;
+//        this.WordModelArrayList = WordModelArrayList;
+//    }
 
 
     @Override
@@ -54,6 +61,7 @@ public class DbCustomAdapter extends BaseAdapter {
             holder.tvWord = (TextView) convertView.findViewById(R.id.word);
             holder.tvDefinition = (TextView) convertView.findViewById(R.id.definition);
             holder.tvSyns = (TextView) convertView.findViewById(R.id.syn);
+            holder.tvEx=(TextView)convertView.findViewById(R.id.ex);
 
 
             convertView.setTag(holder);
@@ -62,15 +70,31 @@ public class DbCustomAdapter extends BaseAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.tvWord.setText("Word: "+WordModelArrayList.get(position).getWord());
-        holder.tvDefinition.setText("Definition: "+WordModelArrayList.get(position).getdefinition());
-        holder.tvSyns.setText("Syns: "+WordModelArrayList.get(position).getSyns());
+
+        WordModel now=WordModelArrayList.get(position);
+        String def=now.getWord()+'\n'+'\n',syns="",ex="";
+        for(int i=0;i<now.definition.size();i++) {
+
+
+            def += "Определение: " + now.getdefinition(i) + '\n';
+
+
+            def += "Синонимы: " + now.getSyns(i) + '\n';
+
+            def += "Примеры: " + now.getEx(i);
+
+        }
+
+       holder.tvWord.setText(def);
+//        holder.tvDefinition.setText("Definition: "+now.getdefinition());
+//        holder.tvSyns.setText("Syns: "now).getSyns());
+//        holder.tvEx.setText("Ex: " );
 
         return convertView;
     }
     private class ViewHolder {
 
-        protected TextView tvWord, tvDefinition, tvSyns;
+        protected TextView tvWord, tvDefinition, tvSyns,tvEx;
     }
 
 }

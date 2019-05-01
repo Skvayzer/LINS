@@ -44,7 +44,7 @@ public class SocialFragment extends Fragment {
     private MessageListAdapter adapter;
 
     private Button btnStore, btnGetall;
-    private EditText etword, etdefinition, etsyns;
+    private EditText etword, etdefinition, etsyns,etex;
     private MyDbHelper databaseHelper;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -101,21 +101,22 @@ boolean test=true;
 //            }
 //        });
 
-        databaseHelper = new MyDbHelper(getContext());
+        databaseHelper = new MyDbHelper(getContext(),"TED");
 
         btnStore = (Button) view.findViewById(R.id.btnstore);
         btnGetall = (Button) view.findViewById(R.id.btnget);
         etword = (EditText) view.findViewById(R.id.etword);
         etdefinition = (EditText) view.findViewById(R.id.etdefinition);
         etsyns = (EditText) view.findViewById(R.id.etsyns);
-
+        etex=(EditText) view.findViewById(R.id.etex);
         btnStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),"");
+                databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),etex.getText().toString());
                 etword.setText("");
                 etdefinition.setText("");
                 etsyns.setText("");
+                etex.setText("");
                 Toast.makeText(getContext(), "Stored Successfully!", Toast.LENGTH_SHORT).show();
             }
         });

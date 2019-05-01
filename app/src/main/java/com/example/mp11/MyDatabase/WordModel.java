@@ -1,10 +1,12 @@
 package com.example.mp11.MyDatabase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class WordModel implements Serializable {
 
-    private String word, definition, syns, ex;
+    private String word;
+    public ArrayList<String> definition=new ArrayList<String>(),syns=new ArrayList<String>(), ex=new ArrayList<String>();
     private int id;
 
 
@@ -16,20 +18,22 @@ public class WordModel implements Serializable {
         this.word = word;
     }
 
-    public String getdefinition() {
-        return definition;
+    public String getdefinition(int i) {
+        if(i<definition.size()) return definition.get(i);
+        return"no def";
     }
 
-    public void setdefinition(String definition) {
-        this.definition = definition;
+    public void adddefinition(String definition) {
+        this.definition.add(definition);
     }
 
-    public String getSyns() {
-        return syns;
+    public String getSyns(int i) {
+        if(i<syns.size()) return syns.get(i);
+        return"no syns";
     }
 
-    public void setSyns(String syns) {
-        this.syns = syns;
+    public void addSyns(String syns) {
+        this.syns.add(syns);
     }
 
     public int getId() {
@@ -40,11 +44,12 @@ public class WordModel implements Serializable {
         this.id = id;
     }
 
-    public String getEx() {
-        return ex;
+    public String getEx(int i) {
+        if(i<ex.size()) return ex.get(i);
+        return"no examples";
     }
 
-    public void setEx(String ex) {
-        this.ex = ex;
+    public void addEx(String ex) {
+        this.ex.add(ex);
     }
 }

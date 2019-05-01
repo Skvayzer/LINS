@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.mp11.views.StringTranslation;
+
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 
 public class MyDbHelper extends SQLiteOpenHelper {
@@ -39,8 +42,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_WORD_EX = "CREATE TABLE "
             + TABLE_EX + "(" + KEY_ID + " INTEGER,"+ KEY_EX + " TEXT );";
 
-    public MyDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public MyDbHelper(Context context, String DB_NAME) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
 
         Log.d("table", CREATE_TABLE_WORDS);
     }
@@ -93,10 +96,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT  * FROM " + TABLE_WORD;
         SQLiteDatabase db = this.getReadableDatabase();
-        
+
         Cursor c = db.rawQuery(selectQuery, null);
-        
-        
+
+
         if (c.moveToFirst()) {
             do {
                 WordModel wordModel = new WordModel();
@@ -104,27 +107,27 @@ public class MyDbHelper extends SQLiteOpenHelper {
                 wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
 
 
-                
+
                 String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
                 Log.d("aaaaa",selectDefinitionQuery);
-                
+
                 //SQLiteDatabase dbDefinition = this.getReadableDatabase();
                 Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
 
                 if (cDefinition.moveToFirst()) {
                     do {
-                        wordModel.setdefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                        wordModel.adddefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
                     } while (cDefinition.moveToNext());
                 }
 
-                
+
                 String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
                 //SQLiteDatabase dbSyn = this.getReadableDatabase();
                 Cursor cSyn = db.rawQuery(selectSynQuery, null);
 
                 if (cSyn.moveToFirst()) {
                     do {
-                        wordModel.setSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                        wordModel.addSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
                     } while (cSyn.moveToNext());
                 }
                 String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
@@ -133,7 +136,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
                 if (cEx.moveToFirst()) {
                     do {
-                        wordModel.setEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                        wordModel.addEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
                     } while (cEx.moveToNext());
                 }
 
@@ -145,7 +148,177 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
         return wordModelArrayList;
     }
+    public ArrayList<StringTranslation> getAllWords(int k) {
+        ArrayList<StringTranslation> wordModelArrayList = new ArrayList<StringTranslation>();
 
+        String selectQuery = "SELECT  * FROM " + TABLE_WORD;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+
+        if (c.moveToFirst()) {
+            do {
+                StringTranslation wordModel = new StringTranslation();
+                wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
+
+
+
+                String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
+                Log.d("aaaaa",selectDefinitionQuery);
+
+                //SQLiteDatabase dbDefinition = this.getReadableDatabase();
+                Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
+
+                if (cDefinition.moveToFirst()) {
+                    do {
+                        wordModel.setdefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                    } while (cDefinition.moveToNext());
+                }
+
+
+                String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cSyn = db.rawQuery(selectSynQuery, null);
+
+                if (cSyn.moveToFirst()) {
+                    do {
+                        wordModel.setsyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                    } while (cSyn.moveToNext());
+                }
+                String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cEx = db.rawQuery(selectExQuery, null);
+
+                if (cEx.moveToFirst()) {
+                    do {
+                        wordModel.setex(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                    } while (cEx.moveToNext());
+                }
+
+
+                wordModelArrayList.add(wordModel);
+            } while (c.moveToNext());
+
+        }
+
+        return wordModelArrayList;
+    }
+    public ArrayList<WordModel> getWord(String word,int k) {
+        ArrayList<WordModel> wordModelArrayList = new ArrayList<WordModel>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_WORD + " WHERE " + KEY_WORD+" = " + word;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+
+        if (c.moveToFirst()) {
+            do {
+                WordModel wordModel = new WordModel();
+                wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
+
+
+
+                String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
+                Log.d("SQLDictionary: ",selectDefinitionQuery);
+
+                //SQLiteDatabase dbDefinition = this.getReadableDatabase();
+                Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
+
+                if (cDefinition.moveToFirst()) {
+                    do {
+                        wordModel.adddefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                    } while (cDefinition.moveToNext());
+                }
+
+
+                String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cSyn = db.rawQuery(selectSynQuery, null);
+
+                if (cSyn.moveToFirst()) {
+                    do {
+                        wordModel.addSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                    } while (cSyn.moveToNext());
+                }
+                String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cEx = db.rawQuery(selectExQuery, null);
+
+                if (cEx.moveToFirst()) {
+                    do {
+                        wordModel.addEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                    } while (cEx.moveToNext());
+                }
+
+
+                wordModelArrayList.add(wordModel);
+            } while (c.moveToNext());
+
+        }
+
+        return wordModelArrayList;
+    }
+    public ArrayList<StringTranslation> getWord(String word) {
+        ArrayList<StringTranslation> wordModelArrayList = new ArrayList<StringTranslation>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_WORD + " WHERE " + KEY_WORD+"=" + "'"+word+"'";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+
+        if (c.moveToFirst()) {
+            do {
+                StringTranslation wordModel = new StringTranslation();
+                wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
+
+
+
+                String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
+                Log.d("SQLDictionary: ",selectDefinitionQuery);
+
+                //SQLiteDatabase dbDefinition = this.getReadableDatabase();
+                Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
+
+                if (cDefinition.moveToFirst()) {
+                    do {
+                        wordModel.setdefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                    } while (cDefinition.moveToNext());
+                }
+
+
+                String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cSyn = db.rawQuery(selectSynQuery, null);
+
+                if (cSyn.moveToFirst()) {
+                    do {
+                        wordModel.setsyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                    } while (cSyn.moveToNext());
+                }
+                String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cEx = db.rawQuery(selectExQuery, null);
+
+                if (cEx.moveToFirst()) {
+                    do {
+                        wordModel.setex(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                    } while (cEx.moveToNext());
+                }
+
+
+                wordModelArrayList.add(wordModel);
+            } while (c.moveToNext());
+
+        }
+
+        return wordModelArrayList;
+    }
     public void updateWord(int id, String word, String Definition, String Syn, String Ex) {
         SQLiteDatabase db = this.getWritableDatabase();
 

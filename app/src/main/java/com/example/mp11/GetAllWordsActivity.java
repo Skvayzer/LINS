@@ -11,12 +11,14 @@ import com.example.mp11.MyDatabase.DbCustomAdapter;
 import com.example.mp11.MyDatabase.MyCustomAdapter;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.MyDatabase.WordModel;
+import com.example.mp11.views.StringTranslation;
 
 import java.util.ArrayList;
 
 public class GetAllWordsActivity extends AppCompatActivity {
     private ListView listView;
     private ArrayList<WordModel> wordModelArrayList;
+    private ArrayList<StringTranslation> wordStringArrayList;
     private DbCustomAdapter customAdapter;
     private MyDbHelper databaseHelper;
     @Override
@@ -25,10 +27,10 @@ public class GetAllWordsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_all_words);
         listView = (ListView) findViewById(R.id.lv);
 
-        databaseHelper = new MyDbHelper(this);
+        databaseHelper = new MyDbHelper(this,"TED");
 
         wordModelArrayList = databaseHelper.getAllWords();
-
+       // wordStringArrayList=databaseHelper.getAllWords(1);
         customAdapter = new DbCustomAdapter(this,wordModelArrayList);
         listView.setAdapter(customAdapter);
 

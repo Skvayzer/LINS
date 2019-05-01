@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class TranslationItem {
     public int index=0;
+    public String word;
 
     public ArrayList<String> meanings=new ArrayList<>();
     public ArrayList<String> syn=new ArrayList<>();

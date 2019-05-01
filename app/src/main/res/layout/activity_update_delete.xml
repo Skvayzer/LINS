@@ -15,6 +15,11 @@
         android:layout_marginTop="10dp"
         android:textColor="#000"
         android:textSize="20sp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/updatelayout">
     <EditText
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -23,43 +28,53 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:hint="Enter Word"/>
+        android:hint="Слово"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Definition"
+        android:text="Значения"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:textColor="#000"
         android:textSize="20sp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etdefinition"
-        android:background="#fff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="Enter Definition"/>
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:id="@+id/etdefinition"-->
+        <!--android:background="#fff"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:hint="Значения"/>-->
 
-    <TextView
-        android:layout_width="match_parent"
+
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:id="@+id/etsyns"-->
+        <!--android:background="#fff"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:hint="Синонимы"/>-->
+
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:id="@+id/etex"-->
+            <!--android:background="#fff"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:hint="Примеры"/>-->
+</LinearLayout>
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Syns"
-        android:layout_marginLeft="10dp"
+        android:text="Добавить определение"
+        android:id="@+id/addmeaning"
         android:layout_marginTop="10dp"
-        android:textColor="#000"
-        android:textSize="20sp"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etsyns"
-        android:background="#fff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="Enter Syns"/>
-
+        android:layout_marginLeft="10dp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

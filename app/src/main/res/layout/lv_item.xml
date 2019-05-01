@@ -29,7 +29,7 @@
             android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingLeft="10dp"
-            android:text="Definition" />
+            android:text="" />
         <TextView
             android:id="@+id/syn"
             android:layout_width="match_parent"
@@ -38,7 +38,16 @@
             android:gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingLeft="10dp"
-            android:text="Syn" />
+            android:text="" />
+        <TextView
+            android:id="@+id/ex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingLeft="10dp"
+            android:text="" />
 
 
     </LinearLayout>
