@@ -2,6 +2,7 @@ package com.example.mp11;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -28,6 +29,7 @@ import com.example.mp11.MyDatabase.WordModel;
 import com.example.mp11.views.StringTranslation;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -269,7 +271,18 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
             list=(ListView)convertView.findViewById(R.id.word_list_card);
-            MyDbHelper databaseHelper = new MyDbHelper(getContext(),"TED");
+            Gson gson=new Gson();
+            SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor=preferences.edit();
+            String json=preferences.getString("dictionaries",null);
+            String names[]=gson.fromJson(json,String[].class);
+
+            String name="";
+            if(names!=null){
+                int random = (int) (Math.random() * (names.length));
+                name=names[random];
+            }
+            MyDbHelper databaseHelper = new MyDbHelper(getContext(),name);
 
 
             //if(wordModelArrayList.size()!=0) {}
