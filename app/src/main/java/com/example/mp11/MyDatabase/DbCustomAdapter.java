@@ -59,9 +59,9 @@ public class DbCustomAdapter extends BaseAdapter {
 
             
             holder.tvWord = (TextView) convertView.findViewById(R.id.word);
-            holder.tvDefinition = (TextView) convertView.findViewById(R.id.definition);
-            holder.tvSyns = (TextView) convertView.findViewById(R.id.syn);
-            holder.tvEx=(TextView)convertView.findViewById(R.id.ex);
+           // holder.tvDefinition = (TextView) convertView.findViewById(R.id.definition);
+           // holder.tvSyns = (TextView) convertView.findViewById(R.id.syn);
+           // holder.tvEx=(TextView)convertView.findViewById(R.id.ex);
 
 
             convertView.setTag(holder);
@@ -76,10 +76,10 @@ public class DbCustomAdapter extends BaseAdapter {
         for(int i=0;i<now.definition.size();i++) {
 
 
-            def += "Определение: " + now.getdefinition(i) + '\n';
+            def += "Определение: " + now.getdefinition(i) + '\n'+'\n';
 
 
-            def += "Синонимы: " + now.getSyns(i) + '\n';
+            def += "Синонимы: " + now.getSyns(i) + '\n'+'\n';
 
             def += "Примеры: " + now.getEx(i);
 

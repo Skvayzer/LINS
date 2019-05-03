@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
@@ -16,12 +19,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.DictionariesFragment;
 import com.example.mp11.FirebaseDbHelper.FirebaseDbHelper;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.PopActivity;
@@ -482,7 +487,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
                 }
 
-                final MyDbHelper databaseHelper = new MyDbHelper(getContext(), "TED");
+                //final MyDbHelper databaseHelper = new MyDbHelper(getContext(), "TED");
                 String meanings="";
                 String syns="(";
                 String ex="";
@@ -569,11 +574,44 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 btn.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        for(int q=0;q<defmean.size();q++){
-                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
-                        }
+                        AlertDialog.Builder pop = new AlertDialog.Builder(getContext());
+                        final AlertDialog lol=pop.create();
+                        lol.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
-                        FirebaseDbHelper.AddWord(text,stringDict);
+//                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                        //View view = inflater.inflate(R.layout.pop_word, null);
+                        //View view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.pop_word,null);
+                        LayoutInflater inflater = (LayoutInflater)   getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
+                                R.layout.recycler_view, null, false);
+
+                        ArrayList<StringTranslation> stlist=new ArrayList<>();
+                        for(int q=0;q<defmean.size();q++){
+
+                            stlist.add(new StringTranslation(text, defmean.get(q), defsyns.get(q),defex.get(q)));
+                        }
+                        DictionariesFragment.MyContentAdapter adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
+                                stlist, lol,text);
+
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setHasFixedSize(true);
+                        // отступ для плитки
+                        int tilePadding = getResources().getDimensionPixelSize(R.dimen.tile_padding);
+                        recyclerView.setPadding(tilePadding, tilePadding, tilePadding, tilePadding);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                        //layoutManager =  ((GridLayoutManager)recyclerView.getLayoutManager());
+
+
+                        recyclerView.setBackgroundColor(Color.WHITE);
+                        lol.setView(recyclerView);
+                        lol.show();
+
+
+//                        for(int q=0;q<defmean.size();q++){
+//                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
+//                        }
+//
+//                        FirebaseDbHelper.AddWord(name,text,stringDict);
 
 
                         kek.hide();

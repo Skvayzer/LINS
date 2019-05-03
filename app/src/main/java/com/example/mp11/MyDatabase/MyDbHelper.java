@@ -20,12 +20,12 @@ public class MyDbHelper extends SQLiteOpenHelper {
     private static final String TABLE_WORD = "words";
     private static final String TABLE_DEFINITION = "words_Definition";
     private static final String TABLE_SYN = "words_Syn";
-    private static final String TABLE_EX = "ex_Syn";
+    private static final String TABLE_EX = "words_Ex";
     private static final String KEY_ID = "id";
     private static final String KEY_WORD = "word";
     private static final String KEY_DEFINITION = "Definition";
     private static final String KEY_SYN = "Syn";
-    private static final String KEY_EX = "ex";
+    private static final String KEY_EX = "Ex";
 
     /*CREATE TABLE students ( id INTEGER PRIMARY KEY AUTOINCREMENT, word TEXT, phone_number TEXT......);*/
 
@@ -86,8 +86,8 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.insert(TABLE_SYN, null, valuesSyn);
 
         ContentValues valuesEx = new ContentValues();
-        valuesSyn.put(KEY_ID, id);
-        valuesSyn.put(KEY_EX, Ex);
+        valuesEx.put(KEY_ID, id);
+        valuesEx.put(KEY_EX, Ex);
         db.insert(TABLE_EX, null, valuesEx);
     }
 
@@ -338,7 +338,7 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.update(TABLE_SYN, valuesSyn, KEY_ID + " = ?", new String[]{String.valueOf(id)});
 
         ContentValues valuesEx = new ContentValues();
-        valuesSyn.put(KEY_EX, Ex);
+        valuesEx.put(KEY_EX, Ex);
         db.update(TABLE_EX, valuesEx, KEY_ID + " = ?", new String[]{String.valueOf(id)});
     }
 

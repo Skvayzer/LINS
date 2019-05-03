@@ -5,7 +5,10 @@
         android:icon="@drawable/ic_person_black_24dp"
         android:title="Social"
         />
-
+    <item
+        android:id="@+id/navigation_dictionaties"
+        android:icon="@drawable/ic_bookmark_black_24dp"
+        android:title="Dictionaries"/>
     <item
         android:id="@+id/navigation_cards"
         android:icon="@drawable/ic_filter_none_black_24dp"

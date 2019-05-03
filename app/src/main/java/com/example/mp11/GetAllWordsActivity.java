@@ -26,8 +26,9 @@ public class GetAllWordsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_all_words);
         listView = (ListView) findViewById(R.id.lv);
+        final String name=getIntent().getExtras().getString("name");
 
-        databaseHelper = new MyDbHelper(this,"TED");
+        databaseHelper = new MyDbHelper(this,name);
 
         wordModelArrayList = databaseHelper.getAllWords();
        // wordStringArrayList=databaseHelper.getAllWords(1);
@@ -39,6 +40,7 @@ public class GetAllWordsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(GetAllWordsActivity.this, UpdateDeleteActivity.class);
                 intent.putExtra("word", wordModelArrayList.get(position));
+                intent.putExtra("name",name);
                 startActivity(intent);
             }
         });

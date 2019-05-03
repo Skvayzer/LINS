@@ -21,18 +21,18 @@ public class FirebaseDbHelper {
     static String userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
     static DatabaseReference myRef = database.getReference(userID);
     static ArrayList<StringTranslation> list;
-    public static void AddWord(String word,ArrayList<StringTranslation> list){
+    public static void AddWord(String dict,String word,ArrayList<StringTranslation> list){
 
 
 
-        myRef.child(word).setValue(list);
+        myRef.child(dict).child(word).setValue(list);
 
     }
 
-    public static ArrayList<StringTranslation> getWord(String word){
+    public static ArrayList<StringTranslation> getWord(String dict,String word){
 
 
-        myRef.child(word).addValueEventListener(new ValueEventListener() {
+        myRef.child(dict).child(word).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

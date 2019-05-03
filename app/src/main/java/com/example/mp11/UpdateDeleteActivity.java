@@ -14,13 +14,18 @@ import android.widget.Toast;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.MyDatabase.WordModel;
 
+import java.util.ArrayList;
+
 public class UpdateDeleteActivity extends AppCompatActivity {
     private com.example.mp11.MyDatabase.WordModel WordModel;
-    private EditText etword, etdefinition, etsyns;
+    private EditText etword; //etdefinition, etsyns;
     private Button btnupdate, btndelete, btnadd;
     private MyDbHelper databaseHelper;
     private LinearLayout ll;
-    int num=1;
+    int num=0;
+    ArrayList<EditText> aretdef=new ArrayList<>(),
+    aretsyns=new ArrayList<>(),
+    aretex=new ArrayList<>();
     public void add() {
 
         EditText etdef = new EditText(this);
@@ -37,7 +42,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         ll.addView(etsyns);
         ll.addView(etex);
         num++;
-
+        aretdef.add(etdef);
+        aretsyns.add(etsyns);
+        aretex.add(etex);
     }
     public void add(String def, String syns, String ex) {
 
@@ -58,6 +65,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         ll.addView(etsyns);
         ll.addView(etex);
         num++;
+        aretdef.add(etdef);
+        aretsyns.add(etsyns);
+        aretex.add(etex);
 
     }
     @Override
@@ -67,8 +77,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         WordModel = (WordModel) intent.getSerializableExtra("word");
         ll=(LinearLayout)findViewById(R.id.updatelayout);
+        final String name=getIntent().getExtras().getString("name");
 
-        databaseHelper = new MyDbHelper(this,"TED");
+        databaseHelper = new MyDbHelper(this,name);
 
           etword = (EditText) findViewById(R.id.etword);
 //        etdefinition = (EditText) findViewById(R.id.etdefinition);
@@ -95,11 +106,18 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         btnupdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseHelper.updateWord(WordModel.getId(),etword.getText().toString(),etdefinition.getText().toString(),etsyns.getText().toString(),"");
-                Toast.makeText(UpdateDeleteActivity.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(UpdateDeleteActivity.this,SocialFragment.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                for (int i = 0; i < num; i++) {
+
+
+                    databaseHelper.updateWord(WordModel.getId(), etword.getText().toString(),aretdef.get(i).getText().toString(),
+                            aretsyns.get(i).getText().toString(), aretex.get(i).getText().toString());
+                }
+                    Toast.makeText(UpdateDeleteActivity.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(UpdateDeleteActivity.this, GetAllWordsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("name",name);
+                    startActivity(intent);
+
             }
         });
 
@@ -108,8 +126,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 databaseHelper.deleteWord(WordModel.getId());
                 Toast.makeText(UpdateDeleteActivity.this, "Deleted Successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(UpdateDeleteActivity.this,SocialFragment.class);
+                Intent intent = new Intent(UpdateDeleteActivity.this,GetAllWordsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("name",name);
                 startActivity(intent);
             }
         });

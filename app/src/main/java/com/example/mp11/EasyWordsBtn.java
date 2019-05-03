@@ -17,6 +17,8 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,7 +60,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class EasyWordsBtn extends Service implements View.OnTouchListener, View.OnClickListener{
+public class EasyWordsBtn extends Service implements View.OnTouchListener, View.OnClickListener, ClickListener{
 
     private View topLeftView;
 
@@ -219,6 +221,17 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
         getReport(message);
 
     }
+
+    @Override
+    public void onItemClick(int position, View v) {
+
+    }
+
+    @Override
+    public void onItemLongClick(int position, View v) {
+
+    }
+
     class ClipboardListener implements ClipboardManager.OnPrimaryClipChangedListener
     {
         public void onPrimaryClipChanged()
@@ -357,6 +370,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 //                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
                 //View view = inflater.inflate(R.layout.pop_word, null);
                 View view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.pop_word,null);
+
                 view.setBackgroundColor(Color.WHITE);
 
                 kek.setView(view);
@@ -378,15 +392,45 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        AlertDialog.Builder pop = new AlertDialog.Builder(getApplicationContext());
+                        final AlertDialog lol=pop.create();
+                        lol.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
-                        MyDbHelper databaseHelper = new MyDbHelper(getApplicationContext(), "TED");
+//                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+                        //View view = inflater.inflate(R.layout.pop_word, null);
+                        //View view=LayoutInflater.from(getApplicationContext()).inflate(R.layout.pop_word,null);
+                        LayoutInflater inflater = (LayoutInflater)   getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
+                                R.layout.recycler_view, null, false);
+
+                        ArrayList<StringTranslation> stlist=new ArrayList<>();
                         for(int q=0;q<defmean.size();q++){
 
-                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
+                            stlist.add(new StringTranslation(text, defmean.get(q), defsyns.get(q),defex.get(q)));
                         }
+                        DictionariesFragment.MyContentAdapter adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
+                                stlist, lol,text);
+                       // FirebaseDbHelper.AddWord(text,stlist);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setHasFixedSize(true);
+                        // отступ для плитки
+                        int tilePadding = getResources().getDimensionPixelSize(R.dimen.tile_padding);
+                        recyclerView.setPadding(tilePadding, tilePadding, tilePadding, tilePadding);
+                        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
+                        //layoutManager =  ((GridLayoutManager)recyclerView.getLayoutManager());
 
 
-                        FirebaseDbHelper.AddWord(text,stringDict);
+                        recyclerView.setBackgroundColor(Color.WHITE);
+                        lol.setView(recyclerView);
+                        lol.show();
+//                        MyDbHelper databaseHelper = new MyDbHelper(getApplicationContext(), "TED");
+//                        for(int q=0;q<defmean.size();q++){
+//
+//                            databaseHelper.addWord(text, defmean.get(q), defsyns.get(q),defex.get(q));
+//                        }
+//
+//
+//                        FirebaseDbHelper.AddWord(text,stringDict);
 
 
 

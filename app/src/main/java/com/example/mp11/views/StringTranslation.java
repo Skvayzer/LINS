@@ -2,7 +2,15 @@ package com.example.mp11.views;
 
 public class StringTranslation {
     public String word,meaning,ex,syns;
+    public StringTranslation(String word, String meaning, String syns, String ex){
+        this.word=word;
+        this.meaning=meaning;
+        this.syns=syns;
+        this.ex=ex;
+    }
+    public StringTranslation(){
 
+    }
     public int index=0,id;
     public void setId(int a){
         id=a;

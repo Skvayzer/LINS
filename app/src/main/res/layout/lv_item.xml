@@ -21,33 +21,33 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingLeft="10dp"
             android:text="Word" />
-        <TextView
-            android:id="@+id/definition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingLeft="10dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/syn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingLeft="10dp"
-            android:text="" />
-        <TextView
-            android:id="@+id/ex"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:gravity="center_vertical"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingLeft="10dp"
-            android:text="" />
+        <!--<TextView-->
+            <!--android:id="@+id/definition"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="#fff"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:text="" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/syn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="#fff"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:text="" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/ex"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="#fff"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:text="" />-->
 
 
     </LinearLayout>

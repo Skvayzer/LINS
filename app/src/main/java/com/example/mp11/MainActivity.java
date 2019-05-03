@@ -52,7 +52,7 @@ import java.util.List;
 import link.fls.swipestack.SwipeStack;
 
 public class MainActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener,
-        SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, VideoPlayerFragment.OnFragmentInteractionListener  {
+        SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener  {
 
 //    private Button mButtonLeft, mButtonRight, showbtn;
 //    private FloatingActionButton mFab;
@@ -116,18 +116,24 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
                                 selectedFragment = SocialFragment.newInstance("kek", "lol");
                                 bottomNavigationView.getMenu().getItem(0).setChecked(true);
                                 break;
-                            case R.id.navigation_cards:
-                                selectedFragment = CardFragment.newInstance("kek", "lol");
+                            case R.id.navigation_dictionaties:
+                                selectedFragment = DictionariesFragment.newInstance("kek","lol");
                                 bottomNavigationView.getMenu().getItem(1).setChecked(true);
                                 break;
-                            case R.id.navigation_settings:
-                                selectedFragment = SettingsFragment.newInstance("kek","lol");
-                                bottomNavigationView.getMenu().getItem(3).setChecked(true);
+                            case R.id.navigation_cards:
+                                selectedFragment = CardFragment.newInstance("kek", "lol");
+                                bottomNavigationView.getMenu().getItem(2).setChecked(true);
                                 break;
                             case R.id.navigation_video:
                                 selectedFragment = VideoPlayerFragment.newInstance("kek","lol");
-                                bottomNavigationView.getMenu().getItem(2).setChecked(true);
+                                bottomNavigationView.getMenu().getItem(3).setChecked(true);
                                 break;
+                            case R.id.navigation_settings:
+                                selectedFragment = SettingsFragment.newInstance("kek","lol");
+                                bottomNavigationView.getMenu().getItem(4).setChecked(true);
+                                break;
+
+
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.frame_layout, selectedFragment);
