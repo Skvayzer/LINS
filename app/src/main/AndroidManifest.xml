@@ -53,6 +53,9 @@
         </activity>
         <activity android:name=".UpdateDeleteActivity" />
         <activity android:name=".GetAllWordsActivity" />
+        <receiver
+            android:name=".AlarmReceiver">
+        </receiver>
     </application>
 
 </manifest>

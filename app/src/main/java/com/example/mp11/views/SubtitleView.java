@@ -82,6 +82,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
     public boolean isMoving = false;
 
+
     public int height, width;
 
     public long last_position = 0;
@@ -233,8 +234,8 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                             btn_pause.setVisibility(GONE);
                             btn_play.setVisibility(VISIBLE);
                             ispopupWindow = false;
-                            Intent i = new Intent(getContext(), PopActivity.class);
-                            i.putExtra("word", s[e]);
+                         //   Intent i = new Intent(getContext(), PopActivity.class);
+                          //  i.putExtra("word", s[e]);
 
                             getReport(s[e]);
                             //showPop();
@@ -342,13 +343,16 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         LineNumberReader r = new LineNumberReader(new InputStreamReader(is, "UTF-8"));
         TreeMap<Long, Line> track = new TreeMap<>();
 
-        while ((r.readLine()) != null) /*Read cue number*/ {
+        while ((r.readLine()) != null)  {
             String timeString = r.readLine();
             String lineString = "";
             String s;
+
             while (!((s = r.readLine()) == null || s.trim().equals(""))) {
                 lineString += s + "\n";
             }
+
+
             long startTime = parse(timeString.split("-->")[0]);
             long endTime = parse(timeString.split("-->")[1]);
             track.put(startTime, new Line(startTime, endTime, lineString));

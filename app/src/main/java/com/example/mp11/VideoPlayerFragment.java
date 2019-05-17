@@ -129,6 +129,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
         btn=(Button)view.findViewById(R.id.watch);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
         final Handler handler = new Handler();
 
         handler.post(new Runnable() {

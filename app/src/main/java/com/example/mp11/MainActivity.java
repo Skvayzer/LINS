@@ -25,16 +25,26 @@ package com.example.mp11;
 //}
 
 
+import android.app.AlarmManager;
 import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -149,8 +159,68 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
         Intent serv=new Intent(getApplicationContext(),EasyWordsBtn.class);
         startService(serv);
 
-    }
 
+//уведомлялки
+//        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+//
+//        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+//        //set the notification to repeat every fifteen minutes
+//        long startTime = 1; // 2 min
+//        // set unique id to the pending item, so we can call it when needed
+//        PendingIntent pi = PendingIntent.getBroadcast(this, 001, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+//        alarmManager.setInexactRepeating(AlarmManager.RTC, SystemClock.elapsedRealtime() +
+//                startTime, 1, pi);
+
+
+
+      //  scheduleNotification(getNotification("1 second delay"), 1000);
+      //  scheduleNotification(getApplicationContext(),1000,0);
+    }
+//    private void scheduleNotification(Notification notification, int delay) {
+//
+//        Intent notificationIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
+//        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, 1);
+//        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION, notification);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+//        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+//    }
+//
+//    private Notification getNotification(String content) {
+//        Notification.Builder builder = new Notification.Builder(getApplicationContext());
+//        builder.setContentTitle("Scheduled Notification");
+//        builder.setContentText(content);
+//        builder.setSmallIcon(R.mipmap.ic_launcher);
+//        return builder.build();
+//    }
+
+
+//    public void scheduleNotification(Context context, long delay, int notificationId) {//delay is after how much time(in millis) from current time you want to schedule the notification
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+//                .setContentTitle("hey")
+//                .setContentText("work")
+//                .setAutoCancel(true)
+//                .setSmallIcon(R.mipmap.ic_launcher_round);
+//
+//                builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+//
+//        Intent intent = new Intent(context, MainActivity.class);
+//        PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+//        builder.setContentIntent(activity);
+//
+//        Notification notification = builder.build();
+//
+//        Intent notificationIntent = new Intent(context, AlarmReceiver.class);
+//        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, notificationId);
+//        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION, notification);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+//    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -253,4 +323,6 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //            return convertView;
 //        }
 //    }
+
+
 }

@@ -122,6 +122,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
     @Override
     public void onCreate() {
         super.onCreate();
+        Toast.makeText(this,"Service created",Toast.LENGTH_LONG).show();
         wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         overlayedButton = new ImageButton(this);

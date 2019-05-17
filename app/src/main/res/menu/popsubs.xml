@@ -1,35 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:id="@+id/menugroup1"
-        >
+    <!--<group android:id="@+id/menugroup1"-->
+        <!--&gt;-->
 
-        <item
-            android:id="@+id/menu1"
-            android:title="Eng subs">
-            <menu>
-                <item
-                    android:id="@+id/submenu1"
-                    android:title="Подменю"/>
-            </menu>
-        </item>
-        <item
-            android:id="@+id/menu2"
-            android:title="Rus subs">
-            <menu>
-                <item
-                    android:id="@+id/submenu2"
-                    android:title="Подменю"/>
-            </menu>
-        </item>
+        <!--<item-->
+            <!--android:id="@+id/menu1"-->
+            <!--android:title="Eng subs">-->
+            <!--<menu>-->
+                <!--<item-->
+                    <!--android:id="@+id/submenu1"-->
+                    <!--android:title="Подменю"/>-->
+            <!--</menu>-->
+        <!--</item>-->
+        <!--<item-->
+            <!--android:id="@+id/menu2"-->
+            <!--android:title="Rus subs">-->
+            <!--<menu>-->
+                <!--<item-->
+                    <!--android:id="@+id/submenu2"-->
+                    <!--android:title="Подменю"/>-->
+            <!--</menu>-->
+        <!--</item>-->
 
-    </group>
+    <!--</group>-->
     <group
 android:checkableBehavior="single"
         android:id="@+id/menugroup2"
         >
+
+
+                <item
+                    android:id="@+id/menu1"
+                    android:title="Eng subs"/>
+
+
+
+
+                <item
+                    android:id="@+id/menu2"
+                    android:title="Rus subs"/>
+
+
         <item
             android:id="@+id/menu3"
-            android:orderInCategory="1"
+            android:orderInCategory="3"
             android:title="Freeze subs"
             />
     </group>

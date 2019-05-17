@@ -3,12 +3,14 @@ package com.example.mp11;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -158,6 +160,7 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
     private int brightness, mediavolume,device_height,device_width;
     private AudioManager audioManager;
 
+    public SubsTask cur_subs;
 
     SubtitleView subView;
     public boolean isSubsFrozen=false;
@@ -494,7 +497,8 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
 //                            volumeBarContainer.setVisibility(View.VISIBLE);
 //                            volumeBar.setProgress((int) volPerc);
 //                        }
-//                    }else if (Math.abs(diffX) > Math.abs(diffY)) {
+//                    }else
+//                      if (Math.abs(diffX) > Math.abs(diffY)) {
 //                        if (Math.abs(diffX) > (MIN_DISTANCE + 100)) {
 //                            tested_ok = true;
 //                            root.setVisibility(View.VISIBLE);
@@ -751,10 +755,10 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
             }
         }
         if (i1 == R.id.btn_fwd) {
-            player.seekTo(player.getCurrentPosition() + 30000);
+            player.seekTo(player.getCurrentPosition() + 10000);
         }
         if (i1 == R.id.btn_rev) {
-            player.seekTo(player.getCurrentPosition() - 30000);
+            player.seekTo(player.getCurrentPosition() - 10000);
         }
         if (i1 == R.id.btn_next) {
             player.release();
@@ -786,14 +790,14 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu1:
-                            Toast.makeText(getApplicationContext(),
-                                    "Eng subs",
-                                    Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(getApplicationContext(), "Eng subs", Toast.LENGTH_SHORT).show();
+                            if(subView.getVisibility()==View.VISIBLE){
+                                subView.setVisibility(View.INVISIBLE);
+                            }else subView.setVisibility(View.VISIBLE);
                             return true;
                         case R.id.menu2:
-                            Toast.makeText(getApplicationContext(),
-                                    "Rus subs",
-                                    Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(getApplicationContext(), "Rus subs", Toast.LENGTH_SHORT).show();
+
                             return true;
                         case R.id.menu3:
 
@@ -877,22 +881,39 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
 //            subView.dt=0;
 //        }
         if(currentTrackIndex==0){
-            subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            if(cur_subs!=null)cur_subs.onCancel();
+            cur_subs=new SubsTask();
+            cur_subs.execute(R.raw.sub1);
+          //  subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             subView.dt=22500;
         }
         if(currentTrackIndex==1){
-            subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            if(cur_subs!=null)cur_subs.onCancel();
+            cur_subs=new SubsTask();
+            cur_subs.execute(R.raw.sub2);
+            //subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             subView.dt=22500;
         }
         if(currentTrackIndex==2){
-            subView.setSubSource(R.raw.sub5,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            if(cur_subs!=null)cur_subs.onCancel();
+            cur_subs=new SubsTask();
+            cur_subs.execute(R.raw.sub5);
+           // subView.setSubSource(R.raw.sub5,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             subView.dt=22500;
         }
         if(currentTrackIndex==3){
-            subView.setSubSource(R.raw.sub3,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            if(cur_subs!=null)cur_subs.onCancel();
+            cur_subs=new SubsTask();
+            cur_subs.execute(R.raw.sub3);
+            //subView.setSubSource(R.raw.sub3,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             subView.dt=0;
         }
-        if(currentTrackIndex==4) subView.setSubSource(R.raw.sub4,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+        if(currentTrackIndex==4){
+            if(cur_subs!=null)cur_subs.onCancel();
+            cur_subs=new SubsTask();
+            cur_subs.execute(R.raw.sub4);
+            //subView.setSubSource(R.raw.sub4,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+        }
 
         if(player!=null) {
             hpLibRendererBuilder = getHpLibRendererBuilder();
@@ -1131,4 +1152,25 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
         showControls();
     }
 
-}
+    class SubsTask extends AsyncTask<Integer,Integer,Void>{
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            subView.setSubSource(integers[0],MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            return null;
+        }
+
+        public void onCancel() {
+            try{
+
+
+                if(cur_subs!=null) cur_subs.cancel(true); // Stop AsyncTask
+
+            }catch(NullPointerException npe){
+
+            }
+        }
+    }
+    }
+
+

@@ -744,10 +744,10 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             }
         }
         if (i1 == R.id.btn_fwd) {
-            player.seekTo(player.getCurrentPosition() + 30000);
+            player.seekTo(player.getCurrentPosition() + 10000);
         }
         if (i1 == R.id.btn_rev) {
-            player.seekTo(player.getCurrentPosition() - 30000);
+            player.seekTo(player.getCurrentPosition() - 10000);
         }
         if (i1 == R.id.btn_next) {
             player.release();

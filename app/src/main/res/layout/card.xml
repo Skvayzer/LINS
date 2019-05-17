@@ -39,7 +39,7 @@
             android:layout_below="@id/current_word_card"
             android:layout_centerHorizontal="true"
             android:padding="20dp"
-            android:visibility="invisible"
+            android:visibility="visible"
             />
         <View
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
             android:clickable="false"
             android:contextClickable="false"
             android:textColor="@android:color/background_dark"
-
+            android:visibility="invisible"
 
             >
         </ListView>

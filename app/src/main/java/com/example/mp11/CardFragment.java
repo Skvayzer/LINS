@@ -1,8 +1,10 @@
 package com.example.mp11;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 import com.example.mp11.MyDatabase.MyCustomAdapter;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.MyDatabase.WordModel;
+import com.example.mp11.views.CategDictionary;
 import com.example.mp11.views.StringTranslation;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
@@ -53,6 +57,8 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     private static final String ARG_PARAM2 = "param2";
 
     private Button mButtonLeft, mButtonRight;
+
+    ImageButton btn_settings;
     ImageButton showbtn;
     private FloatingActionButton mFab;
 
@@ -114,13 +120,13 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mButtonLeft = (Button) view.findViewById(R.id.buttonSwipeLeft);
         mButtonRight = (Button) view.findViewById(R.id.buttonSwipeRight);
         mFab = (FloatingActionButton) view.findViewById(R.id.fabAdd);
+        btn_settings=(ImageButton)view.findViewById(R.id.card_settings);
 
 
 
 
 
-
-
+        btn_settings.setOnClickListener(this);
         mButtonLeft.setOnClickListener(this);
         mButtonRight.setOnClickListener(this);
 
@@ -131,6 +137,10 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mSwipeStack.setAdapter(mAdapter);
         mSwipeStack.setListener(this);
 
+        mData.add("a");
+        mData.add("a");
+        mData.add("a");
+        mAdapter.notifyDataSetChanged();
 
         return view;
     }
@@ -147,9 +157,9 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         inflater.inflate(R.menu.main, menu);
         return true;
     }
-    private void fillWithTestData() {
-        for (int x = 0; x < 5; x++) {
-            mData.add(getString(R.string.dummy_text) + " " + (x + 1));
+    private void fillWithTestData(String a) {
+        for (int x = 0; x < mData.size(); x++) {
+            mData.add("a");
         }
     }
     @Override
@@ -190,24 +200,47 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     public void onClick(View v) {
         if (v.equals(mButtonLeft)) {
             mSwipeStack.swipeTopViewToLeft();
+
+            mData.add("a");
+
+            mAdapter.notifyDataSetChanged();
+           // mData.remove(0);
         } else if (v.equals(mButtonRight)) {
             mSwipeStack.swipeTopViewToRight();
-        } else if (v.equals(mFab)) {
-            mData.add(getString(R.string.dummy_fab));
+
+            mData.add("a");
+
             mAdapter.notifyDataSetChanged();
+           // mData.remove(0);
+        } else if (v.equals(mFab)) {
+            mData.add("a");
+
+            mAdapter.notifyDataSetChanged();
+           // mData.remove(0);
+        }else if(v.equals(btn_settings)) {
+
         }
     }
 
     @Override
     public void onViewSwipedToLeft(int position) {
         String swipedElement = mAdapter.getItem(position);
-        Toast.makeText(getActivity(), getString(R.string.view_swiped_left) + " " + swipedElement, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.view_swiped_left) , Toast.LENGTH_SHORT).show();
+        mData.add("a");
+
+        mAdapter.notifyDataSetChanged();
+       // mData.remove(0);
 
     }
     @Override
     public void onViewSwipedToRight(int position) {
         String swipedElement = mAdapter.getItem(position);
-        Toast.makeText(getActivity(), getString(R.string.view_swiped_right)+ " "+ swipedElement, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.view_swiped_right), Toast.LENGTH_SHORT).show();
+        mData.add("a");
+
+        mAdapter.notifyDataSetChanged();
+       // mData.remove(0);
+
 
     }
 
@@ -260,8 +293,10 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             return view;
         }
+
+
         @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
 
                 convertView = getLayoutInflater().inflate(R.layout.card, parent, false);
 
@@ -276,57 +311,72 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
             SharedPreferences.Editor editor=preferences.edit();
             String json=preferences.getString("dictionaries",null);
             String names[]=gson.fromJson(json,String[].class);
+            if(names.length!=0) {
+                String name = "";
+                String r = "";
+                MyDbHelper databaseHelper = null;
+                while (true) {
+                    if (names != null) {
+                        int random = (int) (Math.random() * (names.length));
+                        name = names[random];
+                    }
+                    databaseHelper = new MyDbHelper(getContext(), name);
 
-            String name="";
-            if(names!=null){
-                int random = (int) (Math.random() * (names.length));
-                name=names[random];
-            }
-            MyDbHelper databaseHelper = new MyDbHelper(getContext(),name);
 
-
-            //if(wordModelArrayList.size()!=0) {}
-               int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
-               String r = databaseHelper.getAllWords().get(randomNumber).getWord();
-            wordModelArrayList = databaseHelper.getWord(r);
-           // Random random=new Random();
-            //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
-           // String curword=wordModelArrayList.get(randomNumber).getWord();
-           // ArrayList<StringTranslation> nowlist = new ArrayList<StringTranslation>();
+                    //if(wordModelArrayList.size()!=0) {}
+                    int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+                    if (databaseHelper.getAllWords().size() != 0) {
+                        r = databaseHelper.getAllWords().get(randomNumber).getWord();
+                        break;
+                    }
+                }
+                wordModelArrayList = databaseHelper.getWord(r);
+                // Random random=new Random();
+                //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
+                // String curword=wordModelArrayList.get(randomNumber).getWord();
+                // ArrayList<StringTranslation> nowlist = new ArrayList<StringTranslation>();
 //            for(WordModel p: wordModelArrayList){
 //                if(p.getWord().equals(curword)){
 //                    nowlist.add(p);
 //                }
 //            }
 
-            customAdapter = new MyCustomAdapter(getContext(),wordModelArrayList,r);
-            list.setAdapter(customAdapter);
+                customAdapter = new MyCustomAdapter(getContext(), wordModelArrayList, r);
+                list.setAdapter(customAdapter);
 
-            textViewCard.setText(r);
-            showbtn=(ImageButton)convertView.findViewById(R.id.showwordbtn);
-            final View view= convertView;
-            final ViewGroup parent1=parent;
+                textViewCard.setText(r);
+                showbtn = (ImageButton) convertView.findViewById(R.id.showwordbtn);
+                final View view = convertView;
+                final ViewGroup parent1 = parent;
 
-            showbtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                showbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                        if(list.getVisibility()!=View.VISIBLE){
+                        ImageButton showbtn=(ImageButton)mSwipeStack.getTopView().findViewById(R.id.showwordbtn);
+
+                        list=(ListView)mSwipeStack.getTopView().findViewById(R.id.word_list_card);
+                        if (list.getVisibility() != View.VISIBLE) {
                             list.setVisibility(View.VISIBLE);
                             showbtn.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getContext(),"lol",Toast.LENGTH_SHORT).show();
 
-                           // mSwipeStack.removeView(view);
+                           // Toast.makeText(getContext(), "lol", Toast.LENGTH_SHORT).show();
+                            mData.set(position,"lol");
+                            notifyDataSetChanged();
+
+                            // mSwipeStack.removeView(view);
 
 
                             //getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
 
 
-
                         }
 
-                }
-            });
+                    }
+                });
+            } else {
+
+            }
             return convertView;
         }
     }
