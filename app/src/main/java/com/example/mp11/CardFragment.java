@@ -313,7 +313,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
             String names[]=gson.fromJson(json,String[].class);
             if(names.length!=0) {
                 String name = "";
-                String r = "";
+                String r = "У вас ещё нет слов";
                 MyDbHelper databaseHelper = null;
                 while (true) {
                     if (names != null) {
@@ -325,12 +325,13 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
                     //if(wordModelArrayList.size()!=0) {}
                     int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
-                    if (databaseHelper.getAllWords().size() != 0) {
+                    if (databaseHelper.isOpened()&&databaseHelper.getAllWords().size()!=0) {
                         r = databaseHelper.getAllWords().get(randomNumber).getWord();
+                        wordModelArrayList = databaseHelper.getWord(r);
                         break;
                     }
                 }
-                wordModelArrayList = databaseHelper.getWord(r);
+
                 // Random random=new Random();
                 //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
                 // String curword=wordModelArrayList.get(randomNumber).getWord();

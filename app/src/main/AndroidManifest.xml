@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,10 +18,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DynVideoPlayer"></activity>
+        <activity android:name=".AddWordActivity"></activity>
+        <activity android:name=".DynVideoPlayer" />
         <activity
             android:name=".PopActivity"
-            android:theme="@style/AppTheme.PopWindow"></activity>
+            android:theme="@style/AppTheme.PopWindow" />
         <activity android:name=".Main2Activity" />
 
         <meta-data
@@ -41,21 +40,18 @@
 
         <activity android:name=".LoginActivity" />
         <activity android:name=".MyRegistrationActivity" />
-        <activity android:name=".RegOrLogActivity" >
+        <activity android:name=".RegOrLogActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".UpdateDeleteActivity" />
         <activity android:name=".GetAllWordsActivity" />
-        <receiver
-            android:name=".AlarmReceiver">
-        </receiver>
+
+        <receiver android:name=".AlarmReceiver"></receiver>
     </application>
 
 </manifest>

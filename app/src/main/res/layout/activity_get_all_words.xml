@@ -7,14 +7,36 @@
     android:orientation="vertical"
     tools:context="com.example.mp11.GetAllWordsActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:textSize="20sp"
-        android:textColor="#000"
-        android:text="Data from SQLite"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/find_word"-->
+            <!--android:layout_alignLeft="@id/add_new_word"/>-->
+        <android.support.v7.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_toLeftOf="@id/add_new_word"
+            android:id="@+id/searchView"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_new_word"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_add_black_48dp"
+            android:background="@android:color/transparent"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+
+            android:background="@color/colorPrimaryDark"
+            android:layout_below="@id/searchView"/>
+    </RelativeLayout>
+
 
     <ListView
         android:layout_width="match_parent"

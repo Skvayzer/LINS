@@ -129,6 +129,6 @@
         android:id="@+id/btnget"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="Get All Words from SQLite"/>
+        android:text="Get All Words"/>
 
 </LinearLayout>

@@ -10,10 +10,12 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,7 +80,8 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
     private static final int UPDATE_INTERVAL = 300;
     //private MediaPlayer player;
     PlayerControl player;
-    private TreeMap<Long, Line> track;
+    private static TreeMap<Long, Line> track;
+    private static TreeMap<Long,Line> rus_track;
 
     public boolean isMoving = false;
 
@@ -90,6 +93,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
     public int dt = 22500;
     public boolean isStopped = false;
     public boolean ispopupWindow = false;
+    public boolean rus_mode=false;
 
     public Activity activity;
     public ImageButton btn_pause;
@@ -250,6 +254,17 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 append(link);
 
             }
+            if(rus_mode){
+                String rus_cur=getRussianTimedText(curpos-dt);
+
+                //Spannable wordtoSpan = new SpannableString(rus_cur);
+                if(rus_cur.length()>1) {
+                    //wordtoSpan.setSpan(new ForegroundColorSpan(Color.YELLOW), 0, rus_cur.length() - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    append("\n" );
+                    appendColoredText(this,rus_cur,Color.YELLOW);
+                }
+            }
             // append("\n"+translation);
             makeLinksFocusable(this);
             //if(curS!=null && !curS.equals("")) translate(curS,this);
@@ -257,7 +272,18 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         postDelayed(this, UPDATE_INTERVAL);
 
     }
+    public static void appendColoredText(TextView tv, String text, int color) {
+        int start = tv.getText().length();
+        tv.append(text);
+        int end = tv.getText().length();
 
+        Spannable spannableText = (Spannable) tv.getText();
+        spannableText.setSpan(new ForegroundColorSpan(color), start, end, 0);
+    }
+    private String getColoredSpanned(String text, String color) {
+        String input = "<font color=" + color + ">" + text + "</font>";
+        return input;
+    }
     private SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
         SpannableString link = new SpannableString(text);
         link.setSpan(new ClickableString(listener), 0, text.length(),
@@ -287,6 +313,15 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         }
     }
 
+    private String getRussianTimedText(long currentPosition){
+        String result = "";
+        for (Map.Entry<Long, Line> entry : rus_track.entrySet()) {
+            if (currentPosition < entry.getKey()) break;
+            if (currentPosition < entry.getValue().to) result = entry.getValue().text;
+        }
+
+        return result;
+    }
     private String getTimedText(long currentPosition) {
         String result = "";
         for (Map.Entry<Long, Line> entry : track.entrySet()) {
@@ -338,7 +373,23 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         else
             throw new UnsupportedOperationException("Parser only built for SRT subs");
     }
+    public static void rus_parse()  {
 
+        rus_track = new TreeMap<>();
+
+        for(Map.Entry<Long,Line> entry: track.entrySet()){
+            Line curline=entry.getValue();
+            translate(curline.text,curline.from,curline.to);
+
+        }
+
+
+
+
+
+
+
+    }
     public static TreeMap<Long, Line> parse(InputStream is) throws IOException {
         LineNumberReader r = new LineNumberReader(new InputStreamReader(is, "UTF-8"));
         TreeMap<Long, Line> track = new TreeMap<>();
@@ -460,7 +511,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         pop.show();
     }
 
-    void getReport(final String text) {
+   public void getReport(final String text) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DICT_URI_JSON)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -642,12 +693,13 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
     }
 
 
-    void translate(String text){
+   public static void translate(String text, final long from, final long to){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(TRLATE_URI_JSON)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         TranslateApi service = retrofit.create(TranslateApi.class);
+        String res="";
         Call<CurrentTranslation> call = service.translate(TRLATE_KEY, text,"en-ru");
         call.enqueue(new Callback<CurrentTranslation>() {
             @Override
@@ -674,7 +726,7 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                 }
 
                 String s=response.body().text[0];
-
+                rus_track.put(from,new Line(from,to,s));
 
 
 

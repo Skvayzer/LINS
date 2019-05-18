@@ -797,6 +797,12 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
                             return true;
                         case R.id.menu2:
                           //  Toast.makeText(getApplicationContext(), "Rus subs", Toast.LENGTH_SHORT).show();
+                            if(!subView.rus_mode){
+                                new RusParseTask().execute();
+                            }else {
+                                subView.rus_mode=false;
+                            }
+
 
                             return true;
                         case R.id.menu3:
@@ -1171,6 +1177,22 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
             }
         }
     }
+    class RusParseTask extends AsyncTask<String,Void,String>{
+        @Override
+        protected  void onPreExecute(){
+
+        }
+        @Override
+        protected String doInBackground(String... voids) {
+
+            subView.rus_parse();
+            return "";
+        }
+       @Override
+        protected  void onPostExecute(String a){
+           subView.rus_mode=true;
+        }
     }
+}
 
 

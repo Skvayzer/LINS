@@ -65,6 +65,10 @@ public class MyDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public boolean isOpened(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.isOpen();
+    }
     public void addWord(String word, String Definition, String Syn,String Ex) {
         SQLiteDatabase db = this.getWritableDatabase();
         
@@ -95,6 +99,63 @@ public class MyDbHelper extends SQLiteOpenHelper {
         ArrayList<WordModel> wordModelArrayList = new ArrayList<WordModel>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_WORD;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+
+        if (c.moveToFirst()) {
+            do {
+                WordModel wordModel = new WordModel();
+                wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
+
+
+
+                String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
+                Log.d("aaaaa",selectDefinitionQuery);
+
+                //SQLiteDatabase dbDefinition = this.getReadableDatabase();
+                Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
+
+                if (cDefinition.moveToFirst()) {
+                    do {
+                        wordModel.adddefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                    } while (cDefinition.moveToNext());
+                }
+
+
+                String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cSyn = db.rawQuery(selectSynQuery, null);
+
+                if (cSyn.moveToFirst()) {
+                    do {
+                        wordModel.addSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                    } while (cSyn.moveToNext());
+                }
+                String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
+                //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                Cursor cEx = db.rawQuery(selectExQuery, null);
+
+                if (cEx.moveToFirst()) {
+                    do {
+                        wordModel.addEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                    } while (cEx.moveToNext());
+                }
+
+
+                wordModelArrayList.add(wordModel);
+            } while (c.moveToNext());
+
+        }
+
+        return wordModelArrayList;
+    }
+    public ArrayList<WordModel> getAllWordsStartingWith(String cur) {
+        ArrayList<WordModel> wordModelArrayList = new ArrayList<WordModel>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_WORD + " WHERE "+KEY_WORD+" LIKE '%"+cur+"%'";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c = db.rawQuery(selectQuery, null);
