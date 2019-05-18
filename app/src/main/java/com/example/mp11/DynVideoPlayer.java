@@ -10,6 +10,7 @@ import android.graphics.Point;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -71,6 +72,8 @@ import com.google.android.gms.cast.framework.media.RemoteMediaClient;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -779,14 +782,16 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu1:
-                            Toast.makeText(getApplicationContext(),
-                                    "Eng subs",
-                                    Toast.LENGTH_SHORT).show();
+                            if(subView.getVisibility()==View.VISIBLE){
+                                subView.setVisibility(View.INVISIBLE);
+                            }else subView.setVisibility(View.VISIBLE);
                             return true;
                         case R.id.menu2:
-                            Toast.makeText(getApplicationContext(),
-                                    "Rus subs",
-                                    Toast.LENGTH_SHORT).show();
+                            if(!subView.rus_mode){
+                                new RusParseTask().execute();
+                            }else {
+                                subView.rus_mode=false;
+                            }
                             return true;
                         case R.id.menu3:
 
@@ -854,9 +859,12 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         txt_title.setText(video_title);
 
 
-
-
+        new MySubsParseTask().execute();
+       // subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
         subView.setPlayer(playerControl);
+        subView.dt=40000;
+
+
       //  subView.setSubSource(Uri.parse("file://" + "subsfolder" + "/subs.srt"),MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
 
 
@@ -993,6 +1001,41 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         bottom_controls.setVisibility(View.VISIBLE);
         root.setVisibility(View.VISIBLE);
         showControls();
+    }
+    class RusParseTask extends AsyncTask<String,Void,String> {
+        @Override
+        protected  void onPreExecute(){
+
+        }
+        @Override
+        protected String doInBackground(String... voids) {
+
+            subView.rus_parse();
+            return "";
+        }
+        @Override
+        protected  void onPostExecute(String a){
+            subView.rus_mode=true;
+        }
+    }
+    class MySubsParseTask extends AsyncTask<Void,Void,Void>
+    {
+
+
+        protected void onPreExecute() {
+
+
+        }
+        protected Void doInBackground(Void... params) {
+            subView.setSubSource(subs_source,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            return null;
+        }
+
+
+
+        protected void onPostExecute(Void result) {
+
+        }
     }
 
 }

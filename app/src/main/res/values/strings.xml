@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MP1.1</string>
+    <string name="app_name">lins</string>
     <string name="swipe_left">Помню </string>
     <string name="swipe_right">Повторять </string>
     <string name="view_swiped_right">Не помню </string>

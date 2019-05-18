@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,7 @@ import com.example.mp11.yandex.dictslate.Model;
 import com.example.mp11.yandex.dictslate.RestApi;
 import com.example.mp11.yandex.dictslate.TranslateApi;
 import com.google.android.exoplayer.util.PlayerControl;
+import com.google.android.gms.common.util.IOUtils;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -52,6 +54,7 @@ import java.io.LineNumberReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
@@ -367,9 +370,9 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         else
             throw new UnsupportedOperationException("Parser only built for SRT subs");
     }
-    public void setSubSource(Uri uri, String mime) {
+    public void setSubSource(String url, String mime) {
         if (mime.equals(MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP))
-            track = getSubtitleFile(uri);
+            track = getSubtitleFile(url);
         else
             throw new UnsupportedOperationException("Parser only built for SRT subs");
     }
@@ -431,6 +434,25 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         }
         return track;
     }
+    public static TreeMap<Long, Line> parse(BufferedReader is) throws IOException {
+        LineNumberReader r = new LineNumberReader(is);
+        TreeMap<Long, Line> track = new TreeMap<>();
+
+        while ((r.readLine()) != null) /*Read cue number*/ {
+            String timeString = r.readLine();
+            String lineString = "";
+            String s;
+            while (!((s = r.readLine()) == null || s.trim().equals(""))) {
+                lineString += s + "\n";
+            }
+            long startTime = parse(timeString.split("-->")[0]);
+            long endTime = parse(timeString.split("-->")[1]);
+            track.put(startTime, new Line(startTime, endTime, lineString));
+            //if(lineString!=null&&lineString!="") translate(lineString);
+            //trlate.put(startTime,new Line(startTime,endTime,translation));
+        }
+        return track;
+    }
     private static long parse(String in) {
         long hours = Long.parseLong(in.split(":")[0].trim());
         long minutes = Long.parseLong(in.split(":")[1].trim());
@@ -460,27 +482,40 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         }
         return null;
     }
-    private TreeMap<Long, Line> getSubtitleFile(Uri uri)  {
+    private TreeMap<Long, Line> getSubtitleFile(String s)  {
 
-        File file=new File(uri.toString());
-        FileInputStream fileInputStream=null;
+//        File file=new File(uri.toString());
+//        FileInputStream fileInputStream=null;
+//
+//        try {
+//            fileInputStream = new FileInputStream(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+        URL url=null;
         try {
-            fileInputStream = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
+            url=new URL(s);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-
-        InputStream inputStream=null;
+        InputStream urlConnection=null;
+        BufferedReader bufferedReader=null;
+        InputStream in=null;
         try {
-            inputStream = fileInputStream;
-            return parse(inputStream);
-        } catch (Exception e) {
+            urlConnection = url.openConnection().getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection));
+
+           // in=urlConnection.getInputStream();
+
+            return parse(bufferedReader);
+
+        } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
+        }
+         finally {
+            if (in != null) {
                 try {
-                    inputStream.close();
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -744,6 +779,5 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
             }
         });
     }
-
 
 }

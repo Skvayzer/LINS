@@ -701,6 +701,7 @@ public class VideoPlayer extends AppCompatActivity implements HlsSampleSource.Ev
 
         video_type = new String[]{"others","others","others","others","others", "others", "others","hls"};
         video_url = new String[]{
+
                 "https://emerald.rev.lavenderhosted.com/s5e12.mp4",
                 "https://emerald.rev.lavenderhosted.com/s5e26.mp4",
                 "https://emerald.rev.lavenderhosted.com/s5e17.mp4",

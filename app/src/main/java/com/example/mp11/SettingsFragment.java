@@ -14,13 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.mp11.views.SubtitleView;
-
-
+import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
@@ -50,6 +50,7 @@ public class SettingsFragment extends Fragment  {
     private OnFragmentInteractionListener mListener;
 
     Button btn;
+    CheckBox box;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -88,6 +89,31 @@ public class SettingsFragment extends Fragment  {
                              Bundle savedInstanceState)   {
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
         btn=(Button)view.findViewById(R.id.govideo);
+        box=(CheckBox)view.findViewById(R.id.chckservice);
+        Button logout=(Button)view.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+
+            }
+        });
+        box.setSelected(true);
+        box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(box.isSelected()){
+                    box.setSelected(false);
+                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
+                    getActivity().stopService(serv);
+                }else{
+                    box.setSelected(true);
+                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
+                    getActivity().startService(serv);
+                }
+            }
+        });
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

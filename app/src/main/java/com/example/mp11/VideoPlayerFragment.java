@@ -15,6 +15,7 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -29,6 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -144,7 +152,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
                     public void onClick(View v) {
                         String cururl = mWebView.getUrl();
                         new MyTask().execute();
-                        Toast.makeText(getContext(),"g",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getContext(),"g",Toast.LENGTH_SHORT).show();
 
 
 
@@ -317,7 +325,11 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 
 
     class MyTask extends AsyncTask<Void, String, String> {
-
+        String current_url="";
+        @Override
+        protected void onPreExecute() {
+            current_url=mWebView.getUrl();
+        }
         @Override
         protected String doInBackground(Void... params) {
 
@@ -325,45 +337,49 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             Document doc=null;
             try {
                 //doc = Jsoup.connect(cururl).get();
-                doc = Jsoup.connect(cururl).header("Accept-Encoding", "gzip, deflate")
+
+                doc = Jsoup.connect(current_url).header("Accept-Encoding", "gzip, deflate")
                         .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
                         .maxBodySize(0)
                         .get();
                 Elements vids = doc.getElementsByTag("iframe");
                 for (Element vid : vids) {
-                    //if(vid.attr("src").contains("openload")  || vid.attr("src").contains("streamango"))
-                    if (vid.attr("src").contains("streamango")) {
+                    if(vid.attr("src").contains("openload")){
+                    //if (vid.attr("src").contains("streamango")) {
                         res = vid.attr("src");
-                        Document doc1 = null;
-
-                        //doc = Jsoup.connect(cururl).get();
-
-                        doc1 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
-                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
-                                .maxBodySize(0)
-                                .get();
-
-
-                        Elements vidu = doc1.getElementsByTag("video");
-                        res = vidu.first().attr("src");
-                        Document doc2 = null;
-
-                        //doc = Jsoup.connect(cururl).get();
-
-                        doc2 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
-                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
-                                .maxBodySize(0)
-                                .get();
-
-
-                        Elements vidfi = doc2.getElementsByTag("meta");
-                        for (Element vidnow : vidfi) {
-                            if (vidnow.attr("name").equals("src")) {
-                                res = vidnow.attr("content");
-                                break;
-
-                            }
-                        }
+                        int from=res.indexOf("embed")+6;
+                        int to=res.indexOf("/",from);
+                        res=res.substring(from,to);
+//                        Document doc1 = null;
+//
+//                        //doc = Jsoup.connect(cururl).get();
+//
+//                        doc1 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
+//                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+//                                .maxBodySize(0)
+//                                .get();
+//
+//
+//                        Elements vidu = doc1.getElementsByTag("video");
+//                        res = vidu.first().attr("src");
+//                        Document doc2 = null;
+//
+//                        //doc = Jsoup.connect(cururl).get();
+//
+//                        doc2 = Jsoup.connect(res).header("Accept-Encoding", "gzip, deflate")
+//                                .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+//                                .maxBodySize(0)
+//                                .get();
+//
+//
+//                        Elements vidfi = doc2.getElementsByTag("meta");
+//                        for (Element vidnow : vidfi) {
+//                            if (vidnow.attr("name").equals("src")) {
+//                                res = vidnow.attr("content");
+//                                break;
+//
+//                            }
+//                        }
 
 
                     }
@@ -381,7 +397,55 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
                 e.printStackTrace();
             }
 
+            HttpClient httpclient = new DefaultHttpClient();
+            String URL="https://api.openload.co/1/file/dlticket?file="+res+"&login=8fe311552cf7409d&key=XYvH9jgv";
+            HttpGet httpget= new HttpGet(URL);
+            String ticket="none";
+            HttpResponse response = null;
+            try {
+                response = httpclient.execute(httpget);
+                if(response.getStatusLine().getStatusCode()==200){
+                    String server_response = "";
+                    try {
+                        server_response = EntityUtils.toString(response.getEntity());
+                        JSONObject obj=new JSONObject(server_response);
+                        ticket=obj.getJSONObject("result").getString("ticket");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+                    Log.i("Server response", server_response );
+                } else {
+                    Log.i("Server response", "Failed to get server response" );
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
+            HttpGet httpget1= new HttpGet("https://api.openload.co/1/file/dl?file="+res+"&ticket="+ticket);
+            String video_url;
+            try {
+                HttpResponse response1=httpclient.execute(httpget1);
+                if(response1.getStatusLine().getStatusCode()==200){
+                    String server_response = "";
+                    try {
+                        server_response = EntityUtils.toString(response1.getEntity());
+                        JSONObject obj=new JSONObject(server_response);
+                        video_url=obj.getJSONObject("result").getString("url");
+                        res=video_url;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                    }
+                    Log.i("Server response", server_response );
+                } else {
+                    Log.i("Server response", "Failed to get server response" );
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 
             Elements subs = doc.getElementsByTag("a");
@@ -402,9 +466,10 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             videourl=result;
             Intent i=new Intent(getContext(), DynVideoPlayer.class);
             String[] s=videourl.split(" ");
+            String title=videourl.substring(s[0].length()+s[1].length()+1,videourl.length());
             i.putExtra("videourl",s[0]);
             i.putExtra("subsurl",s[1]);
-            i.putExtra("title",s[2]);
+            i.putExtra("title",title);
 
             startActivity(i);
         }

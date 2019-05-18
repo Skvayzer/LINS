@@ -101,46 +101,46 @@ boolean test=true;
 //            }
 //        });
 
-        databaseHelper = new MyDbHelper(getContext(),"TED");
-
-        btnStore = (Button) view.findViewById(R.id.btnstore);
-        btnGetall = (Button) view.findViewById(R.id.btnget);
-        etword = (EditText) view.findViewById(R.id.etword);
-        etdefinition = (EditText) view.findViewById(R.id.etdefinition);
-        etsyns = (EditText) view.findViewById(R.id.etsyns);
-        etex=(EditText) view.findViewById(R.id.etex);
-        btnStore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),etex.getText().toString());
-                etword.setText("");
-                etdefinition.setText("");
-                etsyns.setText("");
-                etex.setText("");
-                Toast.makeText(getContext(), "Stored Successfully!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnGetall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext() , GetAllWordsActivity.class);
-                startActivity(intent);
-            }
-        });
+//        databaseHelper = new MyDbHelper(getContext(),"TED");
+//
+//        btnStore = (Button) view.findViewById(R.id.btnstore);
+//        btnGetall = (Button) view.findViewById(R.id.btnget);
+//        etword = (EditText) view.findViewById(R.id.etword);
+//        etdefinition = (EditText) view.findViewById(R.id.etdefinition);
+//        etsyns = (EditText) view.findViewById(R.id.etsyns);
+//        etex=(EditText) view.findViewById(R.id.etex);
+//        btnStore.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),etex.getText().toString());
+//                etword.setText("");
+//                etdefinition.setText("");
+//                etsyns.setText("");
+//                etex.setText("");
+//                Toast.makeText(getContext(), "Stored Successfully!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        btnGetall.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext() , GetAllWordsActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         return view;
     }
-    public void sendMessage() {
-        String message = editText.getText().toString();
-        if (message.length() > 0) {
-
-            String date=getCurrentTimeUsingDate();
-            adapter.add(new Message(message, new MemberData("Соня ТкаченКО-КО-КО","#66FF88"), test, date));
-            test=!test;
-            editText.getText().clear();
-        }
-    }
+//    public void sendMessage() {
+//        String message = editText.getText().toString();
+//        if (message.length() > 0) {
+//
+//            String date=getCurrentTimeUsingDate();
+//            adapter.add(new Message(message, new MemberData("Соня ТкаченКО-КО-КО","#66FF88"), test, date));
+//            test=!test;
+//            editText.getText().clear();
+//        }
+//    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

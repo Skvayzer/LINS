@@ -161,15 +161,15 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 
 
 //уведомлялки
-//        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
-//
-//        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-//        //set the notification to repeat every fifteen minutes
-//        long startTime = 1; // 2 min
-//        // set unique id to the pending item, so we can call it when needed
-//        PendingIntent pi = PendingIntent.getBroadcast(this, 001, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarmManager.setInexactRepeating(AlarmManager.RTC, SystemClock.elapsedRealtime() +
-//                startTime, 1, pi);
+        Intent intentAlarm = new Intent(this, AlarmReceiver.class);
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        //set the notification to repeat every fifteen minutes
+        long startTime = 10; // 2 min
+        // set unique id to the pending item, so we can call it when needed
+        PendingIntent pi = PendingIntent.getBroadcast(this, 001, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setInexactRepeating(AlarmManager.RTC, SystemClock.elapsedRealtime() +
+                startTime, 10, pi);
 
 
 
