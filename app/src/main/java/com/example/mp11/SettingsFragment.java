@@ -50,7 +50,7 @@ public class SettingsFragment extends Fragment  {
     private OnFragmentInteractionListener mListener;
 
     Button btn;
-    CheckBox box;
+    CheckBox box,trans;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -90,15 +90,31 @@ public class SettingsFragment extends Fragment  {
         View view= inflater.inflate(R.layout.fragment_settings, container, false);
         btn=(Button)view.findViewById(R.id.govideo);
         box=(CheckBox)view.findViewById(R.id.chckservice);
+        trans=(CheckBox)view.findViewById(R.id.chcktranslation);
         Button logout=(Button)view.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
+                Intent i=new Intent(getActivity(),LoginActivity.class);
+                startActivity(i);
+                getActivity().finish();
 
             }
         });
         box.setSelected(true);
+        trans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(box.isSelected()){
+                    box.setSelected(false);
+                    EasyWordsBtn.eng=true;
+                }else{
+                    box.setSelected(true);
+                    EasyWordsBtn.eng=false;
+                }
+            }
+        });
         box.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

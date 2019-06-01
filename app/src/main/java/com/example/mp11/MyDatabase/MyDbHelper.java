@@ -3,6 +3,7 @@ package com.example.mp11.MyDatabase;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -103,53 +104,63 @@ public class MyDbHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(selectQuery, null);
 
-
-        if (c.moveToFirst()) {
-            do {
-                WordModel wordModel = new WordModel();
-                wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-                wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
-
-
-
-                String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION +" WHERE "+KEY_ID+" = "+ wordModel.getId();
-                Log.d("aaaaa",selectDefinitionQuery);
-
-                //SQLiteDatabase dbDefinition = this.getReadableDatabase();
-                Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
-
-                if (cDefinition.moveToFirst()) {
-                    do {
-                        wordModel.adddefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
-                    } while (cDefinition.moveToNext());
-                }
+        try {
+            if (c.moveToFirst()) {
+                do {
+                    WordModel wordModel = new WordModel();
+                    wordModel.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                    wordModel.setWord(c.getString(c.getColumnIndex(KEY_WORD)));
 
 
-                String selectSynQuery = "SELECT  * FROM " + TABLE_SYN+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
-                //SQLiteDatabase dbSyn = this.getReadableDatabase();
-                Cursor cSyn = db.rawQuery(selectSynQuery, null);
+                    String selectDefinitionQuery = "SELECT  * FROM " + TABLE_DEFINITION + " WHERE " + KEY_ID + " = " + wordModel.getId();
+                    Log.d("aaaaa", selectDefinitionQuery);
 
-                if (cSyn.moveToFirst()) {
-                    do {
-                        wordModel.addSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
-                    } while (cSyn.moveToNext());
-                }
-                String selectExQuery = "SELECT  * FROM " + TABLE_EX+" WHERE "+KEY_ID+" = "+ wordModel.getId();;
-                //SQLiteDatabase dbSyn = this.getReadableDatabase();
-                Cursor cEx = db.rawQuery(selectExQuery, null);
+                    //SQLiteDatabase dbDefinition = this.getReadableDatabase();
+                    Cursor cDefinition = db.rawQuery(selectDefinitionQuery, null);
+                    try {
+                        if (cDefinition.moveToFirst()) {
+                            do {
+                                wordModel.adddefinition(cDefinition.getString(cDefinition.getColumnIndex(KEY_DEFINITION)));
+                            } while (cDefinition.moveToNext());
+                        }
+                    } catch (SQLiteCantOpenDatabaseException e) {
+                        e.printStackTrace();
+                    }
 
-                if (cEx.moveToFirst()) {
-                    do {
-                        wordModel.addEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
-                    } while (cEx.moveToNext());
-                }
+                    String selectSynQuery = "SELECT  * FROM " + TABLE_SYN + " WHERE " + KEY_ID + " = " + wordModel.getId();
+                    ;
+                    //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                    Cursor cSyn = db.rawQuery(selectSynQuery, null);
+                    try {
+                        if (cSyn.moveToFirst()) {
+                            do {
+                                wordModel.addSyns(cSyn.getString(cSyn.getColumnIndex(KEY_SYN)));
+                            } while (cSyn.moveToNext());
+                        }
+                    } catch (SQLiteCantOpenDatabaseException e) {
+                        e.printStackTrace();
+                    }
+                    String selectExQuery = "SELECT  * FROM " + TABLE_EX + " WHERE " + KEY_ID + " = " + wordModel.getId();
+                    ;
+                    //SQLiteDatabase dbSyn = this.getReadableDatabase();
+                    Cursor cEx = db.rawQuery(selectExQuery, null);
+                    try {
+                        if (cEx.moveToFirst()) {
+                            do {
+                                wordModel.addEx(cEx.getString(cEx.getColumnIndex(KEY_EX)));
+                            } while (cEx.moveToNext());
+                        }
+                    } catch (SQLiteCantOpenDatabaseException e) {
+                        e.printStackTrace();
+                    }
 
+                    wordModelArrayList.add(wordModel);
+                } while (c.moveToNext());
 
-                wordModelArrayList.add(wordModel);
-            } while (c.moveToNext());
-
+            }
+        }catch (SQLiteCantOpenDatabaseException e){
+            e.printStackTrace();
         }
-
         return wordModelArrayList;
     }
     public ArrayList<WordModel> getAllWordsStartingWith(String cur) {
@@ -418,5 +429,40 @@ public class MyDbHelper extends SQLiteOpenHelper {
         db.delete(TABLE_SYN, KEY_ID + " = ?",new String[]{String.valueOf(id)});
         db.delete(TABLE_EX, KEY_ID + " = ?",new String[]{String.valueOf(id)});
     }
+    public void deleteWord(String word) {
 
+        String selectQuery = "SELECT  * FROM " + TABLE_WORD + " WHERE " + KEY_WORD+"=" + "'"+word+"'";
+        SQLiteDatabase db1 = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db1.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do{
+
+               int id=c.getInt(c.getColumnIndex(KEY_ID));
+               deleteWord(id);
+        } while (c.moveToNext());
+
+
+
+
+
+        }
+
+
+//        db.execSQL("delete from "+ TABLE_WORD + " WHERE " + KEY_WORD+"=" + "'"+word+"'");
+//
+//        db.execSQL("delete from "+ TABLE_DEFINITION + " WHERE " + KEY_WORD+"=" + "'"+word+"'");
+//        db.execSQL("delete from "+ TABLE_SYN + " WHERE " + KEY_WORD+"=" + "'"+word+"'");
+//        db.execSQL("delete from "+ TABLE_EX + " WHERE " + KEY_WORD+"=" + "'"+word+"'");
+//        db.close();
+
+//        db.delete(TABLE_WORD, KEY_WORD+"=" + "'"+word+"'",null);
+//
+//
+//        db.delete(TABLE_DEFINITION, KEY_WORD+"=" + "'"+word+"'", null);
+//
+//
+//        db.delete(TABLE_SYN, KEY_WORD+"=" + "'"+word+"'",null);
+//        db.delete(TABLE_EX, KEY_WORD+"=" + "'"+word+"'",null);
+    }
 }

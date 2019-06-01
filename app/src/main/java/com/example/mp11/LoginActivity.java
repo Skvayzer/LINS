@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginbtn;
    private FirebaseAuth Auth;
     private FirebaseAuth.AuthStateListener AuthListener;
+    TextView link;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         useremail = (EditText) findViewById(R.id.useremail);
         userpassword = (EditText) findViewById(R.id.userpassword);
-
+        link=(TextView)findViewById(R.id.link_signup);
+        link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(), MyRegistrationActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         loginbtn = (Button) findViewById(R.id.loginbtn);
         Auth = FirebaseAuth.getInstance();
         AuthListener = new FirebaseAuth.AuthStateListener() {
@@ -46,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         };
+
         loginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +69,12 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(LoginActivity.this, "Неверный E-mail или пароль", Toast.LENGTH_LONG).show();
+                                        if(!isNetworkAvaliable(LoginActivity.this)) {
+                                            Toast.makeText(LoginActivity.this, "Нет подключения к интернету", Toast.LENGTH_LONG).show();
+                                        }else {
+                                            Toast.makeText(LoginActivity.this, "Неверный E-mail или пароль", Toast.LENGTH_LONG).show();
+                                        }
+
                                     }
                                 }
                             });

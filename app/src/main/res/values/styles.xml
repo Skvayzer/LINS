@@ -11,5 +11,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
-
+    <style name="WhiteTextInputLayout" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

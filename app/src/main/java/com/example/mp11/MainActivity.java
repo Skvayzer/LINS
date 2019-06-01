@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -56,8 +57,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import link.fls.swipestack.SwipeStack;
 
@@ -73,10 +77,23 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //    private TextView word, anword;
 //    boolean visibility=false;
 
+
+   // public Stack<String>[] stacks=new Stack[7];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        Gson gson=new Gson();
+//        SharedPreferences preferences = getSharedPreferences("stacks", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor=preferences.edit();
+//        String json=preferences.getString("stacks",null);
+       // if(json!=null && !json.equals("")) stacks=gson.fromJson(json,Stack[].class);
+
+
+
+        //String json=preferences.getString("stacks",null);
+
+
 
 //        mSwipeStack = (SwipeStack) findViewById(R.id.swipeStack);
 //        mButtonLeft = (Button) findViewById(R.id.buttonSwipeLeft);
@@ -114,8 +131,13 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 
         FragmentManager fragmentManager = getFragmentManager();
 
+        Fragment first_frag=CardFragment.newInstance("kek","lol");
 
         final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.getMenu().getItem(2).setChecked(true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, first_frag);
+
         bottomNavigationView.setOnNavigationItemSelectedListener
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -153,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
                 });
 
         //Manually displaying the first fragment - one time only
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //transaction.replace(R.id.navigation_cards, SocialFragment.newInstance("kek","lol"));
         transaction.commit();
         Intent serv=new Intent(getApplicationContext(),EasyWordsBtn.class);

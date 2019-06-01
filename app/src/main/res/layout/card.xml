@@ -29,7 +29,8 @@
             android:paddingLeft="20dp"
             android:paddingVertical="20dp"
             android:layout_toRightOf="@id/current_word_card"
-            android:id="@+id/sound_btn_card"/>
+            android:id="@+id/sound_btn_card"
+            android:visibility="invisible"/>
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

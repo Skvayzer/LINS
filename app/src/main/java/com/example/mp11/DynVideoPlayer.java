@@ -858,11 +858,14 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
 
         txt_title.setText(video_title);
 
+        subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+        subView.dt=22500;
 
-        new MySubsParseTask().execute();
+
+       // new MySubsParseTask().execute();
        // subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
         subView.setPlayer(playerControl);
-        subView.dt=40000;
+       // subView.dt=40000;
 
 
       //  subView.setSubSource(Uri.parse("file://" + "subsfolder" + "/subs.srt"),MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);

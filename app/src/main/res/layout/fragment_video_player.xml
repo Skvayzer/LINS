@@ -1,25 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".VideoPlayerFragment">-->
+
+
+    <!--<WebView-->
+        <!--android:id="@+id/webview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+
+        <!--/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_alignParentTop="true">-->
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/watch"-->
+            <!--android:text="Хочу смотреть"-->
+            <!--android:textSize="20dp"-->
+
+
+
+            <!--/>-->
+        <!--<EditText-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/openload_url"-->
+
+            <!--android:textSize="10dp"-->
+            <!--android:outlineSpotShadowColor="@color/colorPrimaryDark"-->
+
+
+
+
+            <!--/>-->
+    <!--</LinearLayout>-->
+<!--</FrameLayout>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VideoPlayerFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    tools:context="com.example.mp11.VideoPlayerFragment">
 
+   <EditText
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="Введите ссылку на видео"
+       android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"
+       android:id="@+id/video_url"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/subs"
+        android:hint="Введите ссылку на субтитры"
+        android:text="https://opensubtitles.org/f/tg_e16kwM/s5e26.srt"
+        />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/watch"
-        android:text="Хочу смотреть"
-        android:textSize="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_horizontal"
-        />
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/start_video"
+        android:text="Смотреть"/>
 
-        />
 
-</FrameLayout>
+</LinearLayout>

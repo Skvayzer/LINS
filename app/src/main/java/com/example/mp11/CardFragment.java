@@ -1,12 +1,15 @@
 package com.example.mp11;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -37,6 +40,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import link.fls.swipestack.SwipeStack;
@@ -50,7 +54,7 @@ import link.fls.swipestack.SwipeStack;
  * Use the {@link CardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CardFragment extends Fragment implements SwipeStack.SwipeStackListener, View.OnClickListener{
+public class CardFragment extends Fragment implements SwipeStack.SwipeStackListener, View.OnClickListener,TextToSpeech.OnInitListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -75,6 +79,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -107,7 +112,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+       // editor=((MainActivity)getActivity()).editor;
     }
 
     @Override
@@ -136,6 +141,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mAdapter = new SwipeStackAdapter(mData);
         mSwipeStack.setAdapter(mAdapter);
         mSwipeStack.setListener(this);
+
 
         mData.add("a");
         mData.add("a");
@@ -249,6 +255,11 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         Toast.makeText(getActivity(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onInit(int status) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -306,31 +317,69 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
             list=(ListView)convertView.findViewById(R.id.word_list_card);
-            Gson gson=new Gson();
+            final Gson gson=new Gson();
             SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor=preferences.edit();
+
+            final SharedPreferences.Editor editor=preferences.edit();
+            final String known_json=preferences.getString("known_words",null);
             String json=preferences.getString("dictionaries",null);
             String names[]=gson.fromJson(json,String[].class);
-            if(names.length!=0) {
+            final ArrayList<String> known_words=gson.fromJson(known_json,ArrayList.class);
+            if(names!=null&&names.length!=0 ) {
                 String name = "";
                 String r = "У вас ещё нет слов";
-                MyDbHelper databaseHelper = null;
-                while (true) {
-                    if (names != null) {
-                        int random = (int) (Math.random() * (names.length));
-                        name = names[random];
-                    }
-                    databaseHelper = new MyDbHelper(getContext(), name);
+//                MyDbHelper databaseHelper;
+              //  try {
+
+                    while (true) {
+                        if (names != null) {
+                            int random = (int) (Math.random() * (names.length));
+                            name = names[random];
+                           // databaseHelper = new MyDbHelper(getContext(), name);
+                            MyDbHelper databaseHelper = new MyDbHelper(getContext(),name);
+//                        databaseHelper = new MyDbHelper(getContext(), name + "-rest-unknown");
 
 
-                    //if(wordModelArrayList.size()!=0) {}
-                    int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
-                    if (databaseHelper.isOpened()&&databaseHelper.getAllWords().size()!=0) {
-                        r = databaseHelper.getAllWords().get(randomNumber).getWord();
-                        wordModelArrayList = databaseHelper.getWord(r);
-                        break;
+//                        if(databaseHelper.getAllWords().size()==0){
+//                            textViewCard.setText("У вас ещё нет слов");
+//                            wordModelArrayList = new ArrayList<StringTranslation>();
+//                            wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+//                            break;
+//                        }
+
+                            //if(wordModelArrayList.size()!=0) {}
+                            int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+                            if (databaseHelper.isOpened() && databaseHelper.getAllWords().size() != 0) {
+                                r = databaseHelper.getAllWords().get(randomNumber).getWord();
+
+                                //  if(known_words==null){
+                                wordModelArrayList = databaseHelper.getWord(r);
+                                break;
+                                //  }
+//                        else if(!known_words.contains(r)) {
+//                            wordModelArrayList = databaseHelper.getWord(r);
+//                            break;
+//                        }
+                            }
+                        }else{
+                            textViewCard.setText("У вас ещё нет слов");
+                    wordModelArrayList = new ArrayList<StringTranslation>();
+                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                        }
+//                        } else {
+//                            textViewCard.setText("У вас ещё нет слов");
+//                            wordModelArrayList = new ArrayList<StringTranslation>();
+//                            wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+//                            break;
+//                        }
+                      //  databaseHelper.close();
                     }
-                }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                    textViewCard.setText("У вас ещё нет слов");
+//                    wordModelArrayList = new ArrayList<StringTranslation>();
+//                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+//                }
 
                 // Random random=new Random();
                 //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
@@ -350,6 +399,20 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                 final View view = convertView;
                 final ViewGroup parent1 = parent;
 
+                final String finalR = r;
+                final String finalName = name;
+                final MyDbHelper finalDatabaseHelper = databaseHelper;
+
+//                ImageButton sound=(ImageButton)view.findViewById(R.id.sound_btn);
+//                sound.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        TextToSpeech tts = new TextToSpeech(getContext(), CardFragment.this);
+//                        tts.setLanguage(Locale.US);
+//                        tts.speak(finalR,TextToSpeech.QUEUE_ADD, null);
+//
+//                    }
+//                });
                 showbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -365,6 +428,23 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                             mData.set(position,"lol");
                             notifyDataSetChanged();
 
+                           // CategDictionary cur=new CategDictionary(getContext(), finalName +"-known-words");
+                           // cur.addWord(finalR,wordModelArrayList,true);
+                           // finalDatabaseHelper.deleteWord(finalR);
+//                            String json=null;
+//                            if(known_words!=null){
+//                                known_words.add(finalR);
+//                                json=gson.toJson(known_words);
+//                            }
+//
+//                            else{
+//                                ArrayList<String> words=new ArrayList<>();
+//                                words.add(finalR);
+//                                json=gson.toJson(words);
+//                            }
+//
+//                            editor.putString("known_words",json);
+//                            editor.apply();
                             // mSwipeStack.removeView(view);
 
 
@@ -376,7 +456,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                     }
                 });
             } else {
-
+                    textViewCard.setText("У вас ещё нет слов");
             }
             return convertView;
         }

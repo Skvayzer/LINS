@@ -637,14 +637,35 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                     item.index=i+1;
                     item.word=text;
                     //result.add(item);
+//                    defmean.add(meanings);
+//                    if(meanings.length()!=0)item.meaning=meanings.substring(0,meanings.length()-2);
+//                    meanings="";
+//                    defsyns.add(syns);
+//                    if(syns.length()!=0) item.syns=syns.substring(0,syns.length()-2);
+//                    syns="";
+//                    defex.add(ex);
+//                    if(ex.length()!=0)item.ex=ex;
+//                    ex="";
+
+                    if(meanings.length()!=0&& meanings.length()>=4){
+
+                        meanings=meanings.substring(0,meanings.length()-2);
+                        item.meaning=meanings;
+                    }
                     defmean.add(meanings);
-                    if(meanings.length()!=0)item.meaning=meanings.substring(0,meanings.length()-2);
                     meanings="";
+
+                    if(syns.length()!=0 && syns.length()>=4) {
+                        syns=syns.substring(0,syns.length()-2);
+                        item.syns=syns;
+                    }
                     defsyns.add(syns);
-                    if(syns.length()!=0) item.syns=syns.substring(0,syns.length()-2);
                     syns="";
+
+                    if(ex.length()!=0){
+                        item.ex=ex;
+                    }
                     defex.add(ex);
-                    if(ex.length()!=0)item.ex=ex;
                     ex="";
                     stringDict.add(item);
 

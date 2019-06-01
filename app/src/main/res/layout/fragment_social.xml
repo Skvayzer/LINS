@@ -134,11 +134,12 @@
     <android.support.v7.widget.SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:queryHint="Найдите словарь"/>
+        app:queryHint="Найдите словарь"
+        android:id="@+id/searchdicts"/>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:id="@+id/dict_search_list"
         />
 
 </LinearLayout>

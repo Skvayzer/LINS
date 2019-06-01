@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,6 +21,7 @@ public class MyRegistrationActivity extends AppCompatActivity {
     Button btndone;
     FirebaseAuth Auth;
     FirebaseAuth.AuthStateListener AuthListener;
+    TextView link;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +31,15 @@ public class MyRegistrationActivity extends AppCompatActivity {
         etpassword1=(EditText)findViewById(R.id.etpassword1);
         etpassword2=(EditText)findViewById(R.id.etpassword2);
         btndone=(Button)findViewById(R.id.regdonebtn);
-
+        link=(TextView)findViewById(R.id.link_login);
+        link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         Auth=FirebaseAuth.getInstance();
         AuthListener=new FirebaseAuth.AuthStateListener() {
             @Override

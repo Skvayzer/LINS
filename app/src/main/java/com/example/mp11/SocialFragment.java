@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,16 +13,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.mp11.MyDatabase.MyDbHelper;
+import com.example.mp11.views.CategDictionary;
+import com.example.mp11.views.DictAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -51,6 +66,10 @@ public class SocialFragment extends Fragment {
     private String mParam2;
 boolean test=true;
     private OnFragmentInteractionListener mListener;
+
+    ListView listView;
+    SearchView sv;
+
 
     public SocialFragment() {
         // Required empty public constructor
@@ -89,6 +108,8 @@ boolean test=true;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_social, container, false);
+        sv=view.findViewById(R.id.searchdicts);
+        listView=view.findViewById(R.id.dict_search_list);
 //        sendbtn=(FloatingActionButton) view.findViewById(R.id.sendbtn);
 //        editText=(EditText)view.findViewById(R.id.usermessage);
 //        lv=(ListView)view.findViewById(R.id.message_list);
@@ -129,6 +150,32 @@ boolean test=true;
 //            }
 //        });
 
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference();
+        final ArrayList<String> names=new ArrayList<>();
+        final ArrayList<String> holders=new ArrayList<>();
+       // final HashMap<String, List<String>> map=new HashMap<>();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds: dataSnapshot.getChildren()) {
+
+                    for (DataSnapshot ds1 : ds.getChildren()) {
+                        names.add(ds1.getKey());
+                        holders.add(ds.getKey());
+                    }
+                   // map.put(ds.getKey(),names);
+                }
+                listView.setAdapter(new DictAdapter(getContext(),names,holders));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        //CategDictionary.downloadDict(FirebaseAuth.getInstance().getCurrentUser().getUid(), "jehb", getContext());
         return view;
     }
 //    public void sendMessage() {

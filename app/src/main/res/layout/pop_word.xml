@@ -20,7 +20,8 @@
         android:paddingLeft="20dp"
         android:paddingVertical="20dp"
         android:layout_toRightOf="@id/current_word"
-        android:id="@+id/sound_btn"/>
+        android:id="@+id/sound_btn"
+        android:visibility="invisible"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -47,5 +48,9 @@
         android:id="@+id/addToDict_btn"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         />
 </RelativeLayout>

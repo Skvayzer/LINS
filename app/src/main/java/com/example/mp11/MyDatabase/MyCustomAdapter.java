@@ -79,15 +79,18 @@ public class MyCustomAdapter extends BaseAdapter {
    //     if (WordModelArrayList.get(position).getWord().equals(curword)) {
         String def=WordModelArrayList.get(position).getdefinition();
         String syns=WordModelArrayList.get(position).getSyns();
-        if( syns!=null &&!syns.equals("")){
-            syns="("+syns.substring(0,syns.length()-2)+")";
+        if( syns!=null &&!syns.equals("")&&syns.length()>=2){
+            syns="("+syns+")";
             holder.tvSyns.setText(syns);
         }
         String ex=WordModelArrayList.get(position).getEx();
-        if( ex!=null && !ex.equals("")){
-            holder.tvEx.setText(ex.substring(0,ex.length()-2));
+        if( ex!=null && !ex.equals("")&&ex.length()>=2){
+            holder.tvEx.setText(ex);
         }
-            holder.tvMeanings.setText(def.substring(0,def.length()-2));
+        if( def!=null && !def.equals("")&&def.length()>=2){
+            holder.tvMeanings.setText(def);
+        }
+
 
 
 

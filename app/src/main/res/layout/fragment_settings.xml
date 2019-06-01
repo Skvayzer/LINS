@@ -2,37 +2,85 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".SettingsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="40dp"
+    android:layout_gravity="center_horizontal">
 
     <!-- TODO: Update blank fragment layout -->
 
     <CheckBox
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Включить сервис?"
+    android:textSize="30dp"
+    android:id="@+id/chckservice"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal"/>
+    <CheckBox
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Включить сервис?"
+        android:text="Включить английский перевод?"
         android:textSize="30dp"
-        android:id="@+id/chckservice"/>
+        android:id="@+id/chcktranslation"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ваш аккаунт"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Выйти из аккаунта"
         android:textSize="20dp"
-        android:id="@+id/logout"/>
+        android:id="@+id/logout"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/govideo"
-        android:text="Go to the video"
+        android:text="Video"
         android:textSize="30dp"
-
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         />
 
 </LinearLayout>
 <!--</FrameLayout>-->
+<!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="wrap_content">-->
+    <!--<CheckBoxPreference-->
+        <!--android:key="checkbox"-->
+        <!--android:summary="Tap to check if on or off"-->
+        <!--android:title="Checkbox Preference" />-->
+    <!--<RingtonePreference-->
+        <!--android:key="ringtone"-->
+        <!--android:showDefault="true"-->
+        <!--android:showSilent="true"-->
+        <!--android:summary="Pick a ringtone you like"-->
+        <!--android:title="Ringtone Preference" />-->
+    <!--<EditTextPreference-->
+        <!--android:dialogTitle="Enter a text"-->
+        <!--android:key="text"-->
+        <!--android:summary="Click to show a text entry dialog"-->
+        <!--android:title="EditText Preference" />-->
+    <!--<ListPreference-->
+        <!--android:dialogTitle="Select duration"-->
+        <!--android:entries="@array/settings_list_preference_titles"-->
+        <!--android:entryValues="@array/settings_list_preference_values"-->
+        <!--android:key="list"-->
+        <!--android:summary="Click to show a list to choose from"-->
+        <!--android:title="List Preference" />-->
+    <!--<SwitchPreference-->
+        <!--android:key="switch"-->
+        <!--android:title="Switch Preference"-->
+        <!--android:summary="Click to switch on or off"-->
+        <!--android:defaultValue="true"/>-->
+<!--</PreferenceScreen>-->

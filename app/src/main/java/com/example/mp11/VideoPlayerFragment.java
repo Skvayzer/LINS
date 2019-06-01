@@ -25,6 +25,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,10 +74,13 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private SurfaceHolder vidHolder;
     private SurfaceView vidSurface;
     TextView tv;
+    EditText video,subs;
     Button btn;
     String cururl;
-    WebView mWebView;
+ //   WebView mWebView;
     String videourl;
+//    EditText openload_url;
+    String res="";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -133,28 +137,40 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //        PlayVideo();
 
         View view= inflater.inflate(R.layout.fragment_video_player, container, false);
-        mWebView = (WebView) view.findViewById(R.id.webview);
-        btn=(Button)view.findViewById(R.id.watch);
-        WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        btn=(Button)view.findViewById(R.id.start_video);
+        video=(EditText)view.findViewById(R.id.video_url);
+        subs=(EditText)view.findViewById(R.id.subs);
+  //      mWebView = (WebView) view.findViewById(R.id.webview);
+  //      btn=(Button)view.findViewById(R.id.watch);
+ //       WebSettings webSettings = mWebView.getSettings();
+ //       webSettings.setJavaScriptEnabled(true);
 
+ //       openload_url=(EditText)view.findViewById(R.id.openload_url);
         final Handler handler = new Handler();
 
         handler.post(new Runnable() {
             @Override
             public void run() {
-                final String url = "https://english-films.com/westerns/171-nazad-v-buduschee-3-back-to-the-future-part-iii-1990-hd-720-ru-eng.html";
-                mWebView.loadUrl(url);
-                mWebView.setWebViewClient(new WebViewClient());
-                cururl = mWebView.getUrl();
+               // final String url = "https://english-films.com/westerns/171-nazad-v-buduschee-3-back-to-the-future-part-iii-1990-hd-720-ru-eng.html";
+                final String url="https://ololo.to";
+   //             mWebView.loadUrl(url);
+   //             mWebView.setWebViewClient(new WebViewClient());
+    //            cururl = mWebView.getUrl();
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String cururl = mWebView.getUrl();
-                        new MyTask().execute();
+                       // String cururl = mWebView.getUrl();
+//                        res=openload_url.getText().toString();
+//
+//                        new MyTask().execute();
                        // Toast.makeText(getContext(),"g",Toast.LENGTH_SHORT).show();
 
+                        Intent i=new Intent(getContext(), DynVideoPlayer.class);
+                        i.putExtra("videourl",video.getText().toString());
+                        i.putExtra("subsurl",subs.getText().toString());
+                        i.putExtra("title","Видео");
 
+                        startActivity(i);
 
                     }
 
@@ -165,13 +181,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             }
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-            }
-        });
 
 
 
@@ -324,32 +334,46 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 
 
 
-    class MyTask extends AsyncTask<Void, String, String> {
-        String current_url="";
-        @Override
-        protected void onPreExecute() {
-            current_url=mWebView.getUrl();
-        }
-        @Override
-        protected String doInBackground(Void... params) {
 
-            String res="";
-            Document doc=null;
-            try {
-                //doc = Jsoup.connect(cururl).get();
+//    class MyTask extends AsyncTask<Void, String, String> {
+//        String current_url = "";
+//
+//        @Override
+//        protected void onPreExecute() {
+//            current_url = mWebView.getUrl();
+//        }
+//
+//        @Override
+//        protected String doInBackground(Void... params) {
 
-                doc = Jsoup.connect(current_url).header("Accept-Encoding", "gzip, deflate")
-                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
-                        .maxBodySize(0)
-                        .get();
-                Elements vids = doc.getElementsByTag("iframe");
-                for (Element vid : vids) {
-                    if(vid.attr("src").contains("openload")){
-                    //if (vid.attr("src").contains("streamango")) {
-                        res = vid.attr("src");
-                        int from=res.indexOf("embed")+6;
-                        int to=res.indexOf("/",from);
-                        res=res.substring(from,to);
+            //String res="";
+//            Document doc=null;
+//            try {
+//                //doc = Jsoup.connect(cururl).get();
+//
+//                doc = Jsoup.connect(current_url).header("Accept-Encoding", "gzip, deflate")
+//                        .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0")
+//                        .maxBodySize(0)
+//                        .get();
+
+
+            // Elements vids = doc.getElementsByTag("iframe");
+            //  Element vidurl=doc.getElementsByClass("movie-link").first();
+//                for (Element vid : vids) {
+//                    if(vid.attr("src").contains("openload")){
+//                    //if (vid.attr("src").contains("streamango")) {
+//                        res = vid.attr("src");
+//                        int from=res.indexOf("embed")+6;
+//                        int to=res.indexOf("/",from);
+//                        res=res.substring(from,to);
+
+
+//                        res=vidurl.val();
+//
+//                        int from=res.indexOf("f")+2;
+//                        int to=res.indexOf("/",from);
+//                        res=res.substring(from,to);
+
 //                        Document doc1 = null;
 //
 //                        //doc = Jsoup.connect(cururl).get();
@@ -382,140 +406,140 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //                        }
 
 
-                    }
-                }
-
-
-
-
+            // }
+            //      }
 
 
 //                Elements links = doc.select("video");
 //                Log.d("URL: ", links.first().text());
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-            HttpClient httpclient = new DefaultHttpClient();
-            String URL="https://api.openload.co/1/file/dlticket?file="+res+"&login=8fe311552cf7409d&key=XYvH9jgv";
-            HttpGet httpget= new HttpGet(URL);
-            String ticket="none";
-            HttpResponse response = null;
-            try {
-                response = httpclient.execute(httpget);
-                if(response.getStatusLine().getStatusCode()==200){
-                    String server_response = "";
-                    try {
-                        server_response = EntityUtils.toString(response.getEntity());
-                        JSONObject obj=new JSONObject(server_response);
-                        ticket=obj.getJSONObject("result").getString("ticket");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                    Log.i("Server response", server_response );
-                } else {
-                    Log.i("Server response", "Failed to get server response" );
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            HttpClient httpclient = new DefaultHttpClient();
+//            String URL="https://api.openload.co/1/file/dlticket?file="+res+"&login=8fe311552cf7409d&key=XYvH9jgv";
+//            HttpGet httpget= new HttpGet(URL);
+//            String ticket="none";
+//            HttpResponse response = null;
+//            try {
+//                response = httpclient.execute(httpget);
+//                if(response.getStatusLine().getStatusCode()==200){
+//                    String server_response = "";
+//                    try {
+//                        server_response = EntityUtils.toString(response.getEntity());
+//                        JSONObject obj=new JSONObject(server_response);
+//                        ticket=obj.getJSONObject("result").getString("ticket");
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }catch(JSONException e){
+//                        e.printStackTrace();
+//                    }
+//                    Log.i("Server response", server_response );
+//                } else {
+//                    Log.i("Server response", "Failed to get server response" );
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            HttpGet httpget1= new HttpGet("https://api.openload.co/1/file/dl?file="+res+"&ticket="+ticket);
+//            String video_url;
+//            try {
+//                HttpResponse response1=httpclient.execute(httpget1);
+//                if(response1.getStatusLine().getStatusCode()==200){
+//                    String server_response = "";
+//                    try {
+//                        server_response = EntityUtils.toString(response1.getEntity());
+//                        JSONObject obj=new JSONObject(server_response);
+//                        video_url=obj.getJSONObject("result").getString("url");
+//                        res=video_url;
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }catch(JSONException e){
+//                        e.printStackTrace();
+//                    }
+//                    Log.i("Server response", server_response );
+//                } else {
+//                    Log.i("Server response", "Failed to get server response" );
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//            Elements subs = doc.getElementsByTag("a");
+//            for (Element sub : subs) {
+//                if(sub.attr("href").contains("srt")){
+//                    res+=" "+sub.attr("href");
+//                    break;
+//                }
+//
+//            }
+//
+//            return res + " " +doc.title();
+//        }
+//
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//            videourl=result;
+//            Intent i=new Intent(getContext(), DynVideoPlayer.class);
+//            String[] s=videourl.split(" ");
+//            String title=videourl.substring(s[0].length()+s[1].length()+1,videourl.length());
+//            i.putExtra("videourl",s[0]);
+//            i.putExtra("subsurl",s[1]);
+//            i.putExtra("title",title);
+//
+//            startActivity(i);
+//        }
+//    }
 
-            HttpGet httpget1= new HttpGet("https://api.openload.co/1/file/dl?file="+res+"&ticket="+ticket);
-            String video_url;
-            try {
-                HttpResponse response1=httpclient.execute(httpget1);
-                if(response1.getStatusLine().getStatusCode()==200){
-                    String server_response = "";
-                    try {
-                        server_response = EntityUtils.toString(response1.getEntity());
-                        JSONObject obj=new JSONObject(server_response);
-                        video_url=obj.getJSONObject("result").getString("url");
-                        res=video_url;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }catch(JSONException e){
-                        e.printStackTrace();
-                    }
-                    Log.i("Server response", server_response );
-                } else {
-                    Log.i("Server response", "Failed to get server response" );
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-
-            Elements subs = doc.getElementsByTag("a");
-            for (Element sub : subs) {
-                if(sub.attr("href").contains("srt")){
-                    res+=" "+sub.attr("href");
-                    break;
-                }
-
-            }
-
-            return res + " " +doc.title();
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            videourl=result;
-            Intent i=new Intent(getContext(), DynVideoPlayer.class);
-            String[] s=videourl.split(" ");
-            String title=videourl.substring(s[0].length()+s[1].length()+1,videourl.length());
-            i.putExtra("videourl",s[0]);
-            i.putExtra("subsurl",s[1]);
-            i.putExtra("title",title);
-
-            startActivity(i);
-        }
-    }
-    public boolean downloadFile(final String path)
-    {
-        try
-        {
-            URL url = new URL(path);
-
-            URLConnection ucon = url.openConnection();
-            ucon.setReadTimeout(5000);
-            ucon.setConnectTimeout(10000);
-
-            InputStream is = ucon.getInputStream();
-            BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-
-            File file = new File(getContext().getDir("filesdir", Context.MODE_PRIVATE) + "/subs.sqr");
-
-            if (file.exists())
-            {
-                file.delete();
-                downloadFile(path);
-            }
-            file.createNewFile();
-
-            FileOutputStream outStream = new FileOutputStream(file);
-            byte[] buff = new byte[5 * 1024];
-
-            int len;
-            while ((len = inStream.read(buff)) != -1)
-            {
-                outStream.write(buff, 0, len);
-            }
-
-            outStream.flush();
-            outStream.close();
-            inStream.close();
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
+//    public boolean downloadFile(final String path)
+//    {
+//        try
+//        {
+//            URL url = new URL(path);
+//
+//            URLConnection ucon = url.openConnection();
+//            ucon.setReadTimeout(5000);
+//            ucon.setConnectTimeout(10000);
+//
+//            InputStream is = ucon.getInputStream();
+//            BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
+//
+//            File file = new File(getContext().getDir("filesdir", Context.MODE_PRIVATE) + "/subs.sqr");
+//
+//            if (file.exists())
+//            {
+//                file.delete();
+//                downloadFile(path);
+//            }
+//            file.createNewFile();
+//
+//            FileOutputStream outStream = new FileOutputStream(file);
+//            byte[] buff = new byte[5 * 1024];
+//
+//            int len;
+//            while ((len = inStream.read(buff)) != -1)
+//            {
+//                outStream.write(buff, 0, len);
+//            }
+//
+//            outStream.flush();
+//            outStream.close();
+//            inStream.close();
+//
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            return false;
+//        }
+//
+//        return true;
+//    }
 }
+

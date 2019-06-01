@@ -134,7 +134,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
 //
 //            }
 //        });
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapt);
         recyclerView.setHasFixedSize(true);
         // отступ для плитки
         int tilePadding = getResources().getDimensionPixelSize(R.dimen.tile_padding);
@@ -257,6 +257,8 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                         String name=et.getText().toString();
                         if(!name.equals("")){
                             dictionaries.add(new CategDictionary(getContext(),name));
+                            new CategDictionary(getContext(),name + "-known-words");
+                            new CategDictionary(getContext(),name + "-rest-unknown");
                             adapt.notifyDataSetChanged();
                             //dictionaries.clear();
                             //loadDicts();
@@ -342,7 +344,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 return false;
             }
         }
-        // Кол-во RecyclerView.
+
 
        // private final String[] mProjects;
 
@@ -398,19 +400,22 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             String json=preferences.getString("dictionaries",null);
             final String[] names=gson.fromJson(json,String[].class);
             if(names!=null) {
-                String name = names[position];
-                if (holder.viewtype != 1) holder.name.setText(names[position]);
+                final String name = names[position];
+                if (holder.viewtype != 1){
+                    holder.name.setText(names[position]);
+                }
                 if (mclickListener == null) {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             // dictionaries.get(position).addWord();
-                            Toast.makeText(context, "Dict" + position, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
 
                             if (names != null) {
                                 CategDictionary dict = new CategDictionary(context, names[position]);
-
                                 dict.addWord(text, stlist);
+                              //  dict=new CategDictionary(context,names[position]+"-rest-unknown");
+                               // dict.addWord(text, stlist,true);
                                 lol.hide();
                             }
                         }
@@ -419,18 +424,21 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             }else{
                 final String name = dictionaries.get(position).name;
                 if (holder.viewtype != 1) holder.name.setText(name);
+                else
                 if (mclickListener == null) {
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             // dictionaries.get(position).addWord();
-                            Toast.makeText(context, "Dict" + position, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
 
                             if (names != null) {
                                 CategDictionary dict = new CategDictionary(context, name);
 
                                 dict.addWord(text, stlist);
                                 FirebaseDbHelper.AddWord(name,text,stlist);
+                               // dict=new CategDictionary(context,names[position]+"-rest-unknown");
+                               // dict.addWord(text, stlist,true);
                                 lol.hide();
                             }
                         }
