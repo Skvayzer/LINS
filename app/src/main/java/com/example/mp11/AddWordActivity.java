@@ -28,7 +28,7 @@ public class AddWordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_word);
 
         String dict_name=getIntent().getExtras().getString("name");
-        databaseHelper = new MyDbHelper(this,dict_name);
+        databaseHelper = new MyDbHelper(this);
 
         btnStore = (Button) findViewById(R.id.btnstore);
       //  btnGetall = (Button) findViewById(R.id.btnget);
