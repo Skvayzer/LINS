@@ -37,8 +37,13 @@ import com.example.mp11.views.StringTranslation;
 import com.example.mp11.views.TranslationAdapter;
 import com.example.mp11.views.TranslationItem;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -75,6 +80,13 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     MyDbHelper databaseHelper;
     private ArrayList<StringTranslation> wordModelArrayList;
     private MyCustomAdapter customAdapter;
+    String current_word;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    Gson gson;
+
+    int count=0;
+    public static String CURRENT_DICT_NAME;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -148,6 +160,11 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mData.add("a");
         mAdapter.notifyDataSetChanged();
 
+
+       gson = new Gson();
+        preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+        editor = preferences.edit();
         return view;
     }
 
@@ -237,6 +254,25 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         mAdapter.notifyDataSetChanged();
        // mData.remove(0);
 
+
+       // CategDictionary cur=new CategDictionary(getContext(), CURRENT_DICT_NAME +"-known-words");
+        TextView tv=mSwipeStack.getTopView().findViewById(R.id.current_word_card);
+//        cur.addWord(tv.getText().toString(),wordModelArrayList,true);
+//        databaseHelper.deleteWord(tv.getText().toString());
+
+
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        ArrayList<String> ar=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-rest",null),type);
+        ar.remove(tv.getText().toString());
+
+        editor.putString(CURRENT_DICT_NAME+"-rest",gson.toJson(ar));
+        type = new TypeToken<Collection<String>>() {
+        }.getType();
+        ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
+        deque.offer(tv.getText().toString());
+        editor.putString(CURRENT_DICT_NAME+"-known",gson.toJson(deque));
+        editor.apply();
     }
     @Override
     public void onViewSwipedToRight(int position) {
@@ -306,6 +342,28 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         }
 
 
+
+//        public ArrayList<StringTranslation> getWordsFromDict(MyDbHelper db){
+//            databaseHelper = new MyDbHelper(getContext(), CURRENT_DICT_NAME);
+//
+//
+//            if (databaseHelper.getAllWords().size() == 0) {
+//
+//                wordModelArrayList = new ArrayList<StringTranslation>();
+//                wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+//                return wordModelArrayList;
+//            } else {
+//
+//                //if(wordModelArrayList.size()!=0) {}
+//                int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+//                if (databaseHelper.isOpened() && databaseHelper.getAllWords().size() != 0) {
+//                    r = databaseHelper.getAllWords().get(randomNumber).getWord();
+//
+//                    //  if(known_words==null){
+//                    wordModelArrayList = databaseHelper.getWord(r);
+//                    break;
+//                    //  }
+//        }
         @Override
         public View getView(final int position, View convertView, final ViewGroup parent) {
 
@@ -317,91 +375,102 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
             list=(ListView)convertView.findViewById(R.id.word_list_card);
-            final Gson gson=new Gson();
-            SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+            Type type = new TypeToken<Collection<String>>() {
+            }.getType();
+            ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
+            if(deque==null) deque=new ArrayDeque<>();
 
-            final SharedPreferences.Editor editor=preferences.edit();
-            final String known_json=preferences.getString("known_words",null);
-            String json=preferences.getString("dictionaries",null);
-            String names[]=gson.fromJson(json,String[].class);
-            final ArrayList<String> known_words=gson.fromJson(known_json,ArrayList.class);
-            if(names!=null&&names.length!=0 ) {
-                String name = "";
-                String r = "У вас ещё нет слов";
+
+            if(CURRENT_DICT_NAME==null||CURRENT_DICT_NAME.equals("")) {
+//                final Gson gson = new Gson();
+//                SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+//
+//                final SharedPreferences.Editor editor = preferences.edit();
+                //    final String known_json=preferences.getString("known_words",null);
+                String json = preferences.getString("dictionaries", null);
+                String names[] = gson.fromJson(json, String[].class);
+                //   final ArrayList<String> known_words=gson.fromJson(known_json,ArrayList.class);
+                if (names != null && names.length != 0) {
+                    String name = "";
+                    String r = "У вас ещё нет слов";
 //                MyDbHelper databaseHelper;
-              //  try {
+                    try {
 
-                    while (true) {
-                        if (names != null) {
-                            int random = (int) (Math.random() * (names.length));
-                            name = names[random];
-                           // databaseHelper = new MyDbHelper(getContext(), name);
-                            MyDbHelper databaseHelper = new MyDbHelper(getContext(),name);
-//                        databaseHelper = new MyDbHelper(getContext(), name + "-rest-unknown");
+                        while (true) {
+                            if (names != null) {
+                                int random = (int) (Math.random() * (names.length));
+                              //  if(random==0)continue;
+                                name = names[random];
+                                 databaseHelper = new MyDbHelper(getContext(), name);
+                                //     MyDbHelper databaseHelper = new MyDbHelper(getContext(),name);
+                                //databaseHelper = new MyDbHelper(getContext(), name + "-rest-unknown");
 
 
-//                        if(databaseHelper.getAllWords().size()==0){
-//                            textViewCard.setText("У вас ещё нет слов");
-//                            wordModelArrayList = new ArrayList<StringTranslation>();
-//                            wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
-//                            break;
-//                        }
 
-                            //if(wordModelArrayList.size()!=0) {}
-                            int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
-                            if (databaseHelper.isOpened() && databaseHelper.getAllWords().size() != 0) {
-                                r = databaseHelper.getAllWords().get(randomNumber).getWord();
+                                if (databaseHelper.getAllWords().size() == 0) {
 
-                                //  if(known_words==null){
-                                wordModelArrayList = databaseHelper.getWord(r);
-                                break;
-                                //  }
+                                    textViewCard.setText("У вас ещё нет слов");
+                                    wordModelArrayList = new ArrayList<StringTranslation>();
+                                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                                    break;
+                                } else {
+
+                                    //if(wordModelArrayList.size()!=0) {}
+                                    int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+                                    if (databaseHelper.isOpened() && databaseHelper.getAllWords().size() != 0) {
+                                        r = databaseHelper.getAllWords().get(randomNumber).getWord();
+
+                                        //  if(known_words==null){
+                                        wordModelArrayList = databaseHelper.getWord(r);
+                                        break;
+                                        //  }
 //                        else if(!known_words.contains(r)) {
 //                            wordModelArrayList = databaseHelper.getWord(r);
 //                            break;
 //                        }
+                                    }
+                                }
+                            } else {
+                                textViewCard.setText("У вас ещё нет слов");
+                                wordModelArrayList = new ArrayList<StringTranslation>();
+                                wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
                             }
-                        }else{
-                            textViewCard.setText("У вас ещё нет слов");
-                    wordModelArrayList = new ArrayList<StringTranslation>();
-                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
-                        }
 //                        } else {
 //                            textViewCard.setText("У вас ещё нет слов");
 //                            wordModelArrayList = new ArrayList<StringTranslation>();
 //                            wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
 //                            break;
 //                        }
-                      //  databaseHelper.close();
+                            //  databaseHelper.close();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        textViewCard.setText("У вас ещё нет слов");
+                        wordModelArrayList = new ArrayList<StringTranslation>();
+                        wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
                     }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                    textViewCard.setText("У вас ещё нет слов");
-//                    wordModelArrayList = new ArrayList<StringTranslation>();
-//                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
-//                }
 
-                // Random random=new Random();
-                //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
-                // String curword=wordModelArrayList.get(randomNumber).getWord();
-                // ArrayList<StringTranslation> nowlist = new ArrayList<StringTranslation>();
+                    // Random random=new Random();
+                    //int randomNumber = random.ints(0,(wordModelArrayList.size()+1)).findFirst().getAsInt();
+                    // String curword=wordModelArrayList.get(randomNumber).getWord();
+                    // ArrayList<StringTranslation> nowlist = new ArrayList<StringTranslation>();
 //            for(WordModel p: wordModelArrayList){
 //                if(p.getWord().equals(curword)){
 //                    nowlist.add(p);
 //                }
 //            }
 
-                customAdapter = new MyCustomAdapter(getContext(), wordModelArrayList, r);
-                list.setAdapter(customAdapter);
+                    customAdapter = new MyCustomAdapter(getContext(), wordModelArrayList, r);
+                    list.setAdapter(customAdapter);
 
-                textViewCard.setText(r);
-                showbtn = (ImageButton) convertView.findViewById(R.id.showwordbtn);
-                final View view = convertView;
-                final ViewGroup parent1 = parent;
-
-                final String finalR = r;
-                final String finalName = name;
-                final MyDbHelper finalDatabaseHelper = databaseHelper;
+                    textViewCard.setText(r);
+                    showbtn = (ImageButton) convertView.findViewById(R.id.showwordbtn);
+                    final View view = convertView;
+                    final ViewGroup parent1 = parent;
+//
+//                    final String finalR = r;
+//                    final String finalName = name;
+//                    final MyDbHelper finalDatabaseHelper = databaseHelper;
 
 //                ImageButton sound=(ImageButton)view.findViewById(R.id.sound_btn);
 //                sound.setOnClickListener(new View.OnClickListener() {
@@ -413,24 +482,24 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 //
 //                    }
 //                });
-                showbtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                    showbtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                        ImageButton showbtn=(ImageButton)mSwipeStack.getTopView().findViewById(R.id.showwordbtn);
+                            ImageButton showbtn = (ImageButton) mSwipeStack.getTopView().findViewById(R.id.showwordbtn);
 
-                        list=(ListView)mSwipeStack.getTopView().findViewById(R.id.word_list_card);
-                        if (list.getVisibility() != View.VISIBLE) {
-                            list.setVisibility(View.VISIBLE);
-                            showbtn.setVisibility(View.INVISIBLE);
+                            list = (ListView) mSwipeStack.getTopView().findViewById(R.id.word_list_card);
+                            if (list.getVisibility() != View.VISIBLE) {
+                                list.setVisibility(View.VISIBLE);
+                                showbtn.setVisibility(View.INVISIBLE);
 
-                           // Toast.makeText(getContext(), "lol", Toast.LENGTH_SHORT).show();
-                            mData.set(position,"lol");
-                            notifyDataSetChanged();
+                                // Toast.makeText(getContext(), "lol", Toast.LENGTH_SHORT).show();
+                                mData.set(position, "lol");
+                                notifyDataSetChanged();
 
-                           // CategDictionary cur=new CategDictionary(getContext(), finalName +"-known-words");
-                           // cur.addWord(finalR,wordModelArrayList,true);
-                           // finalDatabaseHelper.deleteWord(finalR);
+                                // CategDictionary cur=new CategDictionary(getContext(), finalName +"-known-words");
+                                // cur.addWord(finalR,wordModelArrayList,true);
+                                // finalDatabaseHelper.deleteWord(finalR);
 //                            String json=null;
 //                            if(known_words!=null){
 //                                known_words.add(finalR);
@@ -445,20 +514,95 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 //
 //                            editor.putString("known_words",json);
 //                            editor.apply();
-                            // mSwipeStack.removeView(view);
+                                // mSwipeStack.removeView(view);
 
 
-                            //getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
+                                //getView(mSwipeStack.getCurrentPosition(),mSwipeStack.getTopView(),null);
+
+
+                            }
+
+                        }
+                    });
+                } else {
+                    textViewCard.setText("У вас ещё нет слов");
+                }
+            }else if(deque.size()!=0&&count<5){
+
+            }else{
+                String r = "";
+                final Gson gson = new Gson();
+                SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
+
+                final SharedPreferences.Editor editor = preferences.edit();
+                type = new TypeToken<List<String>>() {
+                }.getType();
+                ArrayList<String> ar=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-rest",null),type);
+                //databaseHelper = new MyDbHelper(getContext(), CURRENT_DICT_NAME + "-rest-unknown");
+                databaseHelper = new MyDbHelper(getContext(), CURRENT_DICT_NAME);
+                //if (databaseHelper.getAllWords().size() == 0) {
+                if(ar==null||ar.size()==0){
+                    textViewCard.setText("У вас ещё нет слов");
+                    wordModelArrayList = new ArrayList<StringTranslation>();
+                    wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                    showbtn.setVisibility(View.INVISIBLE);
+
+                } else {
+
+
+
+                    //if(wordModelArrayList.size()!=0) {}
+                  //  int randomNumber = (int) (Math.random() * (databaseHelper.getAllWords().size()));
+                    int randomNumber = (int) (Math.random() * (ar.size()));
+                    if (ar.size() != 0) {
+                        r = ar.get(randomNumber);
+
+
+                        wordModelArrayList = databaseHelper.getWord(r);
+
+
+                    }else {
+                        textViewCard.setText("У вас ещё нет слов");
+                        wordModelArrayList = new ArrayList<StringTranslation>();
+                        wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                    }
+
+                }
+                customAdapter = new MyCustomAdapter(getContext(), wordModelArrayList, r);
+                list.setAdapter(customAdapter);
+
+                textViewCard.setText(r);
+                showbtn = (ImageButton) convertView.findViewById(R.id.showwordbtn);
+                //final String finalR = r;
+                showbtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        ImageButton showbtn = (ImageButton) mSwipeStack.getTopView().findViewById(R.id.showwordbtn);
+
+                        list = (ListView) mSwipeStack.getTopView().findViewById(R.id.word_list_card);
+                        if (list.getVisibility() != View.VISIBLE) {
+                            list.setVisibility(View.VISIBLE);
+                            showbtn.setVisibility(View.INVISIBLE);
+
+
+                            mData.set(position, "lol");
+                            notifyDataSetChanged();
+
+
+
 
 
                         }
 
                     }
                 });
-            } else {
-                    textViewCard.setText("У вас ещё нет слов");
+
+
             }
+
             return convertView;
         }
     }
+
 }

@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
    private FirebaseAuth Auth;
     private FirebaseAuth.AuthStateListener AuthListener;
     TextView link;
+    private TextView reset_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,21 @@ public class LoginActivity extends AppCompatActivity {
         useremail = (EditText) findViewById(R.id.useremail);
         userpassword = (EditText) findViewById(R.id.userpassword);
         link=(TextView)findViewById(R.id.link_signup);
+        reset_password=(TextView)findViewById(R.id.link_reset);
         link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(getApplicationContext(), MyRegistrationActivity.class);
                 startActivity(i);
                 finish();
+            }
+        });
+        reset_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(), ResetPasswordActivity.class);
+                startActivity(i);
+
             }
         });
         loginbtn = (Button) findViewById(R.id.loginbtn);

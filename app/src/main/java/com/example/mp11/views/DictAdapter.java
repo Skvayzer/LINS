@@ -60,6 +60,12 @@ public class DictAdapter extends BaseAdapter {
         return 0;
     }
 
+    public void addToList(ArrayList<String> list){
+     if(list!=null)names.addAll(list);
+     //if(hold!=null)holders.addAll(hold);
+        for(int i=0;i<list.size();i++)holders.add("kek");
+     notifyDataSetChanged();
+    }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final String name=getItem(position);

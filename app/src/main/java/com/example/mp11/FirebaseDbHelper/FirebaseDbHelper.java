@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class FirebaseDbHelper {
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     static String userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
-    static DatabaseReference myRef = database.getReference(userID);
+    static DatabaseReference myRef = database.getReference("dictionaries").child(userID);
     static ArrayList<StringTranslation> list;
     public static void AddWord(String dict,String word,ArrayList<StringTranslation> list){
 

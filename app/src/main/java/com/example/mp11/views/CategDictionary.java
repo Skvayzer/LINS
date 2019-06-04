@@ -24,15 +24,22 @@ public class CategDictionary {
     public String name;
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     static String userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
-    DatabaseReference myRef = database.getReference(userID);
+    DatabaseReference myRef = database.getReference("dictionaries").child(userID);
     MyDbHelper databaseHelper;
+ //   boolean flag;
     public CategDictionary(Context context, String name){
         myRef=myRef.child(name);
         databaseHelper=new MyDbHelper(context,name);
         this.name=name;
 
     }
-
+//    public CategDictionary(Context context, String name, boolean flag){
+//        this.flag=flag;
+//        if(flag) myRef=myRef.child(name);
+//        databaseHelper=new MyDbHelper(context,name);
+//        this.name=name;
+//
+//    }
     public static void downloadDict(String user, final String dict, final Context context){
         DatabaseReference dictRef=database.getReference(user).child(dict);
         dictRef.addValueEventListener(new ValueEventListener() {

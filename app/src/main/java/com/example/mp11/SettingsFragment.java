@@ -8,7 +8,9 @@ import android.media.TimedText;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * Use the {@link SettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SettingsFragment extends Fragment  {
+public class SettingsFragment extends PreferenceFragmentCompat {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -82,66 +84,82 @@ public class SettingsFragment extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)   {
-        View view= inflater.inflate(R.layout.fragment_settings, container, false);
-        btn=(Button)view.findViewById(R.id.govideo);
-        box=(CheckBox)view.findViewById(R.id.chckservice);
-        trans=(CheckBox)view.findViewById(R.id.chcktranslation);
-        Button logout=(Button)view.findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent i=new Intent(getActivity(),LoginActivity.class);
-                startActivity(i);
-                getActivity().finish();
+    public void onCreatePreferences(Bundle bundle, String rootKey) {
+        addPreferencesFromResource(R.xml.preferences);
 
-            }
-        });
-        box.setSelected(true);
-        trans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(box.isSelected()){
-                    box.setSelected(false);
-                    EasyWordsBtn.eng=true;
-                }else{
-                    box.setSelected(true);
-                    EasyWordsBtn.eng=false;
-                }
-            }
-        });
-        box.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(box.isSelected()){
-                    box.setSelected(false);
-                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
-                    getActivity().stopService(serv);
-                }else{
-                    box.setSelected(true);
-                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
-                    getActivity().startService(serv);
-                }
-            }
-        });
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(getContext(), VideoPlayer.class);
-
-                startActivity(i);
-            }
-        });
-
-
-        return view;
     }
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState)   {
+////        View view= inflater.inflate(R.layout.fragment_settings, container, false);
+////        btn=(Button)view.findViewById(R.id.govideo);
+////        box=(CheckBox)view.findViewById(R.id.chckservice);
+////        trans=(CheckBox)view.findViewById(R.id.chcktranslation);
+////        Button logout=(Button)view.findViewById(R.id.logout);
+////        logout.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                FirebaseAuth.getInstance().signOut();
+////                Intent i=new Intent(getActivity(),LoginActivity.class);
+////                startActivity(i);
+////                getActivity().finish();
+////
+////            }
+////        });
+////        box.setSelected(true);
+////        trans.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                if(box.isSelected()){
+////                    box.setSelected(false);
+////                    EasyWordsBtn.eng=true;
+////                }else{
+////                    box.setSelected(true);
+////                    EasyWordsBtn.eng=false;
+////                }
+////            }
+////        });
+////        box.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                if(box.isSelected()){
+////                    box.setSelected(false);
+////                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
+////                    getActivity().stopService(serv);
+////                }else{
+////                    box.setSelected(true);
+////                    Intent serv=new Intent(getActivity().getApplicationContext(),EasyWordsBtn.class);
+////                    getActivity().startService(serv);
+////                }
+////            }
+////        });
+////
+////        btn.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+//////                Intent i=new Intent(getContext(), VideoPlayer.class);
+//////
+//////                startActivity(i);
+////            }
+////        });
+//
+//
+//        final View view = inflater.inflate(R.layout.fragment_settings, container, false);
+////        // The frame you want to embed the parent layout in.
+////        final ViewGroup innerContainer = (ViewGroup) view.findViewById(R.id.main_frame);
+////        final View innerView = super.onCreateView(inflater, innerContainer, savedInstanceState);
+////        if (innerView != null) {
+////            innerContainer.addView(innerView);
+////        }
+//
+//        return view;
+//    }
 
 
 

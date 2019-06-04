@@ -50,12 +50,15 @@
     android:orientation="vertical"
     android:background="#FFFFFF"
     tools:context="com.example.mp11.VideoPlayerFragment">
-
+    <!--android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"-->
    <EditText
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:hint="Введите ссылку на видео"
-       android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"
+
+
+        android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"
+
        android:id="@+id/video_url"/>
     <EditText
         android:layout_width="match_parent"

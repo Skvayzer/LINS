@@ -16,10 +16,11 @@
         android:icon="@drawable/diam"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddWordActivity"></activity>
+        <activity android:name=".ResetPasswordActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".AddWordActivity" />
         <activity android:name=".DynVideoPlayer" />
         <activity
             android:name=".PopActivity"
@@ -39,7 +40,7 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".LoginActivity" >
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,14 +48,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".MyRegistrationActivity" />
-        <activity android:name=".RegOrLogActivity">
-
-        </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".RegOrLogActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".UpdateDeleteActivity" />
         <activity android:name=".GetAllWordsActivity" />
 
-        <receiver android:name=".AlarmReceiver"></receiver>
+        <receiver android:name=".AlarmReceiver" />
     </application>
 
 </manifest>

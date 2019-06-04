@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -52,15 +56,15 @@ public class SocialFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private MessageListAdapter mMessageAdapter;
-    private FloatingActionButton sendbtn;
+  //  private MessageListAdapter mMessageAdapter;
+  //  private FloatingActionButton sendbtn;
     private EditText editText;
     private ListView lv;
-    private MessageListAdapter adapter;
+   // private MessageListAdapter adapter;
 
-    private Button btnStore, btnGetall;
-    private EditText etword, etdefinition, etsyns,etex;
-    private MyDbHelper databaseHelper;
+  //  private Button btnStore, btnGetall;
+  //  private EditText etword, etdefinition, etsyns,etex;
+  //  private MyDbHelper databaseHelper;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -69,8 +73,15 @@ boolean test=true;
 
     ListView listView;
     SearchView sv;
+    View ftView;
+    DictAdapter adapter;
+    LoadHandler handler;
+    boolean isLoading=false;
 
-
+    Iterator<DataSnapshot> iterator;
+    Iterator<DataSnapshot> inner_iterator;
+    final ArrayList<String> names=new ArrayList<>();
+    final ArrayList<String> holders=new ArrayList<>();
     public SocialFragment() {
         // Required empty public constructor
     }
@@ -110,6 +121,7 @@ boolean test=true;
         View view=inflater.inflate(R.layout.fragment_social, container, false);
         sv=view.findViewById(R.id.searchdicts);
         listView=view.findViewById(R.id.dict_search_list);
+        handler=new LoadHandler();
 //        sendbtn=(FloatingActionButton) view.findViewById(R.id.sendbtn);
 //        editText=(EditText)view.findViewById(R.id.usermessage);
 //        lv=(ListView)view.findViewById(R.id.message_list);
@@ -151,23 +163,59 @@ boolean test=true;
 //        });
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref=database.getReference();
-        final ArrayList<String> names=new ArrayList<>();
-        final ArrayList<String> holders=new ArrayList<>();
+        LayoutInflater li=(LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        ftView=li.inflate(R.layout.footer_view,null);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(view.getLastVisiblePosition()==totalItemCount-1&&listView.getCount()>0&&!isLoading){
+                isLoading=true;
+                Thread thread=new ThreadGetData();
+                thread.start();
+                }
+            }
+        });
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference().child("dictionaries");
+
        // final HashMap<String, List<String>> map=new HashMap<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren()) {
+                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+                iterator = snapshotIterator.iterator();
 
-                    for (DataSnapshot ds1 : ds.getChildren()) {
-                        names.add(ds1.getKey());
-                        holders.add(ds.getKey());
+                int count=6;
+                while (iterator.hasNext()&&count>0) {
+                    DataSnapshot next = (DataSnapshot) iterator.next();
+                    Iterable<DataSnapshot> snapit = next.getChildren();
+                    inner_iterator = snapit.iterator();
+                    while(inner_iterator.hasNext()&&count>0) {
+                        DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                        names.add(ds.getKey());
+                        holders.add(next.getKey());
+                        count--;
+                        if(count<0) break;
                     }
-                   // map.put(ds.getKey(),names);
+
                 }
-                listView.setAdapter(new DictAdapter(getContext(),names,holders));
+
+//                for(DataSnapshot ds: dataSnapshot.getChildren()) {
+//
+//
+//                    if(count<0) break;
+//                   // map.put(ds.getKey(),names);
+//                }
+                adapter=new DictAdapter(getContext(),names,holders);
+                listView.setAdapter(adapter);
             }
 
             @Override
@@ -231,5 +279,66 @@ boolean test=true;
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    public class LoadHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg){
+            switch (msg.what){
+                case 0:
+                    listView.addFooterView(ftView);
+                    break;
+                case 1:
+                    adapter.addToList((ArrayList<String>)msg.obj);
+                    listView.removeFooterView(ftView);
+                    isLoading=false;
+
+                    break;
+                    default:
+                        break;
+            }
+        }
+    }
+    public ArrayList<String> getMoreData(){
+        ArrayList<String> list=new ArrayList<String>();
+        ArrayList<String> hold=new ArrayList<>();
+        int count=6;
+        if(iterator.hasNext())
+        while (iterator.hasNext()&&count>0) {
+            DataSnapshot next = (DataSnapshot) iterator.next();
+            while(inner_iterator.hasNext()&&count>0) {
+                DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                list.add(ds.getKey());
+               hold.add(next.getKey());
+                count--;
+                if(count<0) break;
+            }
+
+        }
+        else{
+            while(inner_iterator.hasNext()&&count>0) {
+                DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                list.add(ds.getKey());
+                hold.add("kek");
+                count--;
+                if(count<0) break;
+            }
+        }
+
+        return list;
+    }
+    public class ThreadGetData extends Thread{
+        @Override
+        public void run(){
+            handler.sendEmptyMessage(0);
+            ArrayList<String> new_list=getMoreData();
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            Message msg=handler.obtainMessage(1,new_list);
+            handler.sendMessage(msg);
+
+        }
     }
 }

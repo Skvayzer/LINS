@@ -139,7 +139,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="No account yet? Create one"
+            android:text="Ещё нет аккаунта? Создайте"
+            android:gravity="center"
+            android:textSize="16dip"
+            android:textColor="@color/white"/>
+        <TextView android:id="@+id/link_reset"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Забыли пароль?"
             android:gravity="center"
             android:textSize="16dip"
             android:textColor="@color/white"/>

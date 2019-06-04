@@ -66,7 +66,8 @@ import java.util.Stack;
 import link.fls.swipestack.SwipeStack;
 
 public class MainActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener,
-        SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener, VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener  {
+        SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
+        VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener  {
 
 //    private Button mButtonLeft, mButtonRight, showbtn;
 //    private FloatingActionButton mFab;
@@ -161,7 +162,9 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
                                 bottomNavigationView.getMenu().getItem(3).setChecked(true);
                                 break;
                             case R.id.navigation_settings:
+                               // selectedFragment =Fragment.instantiate(getApplicationContext(), SettingsFragment.class.getName(), null);
                                 selectedFragment = SettingsFragment.newInstance("kek","lol");
+
                                 bottomNavigationView.getMenu().getItem(4).setChecked(true);
                                 break;
 

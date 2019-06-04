@@ -2,6 +2,7 @@ package com.example.mp11;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -26,9 +27,13 @@ import android.widget.Toast;
 import com.example.mp11.FirebaseDbHelper.FirebaseDbHelper;
 import com.example.mp11.views.CategDictionary;
 import com.example.mp11.views.StringTranslation;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -283,8 +288,27 @@ public class DictionariesFragment extends Fragment implements ClickListener {
     }
 
     @Override
-    public void onItemLongClick(int position, View v) {
+    public void onItemLongClick(final int position, View v) {
         Log.d("Long fkin Click", "onItemClick position: " + position);
+       // final EditText taskEditText = new EditText(getContext());
+        final String name=dictionaries.get(position).name;
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setTitle("Настройки словаря")
+                .setMessage("Что вы хотите сделать со словарём?") //.setView(taskEditText)
+                .setPositiveButton("Изучать", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CardFragment.CURRENT_DICT_NAME=name;
+                    }
+                })
+                .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getContext().deleteDatabase(name);
+                    }
+                })
+                .create();
+        dialog.show();
 
     }
 
@@ -323,6 +347,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 name = (TextView) itemView.findViewById(R.id.tile_title);
                 clickListener=listener;
                 v.setOnClickListener(this);
+                v.setOnLongClickListener(this);
 //                itemView.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -341,7 +366,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             @Override
             public boolean onLongClick(View v) {
                 clickListener.onItemLongClick(getAdapterPosition(), v);
-                return false;
+                return true;
             }
         }
 
@@ -394,9 +419,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
         @Override
         public void onBindViewHolder(MyViewHolder holder, final int position) {
            // holder.picture.setImageDrawable(mProjectPictures[position % mProjectPictures.length]);
-            Gson gson=new Gson();
-            SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor=preferences.edit();
+            final Gson gson=new Gson();
+            final SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor=preferences.edit();
             String json=preferences.getString("dictionaries",null);
             final String[] names=gson.fromJson(json,String[].class);
             if(names!=null) {
@@ -414,8 +439,21 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             if (names != null) {
                                 CategDictionary dict = new CategDictionary(context, names[position]);
                                 dict.addWord(text, stlist);
-                              //  dict=new CategDictionary(context,names[position]+"-rest-unknown");
-                               // dict.addWord(text, stlist,true);
+//                                dict=new CategDictionary(context,names[position]+"-rest-unknown");
+//                                dict.addWord(text, stlist,true);
+                                    String rest=preferences.getString(name +"-rest",null);
+                                ArrayList<String> rest_ar;
+                                    if(rest!=null){
+                                        Type type = new TypeToken<List<String>>() {
+                                        }.getType();
+                                        rest_ar=gson.fromJson(rest,type);
+
+                                    }else{
+                                       rest_ar=new ArrayList<>();
+                                    }
+                                rest_ar.add(text);
+                                editor.putString(name+"-rest",gson.toJson(rest_ar));
+                                editor.apply();
                                 lol.hide();
                             }
                         }
