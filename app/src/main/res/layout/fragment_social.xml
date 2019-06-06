@@ -64,6 +64,7 @@
 
 
 <!--</RelativeLayout>-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -136,10 +137,30 @@
         android:layout_height="wrap_content"
         app:queryHint="Найдите словарь"
         android:id="@+id/searchdicts"/>
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dict_search_list"
-        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dict_search_list"
+
+            android:listSelector="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:foreground="?android:attr/selectableItemBackground"
+
+            />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_dicts"
+            android:layout_centerInParent="true"
+            />
+    </RelativeLayout>
+
 
 </LinearLayout>

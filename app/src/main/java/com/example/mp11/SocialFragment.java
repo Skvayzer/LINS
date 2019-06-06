@@ -9,7 +9,10 @@ import android.os.Message;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,11 +24,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.support.v7.widget.SearchView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.views.CategDictionary;
 import com.example.mp11.views.DictAdapter;
+import com.example.mp11.views.UsersDictionary;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,11 +82,15 @@ boolean test=true;
     DictAdapter adapter;
     LoadHandler handler;
     boolean isLoading=false;
-
+    ProgressBar pb;
     Iterator<DataSnapshot> iterator;
     Iterator<DataSnapshot> inner_iterator;
-    final ArrayList<String> names=new ArrayList<>();
-    final ArrayList<String> holders=new ArrayList<>();
+    //final ArrayList<String> names=new ArrayList<>();
+   // final ArrayList<String> holders=new ArrayList<>();
+    final ArrayList<UsersDictionary> usersDictionaries=new ArrayList<>();
+
+    String CURRENT_USER_ID;
+    FirebaseDatabase database;
     public SocialFragment() {
         // Required empty public constructor
     }
@@ -167,6 +176,9 @@ boolean test=true;
 
         ftView=li.inflate(R.layout.footer_view,null);
 
+        pb=(ProgressBar)view.findViewById(R.id.progress_dicts);
+
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -183,25 +195,47 @@ boolean test=true;
             }
         });
 
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref=database.getReference().child("dictionaries");
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference ref=database.getReference();
 
        // final HashMap<String, List<String>> map=new HashMap<>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                DataSnapshot dataSnapshot=dataSnapshot1.child("dictionaries");
+               // pb.setVisibility(View.VISIBLE);
                 Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
                 iterator = snapshotIterator.iterator();
+                CURRENT_USER_ID=dataSnapshot.getKey();
 
-                int count=6;
+                int count=15;
                 while (iterator.hasNext()&&count>0) {
                     DataSnapshot next = (DataSnapshot) iterator.next();
                     Iterable<DataSnapshot> snapit = next.getChildren();
                     inner_iterator = snapit.iterator();
                     while(inner_iterator.hasNext()&&count>0) {
                         DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                        names.add(ds.getKey());
-                        holders.add(next.getKey());
+                        final UsersDictionary ud=new UsersDictionary();
+                        ud.name=ds.getKey();
+                        ud.holderId=next.getKey();
+                        DataSnapshot dsProfileInfo=dataSnapshot1.child("users").child(ud.holderId);
+                        ud.imageUrl=dsProfileInfo.child("imageURL").getValue().toString();
+                        ud.holderName=dsProfileInfo.child("username").getValue().toString();
+                       // DatabaseReference userRef=database.getReference().child("users").child(ud.holderId);
+
+//                        userRef.addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                ud.imageUrl=dataSnapshot.child("imageURL").getValue().toString();
+//                                ud.holderName=dataSnapshot.child("username").getValue().toString();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+                        usersDictionaries.add(ud);
                         count--;
                         if(count<0) break;
                     }
@@ -214,8 +248,9 @@ boolean test=true;
 //                    if(count<0) break;
 //                   // map.put(ds.getKey(),names);
 //                }
-                adapter=new DictAdapter(getContext(),names,holders);
+                adapter=new DictAdapter(getContext(),usersDictionaries);
                 listView.setAdapter(adapter);
+                pb.setVisibility(View.GONE);
             }
 
             @Override
@@ -288,7 +323,7 @@ boolean test=true;
                     listView.addFooterView(ftView);
                     break;
                 case 1:
-                    adapter.addToList((ArrayList<String>)msg.obj);
+                    adapter.addToList((ArrayList<UsersDictionary>)msg.obj);
                     listView.removeFooterView(ftView);
                     isLoading=false;
 
@@ -298,17 +333,32 @@ boolean test=true;
             }
         }
     }
-    public ArrayList<String> getMoreData(){
-        ArrayList<String> list=new ArrayList<String>();
-        ArrayList<String> hold=new ArrayList<>();
-        int count=6;
+    public ArrayList<UsersDictionary> getMoreData(){
+        ArrayList<UsersDictionary> list=new ArrayList<>();
+
+        int count=15;
         if(iterator.hasNext())
         while (iterator.hasNext()&&count>0) {
             DataSnapshot next = (DataSnapshot) iterator.next();
             while(inner_iterator.hasNext()&&count>0) {
                 DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                list.add(ds.getKey());
-               hold.add(next.getKey());
+                final UsersDictionary ud=new UsersDictionary();
+                ud.name=ds.getKey();
+                ud.holderId=next.getKey();
+                DatabaseReference userRef=database.getReference("users").child(ud.holderId);
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ud.imageUrl=dataSnapshot.child("imageURL").getValue(String.class);
+                        ud.holderName=dataSnapshot.child("username").getValue(String.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                list.add(ud);
                 count--;
                 if(count<0) break;
             }
@@ -317,8 +367,24 @@ boolean test=true;
         else{
             while(inner_iterator.hasNext()&&count>0) {
                 DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                list.add(ds.getKey());
-                hold.add("kek");
+                final UsersDictionary ud=new UsersDictionary();
+                ud.name=ds.getKey();
+                ud.holderId=CURRENT_USER_ID;
+
+                DatabaseReference userRef=database.getReference("users").child(ud.holderId);
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ud.imageUrl=dataSnapshot.child("imageURL").getValue(String.class);
+                        ud.holderName=dataSnapshot.child("username").getValue(String.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                list.add(ud);
                 count--;
                 if(count<0) break;
             }
@@ -330,7 +396,7 @@ boolean test=true;
         @Override
         public void run(){
             handler.sendEmptyMessage(0);
-            ArrayList<String> new_list=getMoreData();
+            ArrayList<UsersDictionary> new_list=getMoreData();
 //            try {
 //                Thread.sleep(3000);
 //            } catch (InterruptedException e) {

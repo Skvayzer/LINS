@@ -17,7 +17,7 @@
     <item
         android:id="@+id/navigation_video"
         android:icon="@drawable/ic_desktop_windows_black_24dp"
-        android:title="Settings"/>
+        android:title="Watch"/>
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_brightness_7_black_24dp"

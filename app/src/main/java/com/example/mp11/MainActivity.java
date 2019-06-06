@@ -42,11 +42,15 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,7 +61,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.gson.Gson;
+//import com.theartofdev.edmodo.cropper.CropImage;
+//import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +91,18 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //    private TextView word, anword;
 //    boolean visibility=false;
 
+//    private DrawerLayout dl;
+//    private ActionBarDrawerToggle t;
+//    private NavigationView nv;
 
    // public Stack<String>[] stacks=new Stack[7];
+
+//    int IMAGE_REQUEST=1011;
+//    DatabaseReference databaseReference;
+//    Uri imageUri;
+//    FirebaseUser user;
+//    StorageTask uploadTask;
+//    private StorageReference storageReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +206,22 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
         transaction.commit();
         Intent serv=new Intent(getApplicationContext(),EasyWordsBtn.class);
         startService(serv);
+
+
+//        user= FirebaseAuth.getInstance().getCurrentUser();
+//        databaseReference= FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+//        storageReference= FirebaseStorage.getInstance().getReference("uploads");
+
+//        dl = (DrawerLayout)findViewById(R.id.activity_main);
+//        t = new ActionBarDrawerToggle(this, dl,R.string.Open, R.string.Close);
+//
+//        dl.addDrawerListener(t);
+//        t.syncState();
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //dl.openDrawer(Gravity.START);
+
+       // nv = (NavigationView)findViewById(R.id.nv);
 
 
 //уведомлялки
@@ -348,6 +387,7 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //            return convertView;
 //        }
 //    }
+
 
 
 }

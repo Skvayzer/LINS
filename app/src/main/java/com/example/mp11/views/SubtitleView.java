@@ -40,7 +40,7 @@ import com.example.mp11.yandex.dictslate.Model;
 import com.example.mp11.yandex.dictslate.RestApi;
 import com.example.mp11.yandex.dictslate.TranslateApi;
 import com.google.android.exoplayer.util.PlayerControl;
-import com.google.android.gms.common.util.IOUtils;
+//import com.google.android.gms.common.util.IOUtils;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;

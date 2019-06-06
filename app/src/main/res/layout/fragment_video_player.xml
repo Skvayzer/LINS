@@ -57,7 +57,7 @@
        android:hint="Введите ссылку на видео"
 
 
-        android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"
+        android:text="https://emerald.rev.lavenderhosted.com/s4e15.mp4"
 
        android:id="@+id/video_url"/>
     <EditText
