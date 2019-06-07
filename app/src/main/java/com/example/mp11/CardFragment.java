@@ -156,8 +156,8 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
 
         mData.add("a");
-        mData.add("a");
-        mData.add("a");
+//        mData.add("a");
+//        mData.add("a");
         mAdapter.notifyDataSetChanged();
 
 
@@ -180,11 +180,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         inflater.inflate(R.menu.main, menu);
         return true;
     }
-    private void fillWithTestData(String a) {
-        for (int x = 0; x < mData.size(); x++) {
-            mData.add("a");
-        }
-    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -264,12 +260,14 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         Type type = new TypeToken<List<String>>() {
         }.getType();
         ArrayList<String> ar=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-rest",null),type);
+       // if(ar==null) ar=new ArrayList<>();
         ar.remove(tv.getText().toString());
 
         editor.putString(CURRENT_DICT_NAME+"-rest",gson.toJson(ar));
-        type = new TypeToken<Collection<String>>() {
+        type = new TypeToken<ArrayDeque<String>>() {
         }.getType();
         ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
+        if(deque==null) deque=new ArrayDeque<>();
         deque.offer(tv.getText().toString());
         editor.putString(CURRENT_DICT_NAME+"-known",gson.toJson(deque));
         editor.apply();
@@ -375,12 +373,14 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
             anword=(TextView) convertView.findViewById(R.id.textViewCardanother);
             list=(ListView)convertView.findViewById(R.id.word_list_card);
-            Type type = new TypeToken<Collection<String>>() {
+            Type type = new TypeToken<ArrayDeque<String>>() {
             }.getType();
             ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
             if(deque==null) deque=new ArrayDeque<>();
 
-
+            if(CURRENT_DICT_NAME==null||CURRENT_DICT_NAME.equals("")){
+                CURRENT_DICT_NAME=preferences.getString("CURRENT_DICT_NAME",null);
+            }
             if(CURRENT_DICT_NAME==null||CURRENT_DICT_NAME.equals("")) {
 //                final Gson gson = new Gson();
 //                SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
@@ -527,10 +527,12 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                 } else {
                     textViewCard.setText("У вас ещё нет слов");
                 }
-            }else if(deque.size()!=0&&count<5){
-
-            }else{
-                String r = "";
+            }
+//            else if(deque.size()!=0&&count<5){
+////
+////            }
+            else{
+                String r = "У вас ещё нет слов";
                 final Gson gson = new Gson();
                 SharedPreferences preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
@@ -545,7 +547,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                     textViewCard.setText("У вас ещё нет слов");
                     wordModelArrayList = new ArrayList<StringTranslation>();
                     wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
-                    showbtn.setVisibility(View.INVISIBLE);
+                    if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
 
                 } else {
 

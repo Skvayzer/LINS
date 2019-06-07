@@ -16,8 +16,9 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonSwipeLeft"
         android:padding="@dimen/padding_swipestack"
-        app:stack_rotation="10"
-        app:stack_size="3"/>
+        app:stack_rotation="0"
+        app:stack_size="1"
+        />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

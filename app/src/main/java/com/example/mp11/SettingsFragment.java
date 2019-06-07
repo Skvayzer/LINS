@@ -230,6 +230,10 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                     mUri=preferences.getString("profile_image_url","");
                     if(mUri!=null)
                    Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
+                    else if(dataSnapshot.child("imageURL").getValue()!=null){
+                        mUri=dataSnapshot.child("imageURL").getValue().toString();
+                        Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
+                    }
 
                 }
             }

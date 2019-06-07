@@ -4,7 +4,7 @@
 
     <dimen name="margin_fab">16dp</dimen>
     <dimen name="padding_normal">8dp</dimen>
-    <dimen name="padding_swipestack">40dp</dimen>
+    <dimen name="padding_swipestack">0dp</dimen>
 
     <dimen name="elevation_normal">4dp</dimen>
     <dimen name="elevation_large">8dp</dimen>

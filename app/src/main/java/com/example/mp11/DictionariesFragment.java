@@ -302,12 +302,30 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             CardFragment.CURRENT_DICT_NAME = name;
+                            SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=preferences.edit();
+                            editor.putString("CURRENT_DICT_NAME",name);
+                            editor.apply();
                         }
                     })
                     .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getContext().deleteDatabase(name);
+                            Gson gson=new Gson();
+                            SharedPreferences preferences = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=preferences.edit();
+                            String json=preferences.getString("dictionaries",null);
+                            Type type = new TypeToken<List<String>>() {
+                            }.getType();
+                            ArrayList<String> names=gson.fromJson(json,type);
+                            names.remove(name);
+                            dictionaries.remove(dictionaries.get(position));
+                            editor.putString("dictionaries",gson.toJson(names));
+                            editor.apply();
+                            adapt.notifyDataSetChanged();
+
+
                         }
                     })
                     .create();
@@ -440,7 +458,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             // dictionaries.get(position).addWord();
                             Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
 
-                            if (names != null) {
+                           // if (names != null) {
                                 CategDictionary dict = new CategDictionary(context, names[position]);
                                 dict.addWord(text, stlist);
 //                                dict=new CategDictionary(context,names[position]+"-rest-unknown");
@@ -460,7 +478,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                                 editor.apply();
                                 lol.hide();
                             }
-                        }
+                       // }
                     });
                 }
             }else{

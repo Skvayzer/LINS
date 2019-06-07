@@ -56,7 +56,7 @@ public class MyCustomAdapter extends BaseAdapter {
 
             
             holder.tvMeanings = (TextView) convertView.findViewById(R.id.meanings);
-            //holder.tvWord=(TextView)convertView.findViewById(R.id.word);
+           // holder.tvWord=(TextView)convertView.findViewById(R.id.current_word_card);
             holder.tvEx = (TextView) convertView.findViewById(R.id.ex);
             holder.tvSyns = (TextView) convertView.findViewById(R.id.syn_item);
 
@@ -79,6 +79,7 @@ public class MyCustomAdapter extends BaseAdapter {
    //     if (WordModelArrayList.get(position).getWord().equals(curword)) {
         String def=WordModelArrayList.get(position).getdefinition();
         String syns=WordModelArrayList.get(position).getSyns();
+      //  holder.tvWord.setText(WordModelArrayList.get(position).word);
         if( syns!=null &&!syns.equals("")&&syns.length()>=2){
             syns="("+syns+")";
             holder.tvSyns.setText(syns);
