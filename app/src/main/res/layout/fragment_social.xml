@@ -72,7 +72,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context="com.example.mp11.SocialFragment">
+    tools:context="com.example.mp11.SocialFragment"
+    >
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->
@@ -142,16 +143,17 @@
         android:layout_height="match_parent">
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/dict_search_list"
 
             android:listSelector="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
             android:dividerHeight="10dp"
-            android:clickable="true"
-            android:focusableInTouchMode="true"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="false"
+
+            android:focusable="false"
+            android:focusableInTouchMode="false"
 
             />
         <ProgressBar

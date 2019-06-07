@@ -256,12 +256,14 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 current.setBackgroundColor(Color.WHITE);
                 Button btn=(Button)current.findViewById(R.id.add_new_dict);
                 final EditText et=(EditText)current.findViewById(R.id.type_new_dict);
+                final EditText desc=(EditText)current.findViewById(R.id.new_dict_description);
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         String name=et.getText().toString();
-                        if(!name.equals("")){
-                            dictionaries.add(new CategDictionary(getContext(),name));
+                        String description=desc.getText().toString();
+                        if(!name.equals("")&&!description.equals("")){
+                            dictionaries.add(new CategDictionary(getContext(),name,description));
                             new CategDictionary(getContext(),name + "-known-words");
                             new CategDictionary(getContext(),name + "-rest-unknown");
                             adapt.notifyDataSetChanged();
@@ -272,7 +274,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             kek.hide();
 
                         }else{
-                            Toast.makeText(getContext(),"Введите название словаря!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),"Заполните все поля!",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -291,24 +293,26 @@ public class DictionariesFragment extends Fragment implements ClickListener {
     public void onItemLongClick(final int position, View v) {
         Log.d("Long fkin Click", "onItemClick position: " + position);
        // final EditText taskEditText = new EditText(getContext());
-        final String name=dictionaries.get(position).name;
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle("Настройки словаря")
-                .setMessage("Что вы хотите сделать со словарём?") //.setView(taskEditText)
-                .setPositiveButton("Изучать", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        CardFragment.CURRENT_DICT_NAME=name;
-                    }
-                })
-                .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getContext().deleteDatabase(name);
-                    }
-                })
-                .create();
-        dialog.show();
+        if(position!=0) {
+            final String name = dictionaries.get(position).name;
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setTitle("Настройки словаря")
+                    .setMessage("Что вы хотите сделать со словарём?") //.setView(taskEditText)
+                    .setPositiveButton("Изучать", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            CardFragment.CURRENT_DICT_NAME = name;
+                        }
+                    })
+                    .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getContext().deleteDatabase(name);
+                        }
+                    })
+                    .create();
+            dialog.show();
+        }
 
     }
 

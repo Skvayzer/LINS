@@ -19,7 +19,12 @@
        android:hint="Введите название словаря"
        android:id="@+id/type_new_dict"
        android:layout_below="@id/name_new_dict"/>
-
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Введите описание словаря"
+        android:id="@+id/new_dict_description"
+        android:layout_below="@id/type_new_dict"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +34,6 @@
         android:id="@+id/add_new_dict"
         android:layout_centerHorizontal="true"
 
-        android:layout_below="@id/type_new_dict"
+        android:layout_below="@id/new_dict_description"
         />
 </RelativeLayout>

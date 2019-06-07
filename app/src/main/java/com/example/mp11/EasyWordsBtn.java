@@ -119,14 +119,14 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
         AlarmManager alarmService = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
         alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() +10, restartServicePI);
-        Toast.makeText(this,"onTaskRemoved",Toast.LENGTH_SHORT).show();
+     //   Toast.makeText(this,"onTaskRemoved",Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this,"Service created",Toast.LENGTH_LONG).show();
+      //  Toast.makeText(this,"Service created",Toast.LENGTH_LONG).show();
         wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         overlayedButton = new ImageButton(this);

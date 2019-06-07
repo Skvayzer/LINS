@@ -13,12 +13,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -256,6 +258,18 @@ boolean test=true;
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment dict_description= DictDescriptionFragment.newInstance("kek","lol");
+                Toast.makeText(getContext(),"ItemClick",Toast.LENGTH_SHORT).show();
+                UsersDictionary ud=usersDictionaries.get(position);
+                ((DictDescriptionFragment) dict_description).ud=ud;
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, dict_description)
+                        .commit();
             }
         });
         //CategDictionary.downloadDict(FirebaseAuth.getInstance().getCurrentUser().getUid(), "jehb", getContext());

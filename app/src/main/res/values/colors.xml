@@ -13,6 +13,8 @@
     <color name="button_grey">#757575</color>
     <color name="graylight">#fafafa</color>
     <color name="startblue">#09c6df</color>
-    <color name="endblue">#0bcce6</color>
+    <color name="endblue">#0b5ce6</color>
+    <color name="startgreen">#09dfd6</color>
+    <color name="endgreen">#09df22</color>
     <color name="profprimarydark">#292b3d</color>
 </resources>

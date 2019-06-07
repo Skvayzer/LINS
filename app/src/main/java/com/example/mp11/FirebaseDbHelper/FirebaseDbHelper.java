@@ -25,14 +25,14 @@ public class FirebaseDbHelper {
 
 
 
-        myRef.child(dict).child(word).setValue(list);
+        myRef.child(dict).child("dictionary").child(word).setValue(list);
 
     }
 
     public static ArrayList<StringTranslation> getWord(String dict,String word){
 
 
-        myRef.child(dict).child(word).addValueEventListener(new ValueEventListener() {
+        myRef.child(dict).child("dictionary").child(word).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

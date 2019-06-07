@@ -30,6 +30,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -81,6 +82,7 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
     private String mParam2;
     int IMAGE_REQUEST=1011;
     DatabaseReference databaseReference;
+    DatabaseReference databaseDictsReference;
     Uri imageUri;
     FirebaseUser user;
     StorageTask uploadTask;
@@ -99,6 +101,7 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
     private CircleImageView profile_image;
     private StorageReference storageReference;
     String mUri;
+    LinearLayout account_settings,app_settings;
     // CheckBox box,trans;
 
     public SettingsFragment() {
@@ -238,8 +241,8 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
         });
 
         dictsCount.setText(preferences.getString("dicts_count","~"));
-        databaseReference= FirebaseDatabase.getInstance().getReference("dictionaries").child(user.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseDictsReference= FirebaseDatabase.getInstance().getReference("dictionaries").child(user.getUid());
+        databaseDictsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int size=0;
@@ -296,6 +299,22 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                 });
                 kek.setView(current);
                 kek.show();
+            }
+        });
+        account_settings=(LinearLayout)view.findViewById(R.id.account_settings);
+        account_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getContext(),AccountSettingsActivity.class);
+                startActivity(i);
+            }
+        });
+        app_settings=(LinearLayout)view.findViewById(R.id.app_settings);
+        app_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getContext(),SettingsActivity.class);
+                startActivity(i);
             }
         });
         return view;

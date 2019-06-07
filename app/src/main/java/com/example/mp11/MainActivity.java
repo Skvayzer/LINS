@@ -33,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
@@ -61,6 +62,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mp11.views.DictAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -80,7 +82,8 @@ import link.fls.swipestack.SwipeStack;
 
 public class MainActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener,
         SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
-        VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener  {
+        VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener,
+        DictDescriptionFragment.OnFragmentInteractionListener{
 
 //    private Button mButtonLeft, mButtonRight, showbtn;
 //    private FloatingActionButton mFab;
@@ -155,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 
         FragmentManager fragmentManager = getFragmentManager();
 
+        //DictAdapter.fragmentManager=fragmentManager;
         Fragment first_frag=CardFragment.newInstance("kek","lol");
 
         final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
@@ -194,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 
                         }
                         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                       // DictAdapter.transaction=transaction;
                         transaction.replace(R.id.frame_layout, selectedFragment);
                         transaction.commit();
                         return true;
@@ -236,7 +241,18 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
                 startTime, 10, pi);
 
 
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
+            @Override
+            public void onReceive(Context arg0, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals("finish_activity")) {
+                    finish();
+
+                }
+            }
+        };
+        registerReceiver(broadcastReceiver, new IntentFilter("finish_activity"));
       //  scheduleNotification(getNotification("1 second delay"), 1000);
       //  scheduleNotification(getApplicationContext(),1000,0);
     }
@@ -388,6 +404,18 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //        }
 //    }
 
+    @Override
+    public void onBackPressed() {
 
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
+    }
 
 }

@@ -21,16 +21,38 @@ import java.util.Collections;
 import java.util.List;
 
 public class CategDictionary {
-    public String name;
+    public String name,description;
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     static String userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
+
     DatabaseReference myRef = database.getReference("dictionaries").child(userID);
     MyDbHelper databaseHelper;
  //   boolean flag;
     public CategDictionary(Context context, String name){
-        myRef=myRef.child(name);
+        myRef=myRef.child(name).child("dictionary");
         databaseHelper=new MyDbHelper(context,name);
         this.name=name;
+
+    }
+    public CategDictionary(Context context, String name, final String description){
+        myRef=myRef.child(name).child("dictionary");
+        databaseHelper=new MyDbHelper(context,name);
+        this.name=name;
+        this.description=description;
+        final DatabaseReference dr=FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
+                .child("description");
+        dr.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.getValue()==null) dr.setValue(description);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 //    public CategDictionary(Context context, String name, boolean flag){
@@ -91,6 +113,9 @@ public class CategDictionary {
     }
     public void addWord(String word,ArrayList<StringTranslation> list){
         myRef.child(word).setValue(list);
+
+
+
         for(StringTranslation a: list){
             databaseHelper.addWord(word,a.meaning,a.syns,a.ex);
         }

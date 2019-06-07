@@ -6,7 +6,9 @@
     android:orientation="horizontal"
     android:clipToPadding="false"
     android:paddingBottom="@dimen/cardview_default_elevation"
-    android:paddingTop="@dimen/cardview_default_elevation">
+    android:paddingTop="@dimen/cardview_default_elevation"
+    android:descendantFocusability="blocksDescendants"
+   >
     <!--<ImageView-->
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="100dp"-->
@@ -31,6 +33,9 @@
 
             <!--android:textSize="30dp"/>-->
     <!--</LinearLayout>-->
+    <!--android:clickable="true"-->
+    <!--android:focusableInTouchMode="true"-->
+    <!--android:foreground="?android:attr/selectableItemBackground"-->
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,17 +43,21 @@
         card_view:cardElevation="@dimen/elevation_large"
         android:paddingHorizontal="10dp"
         android:layout_marginHorizontal="10dp"
-        android:clickable="true"
-        android:focusableInTouchMode="true"
-        android:foreground="?android:attr/selectableItemBackground"
+
         android:id="@+id/card_dict_description"
+        android:focusableInTouchMode="false"
+
+        android:focusable="false"
+
+
         >
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="10dp"
-            android:id="@+id/card_back">
+            android:id="@+id/card_back"
+            >
 
             <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -60,13 +69,15 @@
                 android:src="@drawable/diam"
                 app:civ_border_width="2dp"
                 app:civ_border_color="#0099FF"
-                android:paddingHorizontal="20dp"/>
+                android:paddingHorizontal="20dp"
+               />
 
             <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+               >
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -75,6 +86,7 @@
             android:text="Dictionary name"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
+
             />
             <TextView
             android:layout_width="wrap_content"
@@ -83,7 +95,8 @@
             android:text="Holder"
                 android:gravity="center_horizontal"
                 android:layout_gravity="center_horizontal"
-            android:textSize="30dp"/>
+            android:textSize="30dp"
+                />
             </LinearLayout>
 
 
