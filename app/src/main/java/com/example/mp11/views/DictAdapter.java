@@ -36,8 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DictAdapter extends BaseAdapter {
    // HashMap<String, List<String>> map;
     Context context;
-    static public FragmentManager fragmentManager;
-    static public FragmentTransaction transaction;
+   // static public FragmentManager fragmentManager;
+   // static public FragmentTransaction transaction;
     //ArrayList names=new ArrayList<>();
     //Iterator<Map.Entry<String, List<String>>> it;
    // ArrayList<String> names,holders;

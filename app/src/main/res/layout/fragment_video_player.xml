@@ -51,27 +51,60 @@
     android:background="#FFFFFF"
     tools:context="com.example.mp11.VideoPlayerFragment">
     <!--android:text="https://emerald.rev.lavenderhosted.com/s5e26.mp4"-->
-   <EditText
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:hint="Введите ссылку на видео"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Введите ссылку на видео"
 
 
-        android:text="https://emerald.rev.lavenderhosted.com/s4e15.mp4"
+            android:text="https://emerald.rev.lavenderhosted.com/s4e15.mp4"
 
-       android:id="@+id/video_url"/>
+            android:id="@+id/video_url"
+            />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@drawable/buttonstyle"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:text="+"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:id="@+id/video_path"/>-->
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/subs"
         android:hint="Введите ссылку на субтитры"
         android:text="https://opensubtitles.org/f/tg_e16kwM/s5e26.srt"
+        android:layout_toLeftOf="@id/subs_path"
         />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/buttonstyle"
+            android:textColor="@color/white"
+            android:text="+"
+            android:layout_alignParentRight="true"
+            android:id="@+id/subs_path"/>
+    </RelativeLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/start_video"
-        android:text="Смотреть"/>
+        android:text="Смотреть"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:background="@drawable/buttonstyle"/>
+
+
 
 
 </LinearLayout>

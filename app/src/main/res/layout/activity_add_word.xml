@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,45 +12,68 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="#555"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
-        android:text="Добавление слова" />
+        android:text="Добавление слова или определения"
+        android:paddingVertical="20dp"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="@dimen/card_corner_radius"
+        card_view:cardElevation="@dimen/elevation_large"
+        android:paddingHorizontal="10dp"
+        android:layout_marginHorizontal="10dp"
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etword"
-        android:background="#fff"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:hint="Введите слово"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etdefinition"
-        android:background="#fff"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:hint="Введите определение"/>
+        card_view:cardBackgroundColor="@color/graylight"
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etsyns"
-        android:background="#fff"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:hint="Введите синонимы"/>
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etex"
-        android:background="#fff"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:hint="Введите примеры употребления"/>
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/etword"
+                android:background="@color/graylight"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="Введите слово"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/etdefinition"
+                android:background="@color/graylight"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="Введите определение"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/etsyns"
+                android:background="@color/graylight"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="Введите синонимы"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:id="@+id/etex"
+                android:background="@color/graylight"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="Введите примеры употребления"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
 
     <Button
         android:layout_width="wrap_content"
@@ -57,7 +81,12 @@
         android:id="@+id/btnstore"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="Сохранить"/>
+        android:layout_gravity="center_horizontal"
+        android:text="Сохранить"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:background="@drawable/buttonstyle"
+        />
     <!--<Button-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->

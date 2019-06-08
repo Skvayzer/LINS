@@ -16,11 +16,13 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_bookmark_orange_24dp"
-        android:scaleY="12"
-        android:scaleX="5"
+        android:src="@drawable/ic_bookmark_orange_big"
+        android:scaleY="2"
+        android:scaleX="2"
         android:layout_alignTop="@id/tile_picture"
         android:layout_alignRight="@id/tile_picture"
+
+        android:layout_marginTop="-10dp"
 
         />
 

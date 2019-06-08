@@ -38,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -84,12 +85,16 @@ boolean test=true;
     DictAdapter adapter;
     LoadHandler handler;
     boolean isLoading=false;
+    boolean isSearch=false;
     ProgressBar pb;
     Iterator<DataSnapshot> iterator;
     Iterator<DataSnapshot> inner_iterator;
+    Iterator<DataSnapshot> search_iterator;
+    Iterator<DataSnapshot> search_inner_iterator;
     //final ArrayList<String> names=new ArrayList<>();
    // final ArrayList<String> holders=new ArrayList<>();
     final ArrayList<UsersDictionary> usersDictionaries=new ArrayList<>();
+    String text;
 
     String CURRENT_USER_ID;
     FirebaseDatabase database;
@@ -133,6 +138,7 @@ boolean test=true;
         sv=view.findViewById(R.id.searchdicts);
         listView=view.findViewById(R.id.dict_search_list);
         handler=new LoadHandler();
+
 //        sendbtn=(FloatingActionButton) view.findViewById(R.id.sendbtn);
 //        editText=(EditText)view.findViewById(R.id.usermessage);
 //        lv=(ListView)view.findViewById(R.id.message_list);
@@ -198,32 +204,98 @@ boolean test=true;
         });
 
         database = FirebaseDatabase.getInstance();
-        DatabaseReference ref=database.getReference();
-
+        final DatabaseReference ref=database.getReference();
+        search(ref);
        // final HashMap<String, List<String>> map=new HashMap<>();
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                DataSnapshot dataSnapshot=dataSnapshot1.child("dictionaries");
-               // pb.setVisibility(View.VISIBLE);
-                Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
-                iterator = snapshotIterator.iterator();
-                CURRENT_USER_ID=dataSnapshot.getKey();
 
-                int count=15;
-                while (iterator.hasNext()&&count>0) {
-                    DataSnapshot next = (DataSnapshot) iterator.next();
-                    Iterable<DataSnapshot> snapit = next.getChildren();
-                    inner_iterator = snapit.iterator();
-                    while(inner_iterator.hasNext()&&count>0) {
-                        DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                        final UsersDictionary ud=new UsersDictionary();
-                        ud.name=ds.getKey();
-                        ud.holderId=next.getKey();
-                        DataSnapshot dsProfileInfo=dataSnapshot1.child("users").child(ud.holderId);
-                        ud.imageUrl=dsProfileInfo.child("imageURL").getValue().toString();
-                        ud.holderName=dsProfileInfo.child("username").getValue().toString();
-                       // DatabaseReference userRef=database.getReference().child("users").child(ud.holderId);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment dict_description= DictDescriptionFragment.newInstance("kek","lol");
+              //  Toast.makeText(getContext(),"ItemClick",Toast.LENGTH_SHORT).show();
+                UsersDictionary ud=usersDictionaries.get(position);
+                ((DictDescriptionFragment) dict_description).ud=ud;
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, dict_description)
+                        .commit();
+            }
+        });
+        //CategDictionary.downloadDict(FirebaseAuth.getInstance().getCurrentUser().getUid(), "jehb", getContext());
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {return  false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+
+                newText = newText.toLowerCase();
+
+                if(newText.length()!=0){
+                        usersDictionaries.clear();
+                        isSearch=true;
+                        text=newText;
+                        search(ref);
+
+
+
+
+
+                }else{
+                    isSearch=false;
+                    usersDictionaries.clear();
+                    search(ref);
+                }
+
+
+
+
+                return true;
+            }
+        });
+        return view;
+    }
+//    public void sendMessage() {
+//        String message = editText.getText().toString();
+//        if (message.length() > 0) {
+//
+//            String date=getCurrentTimeUsingDate();
+//            adapter.add(new Message(message, new MemberData("Соня ТкаченКО-КО-КО","#66FF88"), test, date));
+//            test=!test;
+//            editText.getText().clear();
+//        }
+//    }
+
+    private void search(DatabaseReference ref){
+        if(!isSearch) {
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                    DataSnapshot dataSnapshot = dataSnapshot1.child("dictionaries");
+                    // pb.setVisibility(View.VISIBLE);
+                    Iterable<DataSnapshot> snapshotIterator = dataSnapshot.getChildren();
+                    iterator = snapshotIterator.iterator();
+
+
+
+                    int count = 15;
+                    while (iterator.hasNext() && count > 0) {
+                        DataSnapshot next = (DataSnapshot) iterator.next();
+
+                        Iterable<DataSnapshot> snapit = next.getChildren();
+                        inner_iterator = snapit.iterator();
+                        while (inner_iterator.hasNext() && count > 0) {
+                            DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                            final UsersDictionary ud = new UsersDictionary();
+                            ud.name = ds.getKey();
+                            ud.holderId = next.getKey();
+                            CURRENT_USER_ID = next.getKey();
+                            DataSnapshot dsProfileInfo = dataSnapshot1.child("users").child(ud.holderId);
+                            if(dsProfileInfo.child("imageURL").getValue()!=null)
+                                ud.imageUrl = dsProfileInfo.child("imageURL").getValue().toString();
+                            if(dsProfileInfo.child("username").getValue()!=null) ud.holderName = dsProfileInfo.child("username").getValue().toString();
+                            // DatabaseReference userRef=database.getReference().child("users").child(ud.holderId);
 
 //                        userRef.addValueEventListener(new ValueEventListener() {
 //                            @Override
@@ -237,12 +309,12 @@ boolean test=true;
 //
 //                            }
 //                        });
-                        usersDictionaries.add(ud);
-                        count--;
-                        if(count<0) break;
-                    }
+                            usersDictionaries.add(ud);
+                            count--;
+                            if (count < 0) break;
+                        }
 
-                }
+                    }
 
 //                for(DataSnapshot ds: dataSnapshot.getChildren()) {
 //
@@ -250,41 +322,81 @@ boolean test=true;
 //                    if(count<0) break;
 //                   // map.put(ds.getKey(),names);
 //                }
-                adapter=new DictAdapter(getContext(),usersDictionaries);
-                listView.setAdapter(adapter);
-                pb.setVisibility(View.GONE);
-            }
+                    adapter = new DictAdapter(getContext(), usersDictionaries);
+                    listView.setAdapter(adapter);
+                    pb.setVisibility(View.GONE);
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment dict_description= DictDescriptionFragment.newInstance("kek","lol");
-                Toast.makeText(getContext(),"ItemClick",Toast.LENGTH_SHORT).show();
-                UsersDictionary ud=usersDictionaries.get(position);
-                ((DictDescriptionFragment) dict_description).ud=ud;
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, dict_description)
-                        .commit();
-            }
-        });
-        //CategDictionary.downloadDict(FirebaseAuth.getInstance().getCurrentUser().getUid(), "jehb", getContext());
-        return view;
+                }
+            });
+        }else{
+           // final ArrayList<UsersDictionary> list = new ArrayList<>();
+
+            DatabaseReference ref1=database.getReference();
+            ref1.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(final DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> snapshotIterator = dataSnapshot.child("dictionaries").getChildren();
+                    search_iterator = snapshotIterator.iterator();
+                    final int[] count = {15};
+                    final UsersDictionary[] ud = new UsersDictionary[1];
+                    while (search_iterator.hasNext() && count[0] > 0) {
+                        final DataSnapshot next = (DataSnapshot) search_iterator.next();
+                        Query query=database.getReference("dictionaries").child(next.getKey()).orderByChild("name").startAt(text);
+                        final int finalCount = count[0];
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot1) {
+                                Iterable<DataSnapshot> snapit = dataSnapshot1.getChildren();
+                                search_inner_iterator = snapit.iterator();
+                                while (search_inner_iterator.hasNext() && finalCount > 0) {
+                                    DataSnapshot ds = (DataSnapshot) search_inner_iterator.next();
+                                    ud[0] = new UsersDictionary();
+                                    ud[0].name = ds.getKey();
+                                    ud[0].holderId = next.getKey();
+                                    DataSnapshot userRef = dataSnapshot.child("users").child(ud[0].holderId);
+
+                                            ud[0].imageUrl = userRef.child("imageURL").getValue().toString();
+                                            ud[0].holderName = userRef.child("username").getValue().toString();
+
+                                   if(ud[0]!=null&&ud[0].name!=null&&ud[0].holderId!=null&&
+                                           ud[0].holderId!=null&&ud[0].imageUrl!=null) usersDictionaries.add(ud[0]);
+                                    count[0]--;
+                                    if (count[0] < 0) break;
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
+
+
+                    }
+                   if(usersDictionaries!=null&&usersDictionaries.size()!=0) {
+                       adapter = new DictAdapter(getContext(), usersDictionaries);
+                       listView.setAdapter(adapter);
+                       adapter.notifyDataSetChanged();
+                       pb.setVisibility(View.GONE);
+                   }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
     }
-//    public void sendMessage() {
-//        String message = editText.getText().toString();
-//        if (message.length() > 0) {
-//
-//            String date=getCurrentTimeUsingDate();
-//            adapter.add(new Message(message, new MemberData("Соня ТкаченКО-КО-КО","#66FF88"), test, date));
-//            test=!test;
-//            editText.getText().clear();
-//        }
-//    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -347,70 +459,145 @@ boolean test=true;
             }
         }
     }
-    public ArrayList<UsersDictionary> getMoreData(){
-        ArrayList<UsersDictionary> list=new ArrayList<>();
+    public ArrayList<UsersDictionary> getMoreData(boolean flag, final String text){
 
-        int count=15;
-        if(iterator.hasNext())
-        while (iterator.hasNext()&&count>0) {
-            DataSnapshot next = (DataSnapshot) iterator.next();
-            while(inner_iterator.hasNext()&&count>0) {
-                DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                final UsersDictionary ud=new UsersDictionary();
-                ud.name=ds.getKey();
-                ud.holderId=next.getKey();
-                DatabaseReference userRef=database.getReference("users").child(ud.holderId);
-                userRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        ud.imageUrl=dataSnapshot.child("imageURL").getValue(String.class);
-                        ud.holderName=dataSnapshot.child("username").getValue(String.class);
+        if(!flag) {
+            ArrayList<UsersDictionary> list = new ArrayList<>();
+
+            int count = 15;
+            if (iterator.hasNext())
+                while (iterator.hasNext() && count > 0) {
+
+                    while (inner_iterator.hasNext() && count > 0) {
+                        DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                        final UsersDictionary ud = new UsersDictionary();
+                        ud.name = ds.getKey();
+                        ud.holderId =CURRENT_USER_ID;
+                                //next.getKey();
+                        DatabaseReference userRef = database.getReference("users").child(ud.holderId);
+                        userRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                ud.imageUrl = dataSnapshot.child("imageURL").getValue(String.class);
+                                ud.holderName = dataSnapshot.child("username").getValue(String.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                        list.add(ud);
+                        count--;
+                        if (count < 0) break;
                     }
+                    DataSnapshot next = (DataSnapshot) iterator.next();
+                    if(!next.getKey().equals(CURRENT_USER_ID)) CURRENT_USER_ID=next.getKey();
+                    Iterable<DataSnapshot> snapit = next.getChildren();
+                    inner_iterator = snapit.iterator();
+                }
+            else {
+                while (inner_iterator.hasNext() && count > 0) {
+                    DataSnapshot ds = (DataSnapshot) inner_iterator.next();
+                    final UsersDictionary ud = new UsersDictionary();
+                    ud.name = ds.getKey();
+                    ud.holderId = CURRENT_USER_ID;
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    DatabaseReference userRef = database.getReference("users").child(ud.holderId);
+                    userRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            ud.imageUrl = dataSnapshot.child("imageURL").getValue(String.class);
+                            ud.holderName = dataSnapshot.child("username").getValue(String.class);
+                        }
 
-                    }
-                });
-                list.add(ud);
-                count--;
-                if(count<0) break;
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    list.add(ud);
+                    count--;
+                    if (count < 0) break;
+                }
             }
 
-        }
-        else{
-            while(inner_iterator.hasNext()&&count>0) {
-                DataSnapshot ds = (DataSnapshot) inner_iterator.next();
-                final UsersDictionary ud=new UsersDictionary();
-                ud.name=ds.getKey();
-                ud.holderId=CURRENT_USER_ID;
 
-                DatabaseReference userRef=database.getReference("users").child(ud.holderId);
-                userRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        ud.imageUrl=dataSnapshot.child("imageURL").getValue(String.class);
-                        ud.holderName=dataSnapshot.child("username").getValue(String.class);
+            return list;
+        }else{
+            final ArrayList<UsersDictionary> list = new ArrayList<>();
+
+            DatabaseReference ref=database.getReference();
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(final DataSnapshot dataSnapshot) {
+                    Iterable<DataSnapshot> snapshotIterator = dataSnapshot.child("dictionaries").getChildren();
+                    search_iterator = snapshotIterator.iterator();
+                    final int[] count = {15};
+                    final UsersDictionary[] ud = new UsersDictionary[1];
+                    while (search_iterator.hasNext() && count[0] > 0) {
+                        final DataSnapshot next = (DataSnapshot) search_iterator.next();
+                        Query query=database.getReference("dictionaries").child(next.getKey()).orderByChild("name").startAt(text);
+                        final int finalCount = count[0];
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot1) {
+                                Iterable<DataSnapshot> snapit = dataSnapshot1.getChildren();
+                                search_inner_iterator = snapit.iterator();
+                                while (search_inner_iterator.hasNext() && finalCount > 0) {
+                                    DataSnapshot ds = (DataSnapshot) search_inner_iterator.next();
+                                    ud[0] = new UsersDictionary();
+                                    ud[0].name = ds.getKey();
+                                    ud[0].holderId = next.getKey();
+                                    DataSnapshot userRef = dataSnapshot.child("users").child(ud[0].holderId);
+
+                                    ud[0].imageUrl = userRef.child("imageURL").getValue().toString();
+                                    ud[0].holderName = userRef.child("username").getValue().toString();
+
+                                    if(ud[0]!=null&&ud[0].name!=null&&ud[0].holderId!=null&&
+                                            ud[0].holderId!=null&&ud[0].imageUrl!=null) {
+                                        list.add(ud[0]);
+                                        count[0]--;
+                                        if (count[0] < 0) break;
+                                    }
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
+
+
                     }
+                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-                list.add(ud);
-                count--;
-                if(count<0) break;
-            }
+                }
+            });
+
+
+
+
+
+            return list;
         }
 
-        return list;
+
     }
     public class ThreadGetData extends Thread{
         @Override
         public void run(){
             handler.sendEmptyMessage(0);
-            ArrayList<UsersDictionary> new_list=getMoreData();
+            ArrayList<UsersDictionary> new_list=getMoreData(isSearch,text);
 //            try {
 //                Thread.sleep(3000);
 //            } catch (InterruptedException e) {

@@ -80,15 +80,15 @@ public class MyCustomAdapter extends BaseAdapter {
         String def=WordModelArrayList.get(position).getdefinition();
         String syns=WordModelArrayList.get(position).getSyns();
       //  holder.tvWord.setText(WordModelArrayList.get(position).word);
-        if( syns!=null &&!syns.equals("")&&syns.length()>=2){
-            syns="("+syns+")";
+        if( syns!=null &&!syns.equals("")){
+            syns=syns;
             holder.tvSyns.setText(syns);
         }
         String ex=WordModelArrayList.get(position).getEx();
-        if( ex!=null && !ex.equals("")&&ex.length()>=2){
+        if( ex!=null && !ex.equals("")){
             holder.tvEx.setText(ex);
         }
-        if( def!=null && !def.equals("")&&def.length()>=2){
+        if( def!=null && !def.equals("")){
             holder.tvMeanings.setText(def);
         }
 

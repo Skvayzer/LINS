@@ -63,6 +63,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
 
     private OnFragmentInteractionListener mListener;
 
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+    Gson gson=new Gson();
     public DictionariesFragment() {
         // Required empty public constructor
     }
@@ -107,6 +110,8 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 R.layout.recycler_view, container, false);
         MyContentAdapter adapter = new MyContentAdapter(recyclerView.getContext(),this);
         adapt=adapter;
+        preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        editor=preferences.edit();
 //        adapter.setOnItemClickListener(new MyContentAdapter.ClickListener() {
 //            @Override
 //            public void onItemClick(int position, View v) {
@@ -177,9 +182,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
         mListener = null;
     }
     public void loadDicts(){
-        Gson gson=new Gson();
-        SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
+      //  Gson gson=new Gson();
+      //  SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+      //  SharedPreferences.Editor editor=preferences.edit();
         String json=preferences.getString("dictionaries",null);
         String[] names=gson.fromJson(json,String[].class);
 
@@ -194,16 +199,21 @@ public class DictionariesFragment extends Fragment implements ClickListener {
 
     }
     public void saveDicts(){
-        Gson gson=new Gson();
-        String[] names=new String[dictionaries.size()];
-        for(int i=0;i<dictionaries.size();i++){
-            names[i]=dictionaries.get(i).name;
-        }
-        String result=gson.toJson(names);
-        SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=preferences.edit();
-        editor.putString("dictionaries",result);
-        editor.apply();
+        //Gson gson=new Gson();
+       // SharedPreferences preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+       // SharedPreferences.Editor editor=preferences.edit();
+//        String[] names=new String[dictionaries.size()];
+//        for(int i=0;i<dictionaries.size();i++){
+//            names[i]=dictionaries.get(i).name;
+//        }
+
+//        String result=gson.toJson(names);
+//
+//        if(result!=null&&!result.equals("")){
+//            editor.putString("dictionaries",result);
+//            editor.apply();
+//        }
+
     }
 //    @Override
 //    public void onHiddenChanged(boolean hidden) {
@@ -260,7 +270,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String name=et.getText().toString();
+                        String name=et.getText().toString().toLowerCase();
                         String description=desc.getText().toString();
                         if(!name.equals("")&&!description.equals("")){
                             dictionaries.add(new CategDictionary(getContext(),name,description));
@@ -270,7 +280,15 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             //dictionaries.clear();
                             //loadDicts();
 
-
+                            Type type = new TypeToken<List<String>>() {
+                            }.getType();
+                            ArrayList<String> ar=gson.fromJson(preferences.getString("dictionaries",null),type);
+                            if(ar==null||ar.size()==0){
+                               ar=new ArrayList<>();
+                            }
+                            ar.add(name);
+                            editor.putString("dictionaries",gson.toJson(ar));
+                            editor.apply();
                             kek.hide();
 
                         }else{
@@ -496,7 +514,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                                 CategDictionary dict = new CategDictionary(context, name);
 
                                 dict.addWord(text, stlist);
-                                FirebaseDbHelper.AddWord(name,text,stlist);
+                                //FirebaseDbHelper.AddWord(name,text,stlist);
                                // dict=new CategDictionary(context,names[position]+"-rest-unknown");
                                // dict.addWord(text, stlist,true);
                                 lol.hide();

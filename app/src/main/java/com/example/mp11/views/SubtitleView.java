@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mp11.DictionariesFragment;
+import com.example.mp11.EasyWordsBtn;
 import com.example.mp11.FirebaseDbHelper.FirebaseDbHelper;
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.PopActivity;
@@ -42,6 +43,10 @@ import com.example.mp11.yandex.dictslate.TranslateApi;
 import com.google.android.exoplayer.util.PlayerControl;
 //import com.google.android.gms.common.util.IOUtils;
 import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,6 +64,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -107,9 +114,10 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
 
     static TreeMap<Long, Line> trlate = new TreeMap<>();
     static String translation;
-
+    Context context;
     public SubtitleView(Context context) {
         super(context);
+        this.context=context;
 //        setOnTouchListener(new View.OnTouchListener(){
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -244,7 +252,11 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
                          //   Intent i = new Intent(getContext(), PopActivity.class);
                           //  i.putExtra("word", s[e]);
 
-                            getReport(s[e]);
+
+
+                           // getReport(s[e]);
+                            CallbackTask task=new CallbackTask();
+                            task.execute(inflections(s[e]));
                             //showPop();
 
                             //getContext().startActivity(i);
@@ -376,6 +388,12 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         else
             throw new UnsupportedOperationException("Parser only built for SRT subs");
     }
+    public void setSubSource(Uri uri, String mime) {
+        if (mime.equals(MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP))
+            track = getSubtitleFile(uri);
+        else
+            throw new UnsupportedOperationException("Parser only built for SRT subs");
+    }
     public static void rus_parse()  {
 
         rus_track = new TreeMap<>();
@@ -462,7 +480,25 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
         return hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000 + millies;
 
     }
+    private TreeMap<Long, Line> getSubtitleFile(Uri uri) {
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getContentResolver().openInputStream(uri);
 
+            return parse(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
     private TreeMap<Long, Line> getSubtitleFile(int resId) {
         InputStream inputStream = null;
         try {
@@ -800,5 +836,61 @@ public class SubtitleView extends android.support.v7.widget.AppCompatTextView im
             }
         });
     }
+    public String inflections(String w) {
+        final String language = "en";
+        final String word = w;
+        final String word_id = word.toLowerCase();
+        return "https://od-api.oxforddictionaries.com:443/api/v2/lemmas/" + language + "/" + word_id;
+    }
+    public class CallbackTask extends AsyncTask<String, Integer, String> {
 
+        @Override
+        protected String doInBackground(String... params) {
+
+            //TODO: replace with your own app id and app key
+            final String app_id = "6532a039";
+            final String app_key = "b866d663c9393fa1ec6970fb989d31c3";
+            try {
+                URL url = new URL(params[0]);
+                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Accept","application/json");
+                urlConnection.setRequestProperty("app_id",app_id);
+                urlConnection.setRequestProperty("app_key",app_key);
+
+                // read the output from the server
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+
+                return stringBuilder.toString();
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            try {
+                String lemma=new JSONObject(result)
+                        .getJSONArray("results")
+                        .getJSONObject(0)
+                        .getJSONArray("lexicalEntries")
+                        .getJSONObject(0)
+                        .getJSONArray("inflectionOf").getJSONObject(0)
+                        .getString("text");
+                getReport(lemma);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

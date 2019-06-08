@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -53,10 +54,19 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.zip.Inflater;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -118,7 +128,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
 
         AlarmManager alarmService = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() +10, restartServicePI);
+        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() +1, restartServicePI);
      //   Toast.makeText(this,"onTaskRemoved",Toast.LENGTH_SHORT).show();
 
     }
@@ -226,7 +236,8 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
         if(eng){
             googleDict(message);
         }else{
-            getReport(message);
+            CallbackTask task=new CallbackTask();
+            task.execute(inflections(message));
         }
 
         //googleDict(message);
@@ -315,7 +326,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
                 //final ArrayList<TranslationItem> result = new ArrayList<>();
                // final ArrayList<StringTranslation> stringDict=new ArrayList<>();
-                String transcription="["+response.body().phonetic[0]+"]";
+                String transcription="["+response.body().phonetic+"]";
                 final ArrayList<StringTranslation> stlist=new ArrayList<>();
                 // String strmeanings="",strex="",strsyns="";
                 if (response.body().meaning.noun!=null)
@@ -707,7 +718,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                         ArrayList<StringTranslation> stlist=new ArrayList<>();
                         for(int q=0;q<defmean.size();q++){
 
-                            stlist.add(new StringTranslation(text, defmean.get(q), defsyns.get(q),defex.get(q)));
+                            stlist.add(new StringTranslation(text.toLowerCase(), defmean.get(q), defsyns.get(q)+")",defex.get(q)));
                         }
                         DictionariesFragment.MyContentAdapter adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
                                 stlist, lol,text);
@@ -761,5 +772,62 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 }
             }
         });
+    }
+    public String inflections(String w) {
+        final String language = "en";
+        final String word = w;
+        final String word_id = word.toLowerCase();
+        return "https://od-api.oxforddictionaries.com:443/api/v2/lemmas/" + language + "/" + word_id;
+    }
+    public class CallbackTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            //TODO: replace with your own app id and app key
+            final String app_id = "6532a039";
+            final String app_key = "b866d663c9393fa1ec6970fb989d31c3";
+            try {
+                URL url = new URL(params[0]);
+                HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                urlConnection.setRequestProperty("Accept","application/json");
+                urlConnection.setRequestProperty("app_id",app_id);
+                urlConnection.setRequestProperty("app_key",app_key);
+
+                // read the output from the server
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                StringBuilder stringBuilder = new StringBuilder();
+
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+
+                return stringBuilder.toString();
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return e.toString();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            try {
+                String lemma=new JSONObject(result)
+                .getJSONArray("results")
+                .getJSONObject(0)
+                .getJSONArray("lexicalEntries")
+                .getJSONObject(0)
+                .getJSONArray("inflectionOf").getJSONObject(0)
+                .getString("text");
+                getReport(lemma);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

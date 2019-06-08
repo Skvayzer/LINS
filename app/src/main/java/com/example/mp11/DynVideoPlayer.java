@@ -163,6 +163,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     private int brightness, mediavolume,device_height,device_width;
     private AudioManager audioManager;
 
+    public static Uri subsUri, videoUri;
 
     SubtitleView subView;
     public boolean isSubsFrozen=false;
@@ -228,6 +229,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
 
         mSelectedMedia = new MediaItem();
         mSelectedMedia.setUrl(video_url);
+
         mSelectedMedia.setContentType(video_type);
         mSelectedMedia.setTitle(video_title);
 
@@ -857,9 +859,15 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         playerControl = new PlayerControl(player);
 
         txt_title.setText(video_title);
-
-        subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-        subView.dt=22500;
+        try {
+            if (subsUri != null)
+                subView.setSubSource(subsUri, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+            else subView.setSubSource(subs_source, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(),"Выберите файлы!",Toast.LENGTH_SHORT);
+        }
+      //  subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+      //  subView.dt=22500;
 
 
        // new MySubsParseTask().execute();

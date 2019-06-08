@@ -4,94 +4,125 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.mp11.UpdateDeleteActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Word"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="#000"
-        android:textSize="20sp"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/updatelayout">
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:id="@+id/etword"
-        android:background="#fff"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="Слово"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Значения"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textColor="#000"
-        android:textSize="20sp"/>
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:id="@+id/etdefinition"-->
-        <!--android:background="#fff"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:hint="Значения"/>-->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="@dimen/card_corner_radius"
+            card_view:cardElevation="@dimen/elevation_large"
+            android:paddingHorizontal="10dp"
+            android:layout_marginHorizontal="10dp"
 
 
-    <!--<EditText-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:id="@+id/etsyns"-->
-        <!--android:background="#fff"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:hint="Синонимы"/>-->
+            card_view:cardBackgroundColor="@color/graydark"
 
-        <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="40dp"-->
-            <!--android:id="@+id/etex"-->
-            <!--android:background="#fff"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:hint="Примеры"/>-->
-</LinearLayout>
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Слово"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"
+                android:textSize="20dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/updatelayout"
+                android:layout_marginLeft="10dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:id="@+id/etword"
+                    android:background="@color/graydark"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:hint="Слово"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Значения"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000"
+                    android:textSize="20sp"/>
+                <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:id="@+id/etdefinition"-->
+                <!--android:background="#fff"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:hint="Значения"/>-->
+
+
+                <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:id="@+id/etsyns"-->
+                <!--android:background="#fff"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:hint="Синонимы"/>-->
+
+                <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:id="@+id/etex"-->
+                <!--android:background="#fff"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:hint="Примеры"/>-->
+            </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/btnupdate"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"
+            android:textColor="@color/white"
+            android:text="Обновить"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/btndelete"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttonstyle"
+            android:textColor="@color/white"
+            android:text="Удалить"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Добавить определение"
         android:id="@+id/addmeaning"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
-        android:id="@+id/btnupdate"
-        android:text="update"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/btndelete"
-        android:text="delete"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/buttonstyle"
+        android:textColor="@color/white"
+        />
+
 
     </LinearLayout>
 </ScrollView>

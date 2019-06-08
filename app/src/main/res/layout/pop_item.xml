@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/meanings"
-        android:text="MEANINGS"
+        android:text=""
         android:textSize="30dp"
         android:textColor="@android:color/background_dark"
         />
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/syn_item"
-        android:text="SYNS"
+        android:text=""
         android:textSize="20dp"
         android:layout_below="@id/meanings"
         android:textColor="@android:color/background_dark"/>
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/syn_item"
         android:id="@+id/ex"
-        android:text="Ex: "
+        android:text=""
         android:textSize="20dp"
         android:textColor="@android:color/background_dark"/>
 </RelativeLayout>

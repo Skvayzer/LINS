@@ -1,5 +1,6 @@
 package com.example.mp11;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -44,10 +45,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -70,23 +74,26 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private static ProgressDialog progressDialog;
 
 
-    private MediaPlayer mediaPlayer;
-    private SurfaceHolder vidHolder;
-    private SurfaceView vidSurface;
+//    private MediaPlayer mediaPlayer;
+//    private SurfaceHolder vidHolder;
+//    private SurfaceView vidSurface;
     TextView tv;
     EditText video,subs;
-    Button btn;
+    Button btn,btn_get_video,btn_get_subs;
     String cururl;
  //   WebView mWebView;
     String videourl;
 //    EditText openload_url;
     String res="";
+
+    boolean flagUrl=true;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    String videoS,subsS;
+    public  Uri videoUri,subsUri;
     public VideoPlayerFragment() {
         // Required empty public constructor
     }
@@ -138,6 +145,8 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 
         View view= inflater.inflate(R.layout.fragment_video_player, container, false);
         btn=(Button)view.findViewById(R.id.start_video);
+       // btn_get_video=(Button)view.findViewById(R.id.video_path);
+        btn_get_subs=(Button)view.findViewById(R.id.subs_path);
         video=(EditText)view.findViewById(R.id.video_url);
         subs=(EditText)view.findViewById(R.id.subs);
   //      mWebView = (WebView) view.findViewById(R.id.webview);
@@ -152,7 +161,7 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             @Override
             public void run() {
                // final String url = "https://english-films.com/westerns/171-nazad-v-buduschee-3-back-to-the-future-part-iii-1990-hd-720-ru-eng.html";
-                final String url="https://ololo.to";
+              //  final String url="https://ololo.to";
    //             mWebView.loadUrl(url);
    //             mWebView.setWebViewClient(new WebViewClient());
     //            cururl = mWebView.getUrl();
@@ -164,19 +173,45 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //
 //                        new MyTask().execute();
                        // Toast.makeText(getContext(),"g",Toast.LENGTH_SHORT).show();
+                        if(flagUrl) {
 
-                        Intent i=new Intent(getContext(), DynVideoPlayer.class);
-                        i.putExtra("videourl",video.getText().toString());
-                        i.putExtra("subsurl",subs.getText().toString());
-                        i.putExtra("title","Видео");
 
-                        startActivity(i);
+                            videoS = video.getText().toString();
+                            subsS = subs.getText().toString();
+                            Intent i = new Intent(getContext(), DynVideoPlayer.class);
+                            i.putExtra("videourl", videoS);
+                            i.putExtra("subsurl", subsS);
+                            i.putExtra("title", "Видео");
+
+                            startActivity(i);
+                        }else{
+                            videoS = video.getText().toString();
+
+                            Intent i = new Intent(getContext(), DynVideoPlayer.class);
+                            i.putExtra("videourl", videoS);
+                            i.putExtra("subsurl", subsUri);
+                            i.putExtra("title", "Видео");
+
+                            startActivity(i);
+                        }
 
                     }
 
 
                 });
 
+                btn_get_subs.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+                        chooseFile.setType("*/*");
+                        startActivityForResult(
+                                Intent.createChooser(chooseFile, "Choose a file"),
+                                112
+                        );
+                    }
+                });
 
             }
         });
@@ -497,49 +532,32 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
 //    }
 
 
-//    public boolean downloadFile(final String path)
-//    {
-//        try
-//        {
-//            URL url = new URL(path);
-//
-//            URLConnection ucon = url.openConnection();
-//            ucon.setReadTimeout(5000);
-//            ucon.setConnectTimeout(10000);
-//
-//            InputStream is = ucon.getInputStream();
-//            BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
-//
-//            File file = new File(getContext().getDir("filesdir", Context.MODE_PRIVATE) + "/subs.sqr");
-//
-//            if (file.exists())
-//            {
-//                file.delete();
-//                downloadFile(path);
-//            }
-//            file.createNewFile();
-//
-//            FileOutputStream outStream = new FileOutputStream(file);
-//            byte[] buff = new byte[5 * 1024];
-//
-//            int len;
-//            while ((len = inStream.read(buff)) != -1)
-//            {
-//                outStream.write(buff, 0, len);
-//            }
-//
-//            outStream.flush();
-//            outStream.close();
-//            inStream.close();
-//
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == 211 && resultCode == Activity.RESULT_OK&&data!=null&&data.getData()!=null){
+//            Uri content_describer = data.getData();
+//            videoUri=content_describer;
+//            Log.d("Path???", content_describer.getPath());
+
+
+
+
+
+
 //        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//        return true;
-//    }
+        if (requestCode == 112 && resultCode == Activity.RESULT_OK&&data!=null&&data.getData()!=null){
+            Uri content_describer = data.getData();
+            subsUri=content_describer;
+            Log.d("Path???", content_describer.getPath());
+            flagUrl=false;
+
+
+
+
+
+
+        }
+    }
 }
 

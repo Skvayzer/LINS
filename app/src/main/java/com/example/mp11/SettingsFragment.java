@@ -31,11 +31,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.example.mp11.views.CategDictionary;
 import com.example.mp11.views.SubtitleView;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,9 +56,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -214,6 +221,9 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
         databaseReference= FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
         storageReference= FirebaseStorage.getInstance().getReference("uploads");
         username=(TextView)view.findViewById(R.id.username);
+        final TextView level=(TextView)view.findViewById(R.id.level);
+        final LinearLayout l_level=(LinearLayout)view.findViewById(R.id.ll_level);
+
 
         dictsCount=(TextView)view.findViewById(R.id.users_dicts_count);
         profile_image=(CircleImageView)view.findViewById(R.id.profile_image);
@@ -228,13 +238,16 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                   //  profile_image.setImageURI(imageUri);
                     //SharedPreferences preferences = mActivity.getSharedPreferences("pref", Context.MODE_PRIVATE);
                     mUri=preferences.getString("profile_image_url","");
-                    if(mUri!=null)
+                    if(mUri!=null&&!mUri.equals(""))
                    Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
                     else if(dataSnapshot.child("imageURL").getValue()!=null){
                         mUri=dataSnapshot.child("imageURL").getValue().toString();
                         Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
                     }
 
+                }
+                if(dataSnapshot.child("level").getValue()!=null){
+                    level.setText(dataSnapshot.child("level").getValue().toString());
                 }
             }
 
@@ -245,16 +258,25 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
         });
 
         dictsCount.setText(preferences.getString("dicts_count","~"));
-        databaseDictsReference= FirebaseDatabase.getInstance().getReference("dictionaries").child(user.getUid());
+        username.setText(preferences.getString("username","Your profile"));
+        level.setText(preferences.getString("level","Unknown"));
+        databaseDictsReference= FirebaseDatabase.getInstance().getReference();
         databaseDictsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 int size=0;
-                for(DataSnapshot ds:dataSnapshot.getChildren()) size++;
+                DataSnapshot dataSnapshot1=dataSnapshot.child("dictionaries").child(user.getUid());
+                for(DataSnapshot ds:dataSnapshot1.getChildren()) size++;
                 dictsCount.setText(String.valueOf(size));
 
                 SharedPreferences.Editor editor=preferences.edit();
                 editor.putString("dicts_count",String.valueOf(size));
+                String myName=dataSnapshot.child("users").child(user.getUid()).child("username").getValue().toString();
+                editor.putString("username",myName);
+                if(dataSnapshot.child("users").child(user.getUid()).child("level").getValue()!=null) {
+                    String myLevel = dataSnapshot.child("users").child(user.getUid()).child("level").getValue().toString();
+                    editor.putString("level",myLevel);
+                }
                 editor.apply();
 
             }
@@ -319,6 +341,44 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
             public void onClick(View v) {
                 Intent i=new Intent(getContext(),SettingsActivity.class);
                 startActivity(i);
+            }
+        });
+
+        l_level.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder pop = new AlertDialog.Builder(l_level.getContext());
+                final AlertDialog kek=pop.create();
+                final View current=LayoutInflater.from(l_level.getContext()).inflate(R.layout.selectlevel,null,false);
+
+                current.setBackgroundColor(Color.WHITE);
+                Button btn=(Button)current.findViewById(R.id.save);
+                final RadioGroup rg = (RadioGroup) current.findViewById(R.id.radioGroup);
+
+
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       int id= rg.getCheckedRadioButtonId();
+
+                        RadioButton radioButton = (RadioButton) current.findViewById(id);
+                        if(radioButton!=null){
+                        String your_level=radioButton.getText().toString();
+                            databaseReference.child("level").setValue(your_level);
+                            kek.hide();
+                        }else{
+                            Toast.makeText(l_level.getContext(),"Выберите!",Toast.LENGTH_SHORT).show();
+                        }
+
+
+
+
+                    }
+                });
+
+
+                kek.setView(current);
+                kek.show();
             }
         });
         return view;

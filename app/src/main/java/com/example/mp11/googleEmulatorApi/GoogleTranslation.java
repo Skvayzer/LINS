@@ -10,11 +10,16 @@ public class GoogleTranslation {
     public String word;
     @SerializedName("phonetic")
     @Expose
-    public String[] phonetic;
+    public String phonetic;
     @SerializedName("meaning")
     @Expose
     public Meaning meaning;
-
+    @SerializedName("pronunciation")
+    @Expose
+    public String pronunciation;
+    @SerializedName("origin")
+    @Expose
+    public String origin;
 
     public class Meaning{
         public Def[] noun;

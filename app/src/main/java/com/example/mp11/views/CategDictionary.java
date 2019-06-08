@@ -3,6 +3,7 @@ package com.example.mp11.views;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.example.mp11.MyDatabase.MyDbHelper;
 import com.example.mp11.MyDatabase.WordModel;
@@ -15,9 +16,11 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class CategDictionary {
@@ -34,7 +37,7 @@ public class CategDictionary {
         this.name=name;
 
     }
-    public CategDictionary(Context context, String name, final String description){
+    public CategDictionary(Context context, final String name, final String description){
         myRef=myRef.child(name).child("dictionary");
         databaseHelper=new MyDbHelper(context,name);
         this.name=name;
@@ -53,7 +56,36 @@ public class CategDictionary {
 
             }
         });
+        final DatabaseReference dr2=FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
+                .child("name");
+        dr2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                if(dataSnapshot.getValue()==null) dr2.setValue(name);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        final DatabaseReference dr3=FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
+                .child("lastEdit");
+        dr3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+                Date todayDate = new Date();
+                String thisDate = currentDate.format(todayDate);
+                dr3.setValue(thisDate);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 //    public CategDictionary(Context context, String name, boolean flag){
 //        this.flag=flag;
@@ -63,11 +95,13 @@ public class CategDictionary {
 //
 //    }
     public static void downloadDict(String user, final String dict, final Context context){
-        DatabaseReference dictRef=database.getReference(user).child(dict);
+        //DatabaseReference wholeDictRef=database.getReference("dictionaries").child(user).child(dict);
+        DatabaseReference dictRef=database.getReference("dictionaries").child(user).child(dict);
         dictRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
 
+                DataSnapshot dataSnapshot=dataSnapshot1.child("dictionary");
                 //GenericTypeIndicator<ArrayList<Dictionary>> t = new GenericTypeIndicator<ArrayList<Dictionary>>() {};
                 ArrayList<StringTranslation> d=new ArrayList<>();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
@@ -81,7 +115,13 @@ public class CategDictionary {
                 final String[] names=gson.fromJson(json,String[].class);
                 ArrayList<String> nameslist = new ArrayList<String>(Arrays.asList(names));
                 String res_dict=dict;
-                if(!nameslist.contains(dict)) nameslist.add(dict);
+
+
+                if(!nameslist.contains(dict)){
+                    nameslist.add(dict);
+                    DatabaseReference addToMeRef=database.getReference("dictionaries").child(userID).child(dict);
+                    addToMeRef.setValue(dataSnapshot1.getValue());
+                }
                 else{
                     res_dict=dict+ " - copy";
                     while(true){
@@ -90,6 +130,8 @@ public class CategDictionary {
                         else res_dict+=" - copy";
 
                     }
+                    DatabaseReference addToMeRef=database.getReference("dictionaries").child(userID).child(res_dict);
+                    addToMeRef.setValue(dataSnapshot1.getValue());
                     nameslist.add(res_dict);
                 }
                 MyDbHelper dbhelp=new MyDbHelper(context,res_dict);
@@ -102,18 +144,22 @@ public class CategDictionary {
                 json=gson.toJson(nameslist);
                 editor.putString("dictionaries",json);
                 editor.apply();
-
+                Toast.makeText(context,"Скачано успешно!",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(context,"Что-то пошло не так",Toast.LENGTH_SHORT).show();
             }
         });
     }
     public void addWord(String word,ArrayList<StringTranslation> list){
         myRef.child(word).setValue(list);
-
+        DatabaseReference dateRef = database.getReference("dictionaries").child(userID).child(name).child("lastEdit");
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        Date todayDate = new Date();
+        String thisDate = currentDate.format(todayDate);
+        dateRef.setValue(thisDate);
 
 
         for(StringTranslation a: list){

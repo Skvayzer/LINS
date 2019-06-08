@@ -195,17 +195,19 @@
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:id="@+id/ll_level">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Профиль"
+                        android:text="Уровень"
                         android:textSize="20sp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Открытый"
+                        android:text="Unknown"
+                        android:id="@+id/level"
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:paddingTop="10dp"

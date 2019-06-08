@@ -83,7 +83,8 @@ import link.fls.swipestack.SwipeStack;
 public class MainActivity extends AppCompatActivity implements CardFragment.OnFragmentInteractionListener,
         SocialFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
         VideoPlayerFragment.OnFragmentInteractionListener, DictionariesFragment.OnFragmentInteractionListener,
-        DictDescriptionFragment.OnFragmentInteractionListener{
+        DictDescriptionFragment.OnFragmentInteractionListener,ViewWordsFragment.OnFragmentInteractionListener,
+        UsersProfileFragment.OnFragmentInteractionListener{
 
 //    private Button mButtonLeft, mButtonRight, showbtn;
 //    private FloatingActionButton mFab;
@@ -403,6 +404,7 @@ public class MainActivity extends AppCompatActivity implements CardFragment.OnFr
 //            return convertView;
 //        }
 //    }
+
 
     @Override
     public void onBackPressed() {

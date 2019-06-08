@@ -58,6 +58,10 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         etdef.setHint("Значения слова");
         etsyns.setHint("Синонимы");
         etex.setHint("Примеры");
+        etdef.setBackgroundColor(getResources().getColor(R.color.graydark));
+        etsyns.setBackgroundColor(getResources().getColor(R.color.graydark));
+        etex.setBackgroundColor(getResources().getColor(R.color.graydark));
+
         etdef.setText(def);
         etsyns.setText(syns);
         etex.setText(ex);
@@ -113,10 +117,11 @@ public class UpdateDeleteActivity extends AppCompatActivity {
                             aretsyns.get(i).getText().toString(), aretex.get(i).getText().toString());
                 }
                     Toast.makeText(UpdateDeleteActivity.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(UpdateDeleteActivity.this, GetAllWordsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("name",name);
-                    startActivity(intent);
+//                    Intent intent = new Intent(UpdateDeleteActivity.this, GetAllWordsActivity.class);
+//                  //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.putExtra("name",name);
+//                    startActivity(intent);
+                finish();
 
             }
         });
@@ -126,18 +131,20 @@ public class UpdateDeleteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 databaseHelper.deleteWord(WordModel.getId());
                 Toast.makeText(UpdateDeleteActivity.this, "Deleted Successfully!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(UpdateDeleteActivity.this,GetAllWordsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("name",name);
-                startActivity(intent);
+//                Intent intent = new Intent(UpdateDeleteActivity.this,GetAllWordsActivity.class);
+//               // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra("name",name);
+//                startActivity(intent);
+                finish();
             }
         });
-        btnadd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                add();
-            }
-        });
+        btnadd.setVisibility(View.INVISIBLE);
+//        btnadd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                add();
+//            }
+//        });
     }
 }

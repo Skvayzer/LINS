@@ -1,6 +1,8 @@
 package com.example.mp11;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.mp11.MyDatabase.MyDbHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddWordActivity extends AppCompatActivity {
     private MessageListAdapter mMessageAdapter;
@@ -27,7 +35,7 @@ public class AddWordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
 
-        String dict_name=getIntent().getExtras().getString("name");
+        final String dict_name=getIntent().getExtras().getString("name");
         databaseHelper = new MyDbHelper(this,dict_name);
 
         btnStore = (Button) findViewById(R.id.btnstore);
@@ -40,6 +48,23 @@ public class AddWordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 databaseHelper.addWord(etword.getText().toString(), etdefinition.getText().toString(), etsyns.getText().toString(),etex.getText().toString());
+
+                final SharedPreferences preferences = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                final SharedPreferences.Editor editor=preferences.edit();
+                Gson gson=new Gson();
+                String rest=preferences.getString(dict_name +"-rest",null);
+                ArrayList<String> rest_ar;
+                if(rest!=null){
+                    Type type = new TypeToken<List<String>>() {
+                    }.getType();
+                    rest_ar=gson.fromJson(rest,type);
+
+                }else{
+                    rest_ar=new ArrayList<>();
+                }
+                rest_ar.add(etword.getText().toString());
+                editor.putString(dict_name+"-rest",gson.toJson(rest_ar));
+                editor.apply();
                 etword.setText("");
                 etdefinition.setText("");
                 etsyns.setText("");

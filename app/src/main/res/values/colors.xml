@@ -6,12 +6,13 @@
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#0b5ce6</color>
     <color name="white">#FFFFFF</color>
     <color name="dark_grey">#424242</color>
     <color name="medium_grey">#9E9E9E</color>
     <color name="button_grey">#757575</color>
     <color name="graylight">#fafafa</color>
+    <color name="graydark">#eeeeff</color>
     <color name="startblue">#09c6df</color>
     <color name="endblue">#0b5ce6</color>
     <color name="startgreen">#09dfd6</color>

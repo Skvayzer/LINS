@@ -86,11 +86,11 @@
             android:layout_marginBottom="8dp"
             android:textColorHint="@color/white"
             app:hintTextAppearance="@color/white">
-            <EditText android:id="@+id/input_name"
+            <EditText android:id="@+id/nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
-                android:hint="Name"
+                android:hint="Nickname"
                 android:shadowColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textColor="@color/white"

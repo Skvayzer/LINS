@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -85,6 +86,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
     SharedPreferences.Editor editor;
     Gson gson;
 
+    int KNOWN_SESSION=0;
     int count=0;
     public static String CURRENT_DICT_NAME;
 
@@ -125,6 +127,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
        // editor=((MainActivity)getActivity()).editor;
+
     }
 
     @Override
@@ -165,6 +168,13 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         preferences = getContext().getSharedPreferences("pref", Context.MODE_PRIVATE);
 
         editor = preferences.edit();
+        Type type = new TypeToken<ArrayDeque<String>>() {
+        }.getType();
+        ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
+        if(deque==null) deque=new ArrayDeque<>();
+        if(deque.size()>KNOWN_SESSION) KNOWN_SESSION= Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext())
+                .getString("wordsCount","5"));
+        else KNOWN_SESSION=deque.size();
         return view;
     }
 
@@ -268,7 +278,13 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
         }.getType();
         ArrayDeque<String> deque=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-known",null),type);
         if(deque==null) deque=new ArrayDeque<>();
-        deque.offer(tv.getText().toString());
+//        if(deque.size()>KNOWN_SESSION) KNOWN_SESSION=5;
+//        else KNOWN_SESSION=deque.size();
+        if(KNOWN_SESSION>0&&deque.size()!=0){
+            deque.offer(deque.poll());
+        }else {
+            deque.offer(tv.getText().toString());
+        }
         editor.putString(CURRENT_DICT_NAME+"-known",gson.toJson(deque));
         editor.apply();
     }
@@ -286,7 +302,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
 
     @Override
     public void onStackEmpty() {
-        Toast.makeText(getActivity(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), R.string.stack_empty, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -412,6 +428,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                                     textViewCard.setText("У вас ещё нет слов");
                                     wordModelArrayList = new ArrayList<StringTranslation>();
                                     wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                                    if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
                                     break;
                                 } else {
 
@@ -434,6 +451,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                                 textViewCard.setText("У вас ещё нет слов");
                                 wordModelArrayList = new ArrayList<StringTranslation>();
                                 wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                                if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
                             }
 //                        } else {
 //                            textViewCard.setText("У вас ещё нет слов");
@@ -448,6 +466,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                         textViewCard.setText("У вас ещё нет слов");
                         wordModelArrayList = new ArrayList<StringTranslation>();
                         wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                        if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
                     }
 
                     // Random random=new Random();
@@ -464,6 +483,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                     list.setAdapter(customAdapter);
 
                     textViewCard.setText(r);
+
                     showbtn = (ImageButton) convertView.findViewById(R.id.showwordbtn);
                     final View view = convertView;
                     final ViewGroup parent1 = parent;
@@ -526,6 +546,7 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                     });
                 } else {
                     textViewCard.setText("У вас ещё нет слов");
+                    if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
                 }
             }
 //            else if(deque.size()!=0&&count<5){
@@ -540,9 +561,17 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                 type = new TypeToken<List<String>>() {
                 }.getType();
                 ArrayList<String> ar=gson.fromJson(preferences.getString(CURRENT_DICT_NAME+"-rest",null),type);
+
                 //databaseHelper = new MyDbHelper(getContext(), CURRENT_DICT_NAME + "-rest-unknown");
                 databaseHelper = new MyDbHelper(getContext(), CURRENT_DICT_NAME);
                 //if (databaseHelper.getAllWords().size() == 0) {
+
+                if(KNOWN_SESSION>0&&deque.size()!=0){
+                    r=deque.peek();
+                    wordModelArrayList = databaseHelper.getWord(r);
+                    KNOWN_SESSION--;
+
+                }else
                 if(ar==null||ar.size()==0){
                     textViewCard.setText("У вас ещё нет слов");
                     wordModelArrayList = new ArrayList<StringTranslation>();
@@ -567,6 +596,8 @@ public class CardFragment extends Fragment implements SwipeStack.SwipeStackListe
                         textViewCard.setText("У вас ещё нет слов");
                         wordModelArrayList = new ArrayList<StringTranslation>();
                         wordModelArrayList.add(new StringTranslation("У вас ещё нет слов", "", "", ""));
+                        if(showbtn!=null)showbtn.setVisibility(View.INVISIBLE);
+
                     }
 
                 }
