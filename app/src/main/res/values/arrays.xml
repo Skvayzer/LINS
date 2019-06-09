@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="projects_picture">
-        <item>@drawable/overjump</item>
-        <item>@drawable/the_cat_quiz</item>
-        <item>@drawable/thinkup</item>
-        <item>@drawable/tiny_lands</item>
-        <item>@drawable/touch_cube</item>
-        <item>@drawable/wormy</item>
-    </array>
-    <string-array name="projects">
-        <item>Over Jump</item>
-        <item>The Cat Quiz</item>
-        <item>Think Up</item>
-        <item>Tiny Lands</item>
-        <item>Touch Cube</item>
-        <item>Wormy</item>
-    </string-array>
+
 </resources>

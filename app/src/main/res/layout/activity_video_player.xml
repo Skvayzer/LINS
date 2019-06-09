@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".VideoPlayer"
+    tools:context=".activities.DynVideoPlayer"
     android:id="@+id/parent"
     android:keepScreenOn="true">
 
@@ -150,16 +150,7 @@
             android:background="#96000000"
             android:visibility="visible">
 
-            <ImageButton
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:id="@+id/btn_lock"
-                android:layout_gravity="right"
-                android:background="@null"
-                android:layout_weight="0"
-                android:visibility="invisible"
-                android:src="@drawable/hplib_ic_lock"
-                android:layout_marginLeft="20dp" />
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:orientation="horizontal"
@@ -285,25 +276,8 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="100dp"
         android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/hplib_volume"
-            android:id="@+id/volIcon"/>
-        <ProgressBar
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:max="100"
-            android:progress="33"
-            android:id="@+id/volume_slider"
-            android:progressDrawable="@drawable/hplib_verticalbar_design_volume"
-            android:layout_marginRight="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp"
-            android:visibility="visible"
-            />
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -315,24 +289,8 @@
         android:layout_marginTop="100dp"
         android:layout_marginBottom="100dp"
         android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/hplib_brightness_medium"
-            android:id="@+id/brightnessIcon"/>
-        <ProgressBar
-            style="@android:style/Widget.ProgressBar.Horizontal"
-            android:layout_width="10dp"
-            android:layout_height="match_parent"
-            android:max="100"
-            android:progress="33"
-            android:id="@+id/brightness_slider"
-            android:progressDrawable="@drawable/hplib_verticalbar_design_brightness"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp"
-            android:visibility="visible" />
+
+
 
     </LinearLayout>
 
@@ -348,13 +306,6 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_unlock"
-            android:layout_gravity="center"
-            android:background="@null"
-            android:src="@drawable/hplib_ic_unlock"/>
 
     </LinearLayout>
 
@@ -367,11 +318,7 @@
         android:visibility="gone"
         android:layout_centerHorizontal="true" >
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/vol_image"
-            android:src="@drawable/hplib_volume" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -393,11 +340,7 @@
         android:visibility="gone"
         android:layout_centerHorizontal="true" >
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/brightness_image"
-            android:src="@drawable/hplib_brightness_minimum" />
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -441,7 +384,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         >
-        <com.example.mp11.views.SubtitleView
+        <com.example.mp11.videoplayer.SubtitleView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/subs_box"

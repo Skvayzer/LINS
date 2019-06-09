@@ -33,7 +33,8 @@
         android:textSize="20dp"
         android:id="@+id/add_new_dict"
         android:layout_centerHorizontal="true"
-
+        android:background="@drawable/buttonstyle"
+        android:textColor="@color/white"
         android:layout_below="@id/new_dict_description"
         />
 </RelativeLayout>

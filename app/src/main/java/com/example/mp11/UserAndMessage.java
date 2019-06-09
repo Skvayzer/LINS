@@ -1,4 +1,5 @@
 package com.example.mp11;
+//классы для хранения информации о сообщении и его отправителе
 public class UserAndMessage {
     Message message;
     User user;

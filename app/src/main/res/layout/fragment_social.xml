@@ -72,7 +72,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    tools:context="com.example.mp11.SocialFragment"
+    tools:context="com.example.mp11.fragments.SocialFragment"
     >
 
     <!--<TextView-->

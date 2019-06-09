@@ -76,7 +76,7 @@
 <!--</FrameLayout>-->
 <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--android:id="@+id/activity_settings"-->
-    <!--android:name="com.example.mp11.SettingsFragment"-->
+    <!--android:name="com.example.mp11.fragments.SettingsFragment"-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="match_parent"/>-->
 
@@ -85,7 +85,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsFragment"
+    tools:context=".fragments.SettingsFragment"
     android:background="@color/graylight"
     >
     <LinearLayout

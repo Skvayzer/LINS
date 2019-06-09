@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    tools:context="com.example.mp11.GetAllWordsActivity">
+    tools:context="com.example.mp11.activities.GetAllWordsActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
