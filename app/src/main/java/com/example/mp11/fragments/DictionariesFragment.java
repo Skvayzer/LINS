@@ -26,6 +26,9 @@ import com.example.mp11.R;
 import com.example.mp11.activities.GetAllWordsActivity;
 import com.example.mp11.ForDictionaries.CategDictionary;
 import com.example.mp11.ForDictionaries.StringTranslation;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -53,7 +56,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
     public static Context fragcontext;
     //для отображения словарей
     public static RecyclerView recyclerView;
-    MyContentAdapter adapt;
+    private MyContentAdapter adapt;
     static GridLayoutManager layoutManager;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,9 +64,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
 
     private OnFragmentInteractionListener mListener;
     //для всеобщего доступа к массиву названий словарей
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
-    Gson gson=new Gson();
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private Gson gson=new Gson();
     public DictionariesFragment() {
         // Required empty public constructor
     }
@@ -94,10 +97,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //сначала инициализируем массив и добавляем туда один элемент, который будет
-        //псевдословарём, потому что по клику на него будет создаваться новый словарь
         dictionaries=new ArrayList<>();
-        dictionaries.add(new CategDictionary(getContext(),"add new"));
+        dictionaries.add(new CategDictionary(getContext(),"new"));
+
         fragcontext=getContext();
 
     }
@@ -109,7 +111,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
         //адаптер для списка словарей
-        MyContentAdapter adapter = new MyContentAdapter(recyclerView.getContext(),this);
+        MyContentAdapter adapter = new MyContentAdapter(getContext(),this);
         adapt=adapter;
         preferences = this.getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         editor=preferences.edit();
@@ -121,6 +123,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
         recyclerView.setPadding(tilePadding, tilePadding, tilePadding, tilePadding);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         layoutManager =  ((GridLayoutManager)recyclerView.getLayoutManager());
+        //сначала инициализируем массив и добавляем туда один элемент, который будет
+        //псевдословарём, потому что по клику на него будет создаваться новый словарь
+
         loadDicts();
 
         return recyclerView;
@@ -154,19 +159,24 @@ public class DictionariesFragment extends Fragment implements ClickListener {
     //фунция загрузки словарей
     public void loadDicts(){
         //берём массив с названиями словарей
-        String json=preferences.getString("dictionaries",null);
-        String[] names=gson.fromJson(json,String[].class);
+        //String json=preferences.getString("dictionaries",null);
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        ArrayList<String> names=gson.fromJson(preferences.getString("dictionaries",null),type);
+        //String[] names=gson.fromJson(json,String[].class);
         //если он не пустой
         if(names!=null)
             //пробегаемся по массиву
-        for(int i=1;i<names.length&&dictionaries.size()<=names.length+1;i++){
-            if(!names[i].equals("")) {
+        for(String a: names){
+            if(!a.equals("")) {
                 //если такого словаря ещё нет в arrayList'e, добавить
-                if(!dictionaries.contains(new CategDictionary(getContext(),names[i])))
-                dictionaries.add(new CategDictionary(getContext(), names[i]));
+                //if(!dictionaries.contains(new CategDictionary(getContext(),names[i])))
+                dictionaries.add((new CategDictionary(getContext(),a)));
             }
         }
-
+//        editor.putString("dictionaries",gson.toJson(ar));
+//        editor.apply();
+    adapt.notifyDataSetChanged();
 
     }
 
@@ -197,7 +207,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
     //клик на словаре
     @Override
     public void onItemClick(int position, View v) {
-        Context context=v.getContext();
+        final Context context=v.getContext();
         //если это первый словарь, который для ооздания других словарей
         if(position==0){
                 //создать всплывающее окно, где надо ввести название и описание словаря
@@ -227,7 +237,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             }.getType();
                             ArrayList<String> ar=gson.fromJson(preferences.getString("dictionaries",null),type);
                             //если пустой, создать новый
-                            if(ar==null||ar.size()==0){
+                            if(ar==null){
                                ar=new ArrayList<>();
                             }
                             ar.add(name);
@@ -235,13 +245,15 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             editor.putString("dictionaries",gson.toJson(ar));
                             editor.apply();
                             kek.hide();
-                            adapt.notifyDataSetChanged();
+                            kek.dismiss();
+
 
                         }
                         //иначе поругать
                         else{
-                            Toast.makeText(getContext(),"Заполните все поля!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),context.getString(R.string.fill_all_the_fields),Toast.LENGTH_SHORT).show();
                         }
+                        adapt.notifyDataSetChanged();
                     }
                 });
 
@@ -268,7 +280,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             AlertDialog dialog = new AlertDialog.Builder(getContext())
                     .setTitle("Настройки словаря")
                     .setMessage("Что вы хотите сделать со словарём?")
-                    .setPositiveButton("Изучать", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.learn), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //пользователь хочет изучать словарь,
@@ -280,7 +292,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             editor.apply();
                         }
                     })
-                    .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //пользователь хочет удалить словарь
@@ -297,6 +309,9 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             dictionaries.remove(dictionaries.get(position));
                             //сохраняем и применяем изменения
                             editor.putString("dictionaries",gson.toJson(names));
+                            if(name.equals(CardFragment.CURRENT_DICT_NAME)) CardFragment.CURRENT_DICT_NAME=null;
+                            editor.putString(name+"-rest",null);
+                            //editor.putString(name+"-known",null);
                             editor.apply();
                             adapt.notifyDataSetChanged();
                         }
@@ -349,15 +364,18 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                 v.setOnClickListener(this);
                 v.setOnLongClickListener(this);
             }
-            //на клике вызываем определённую функцию из интерфейса
+            //на клике вызываем соответствующую функцию из интерфейса
             @Override
             public void onClick(View v) {
+                if(clickListener!=null)
                 clickListener.onItemClick(getAdapterPosition(), v);
+
+
             }
 
             @Override
             public boolean onLongClick(View v) {
-                clickListener.onItemLongClick(getAdapterPosition(), v);
+                if(clickListener!=null)clickListener.onItemLongClick(getAdapterPosition(), v);
                 return true;
             }
         }
@@ -387,7 +405,7 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             //если тип элемента 1, то это первый  словарь-помошник
             if (viewType == 1) {
                 //меняем ему текст и делаем серым
-                holder.name.setText("Добавить новый словарь");
+                holder.name.setText(context.getString(R.string.create_dict));
                 holder.picture.setBackgroundColor(Color.rgb(150,150,150));
 
             }
@@ -396,80 +414,89 @@ public class DictionariesFragment extends Fragment implements ClickListener {
 
         //адаптер привязывается к сервису вне приложения
         @Override
-        public void onBindViewHolder(MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
             //достаём из shared preferences массив с названиями словарей
             holder.clickListener=mclickListener;
             final Gson gson=new Gson();
             final SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
             final SharedPreferences.Editor editor=preferences.edit();
-            String json=preferences.getString("dictionaries",null);
-            final String[] names=gson.fromJson(json,String[].class);
-            if(names!=null&&names.length!=0) {
+            Type type = new TypeToken<List<String>>() {
+            }.getType();
+            final ArrayList<String> names=gson.fromJson(preferences.getString("dictionaries",null),type);
+            if(names!=null&&names.size()!=0&&position>0) {
                 //получаем имя словаря согласно позиции
-                final String name = names[position];
+                final String name = names.get(position - 1);
                 //если это не первый словарь-помошник, то меняем текст на нем на его название
-                if (holder.viewtype != 1){
-                    holder.name.setText(names[position]);
+                if (holder.viewtype != 1) {
+                    if (dictionaries != null)
+                        holder.name.setText(dictionaries.get(position).name);
+                    //else holder.name.setText(name);
                 }
                 //если нет листенера
                 if (mclickListener == null) {
-                    if(holder.viewtype!=1)
-                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+
+                    if (holder.viewtype != 1) {
+                        holder.name.setText(names.get(position - 1));
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
                                 Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
                                 //создаём словарь по имени
-                                CategDictionary dict = new CategDictionary(context, names[position]);
+                                CategDictionary dict = new CategDictionary(context, names.get(position - 1));
                                 //бросаем туда появившееся слово
                                 dict.addWord(text, stlist);
                                 //достаем из shared preferences массив с неизученными словами для данного словаря
-                                String rest=preferences.getString(name +"-rest",null);
-                                ArrayList<String> rest_ar;
+
+                                Type type = new TypeToken<List<String>>() {
+                                }.getType();
+                                ArrayList<String> rest_ar = gson.fromJson(preferences.getString(name + "-rest", null), type);
+                                ;
                                 //если не пустой
-                                    if(rest!=null){
-                                        Type type = new TypeToken<List<String>>() {
-                                        }.getType();
-                                        //десериализируем
-                                        rest_ar=gson.fromJson(rest,type);
-                                    }else{
-                                        //иначе создаем новый
-                                       rest_ar=new ArrayList<>();
-                                    }
-                                    //добавляем туда появившееся слово
+                                if (rest_ar == null) {
+
+                                    //десериализируем
+                                    rest_ar = new ArrayList<>();
+                                }
+                                //добавляем туда появившееся слово
                                 rest_ar.add(text);
-                                    //сохраняем
-                                editor.putString(name+"-rest",gson.toJson(rest_ar));
+                                FirebaseDatabase db = FirebaseDatabase.getInstance();
+                                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                DatabaseReference ref = db.getReference().child("dictionaries").child(userId).child(name).child("rest");
+                                ref.setValue(rest_ar);
+                                //сохраняем
+                                editor.putString(name + "-rest", gson.toJson(rest_ar));
                                 editor.apply();
                                 lol.hide();
                             }
-                       // }
-                    });
-                    else{
+                            // }
+                        });
+
+
+                    } else {
+
+//                final String name = dictionaries.get(position).name;
+//                if (holder.viewtype != 1) holder.name.setText(name);
+////                else
+//                if (mclickListener == null) {
+//
+//                }
                         holder.itemView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
-//                            Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
-//
-//                            if (names != null) {
-//                                CategDictionary dict = new CategDictionary(context, name);
-//
-//                                dict.addWord(text, stlist);
-//
-//                                lol.hide();
-//                            }
+
                                 //создать всплывающее окно, где надо ввести название и описание словаря
                                 AlertDialog.Builder pop = new AlertDialog.Builder(context);
 
-                                final AlertDialog kek=pop.create();
+                                final AlertDialog kek = pop.create();
                                 kek.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                                final View current=LayoutInflater.from(context).inflate(R.layout.add_dict_name,null,false);
+                                final View current = LayoutInflater.from(context).inflate(R.layout.add_dict_name, null, false);
                                 current.setBackgroundColor(Color.WHITE);
-                                Button btn=(Button)current.findViewById(R.id.add_new_dict);
+                                Button btn = (Button) current.findViewById(R.id.add_new_dict);
                                 //поля для ввода названия и описания
-                                final EditText et=(EditText)current.findViewById(R.id.type_new_dict);
+                                final EditText et = (EditText) current.findViewById(R.id.type_new_dict);
 
-                                final EditText desc=(EditText)current.findViewById(R.id.new_dict_description);
+                                final EditText desc = (EditText) current.findViewById(R.id.new_dict_description);
 
                                 et.setHintTextColor(Color.GRAY);
                                 et.setTextColor(Color.GRAY);
@@ -482,29 +509,30 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                                     @Override
                                     public void onClick(View v) {
                                         //берём название и описание
-                                        String name=et.getText().toString().toLowerCase();
-                                        String description=desc.getText().toString();
+                                        String name = et.getText().toString().toLowerCase();
+                                        String description = desc.getText().toString();
                                         //если они не пустые
-                                        if(!name.equals("")&&!description.equals("")){
+                                        if (!name.equals("") && !description.equals("")) {
                                             //достаём из shared preferences массив с названиями словарей
                                             Type type = new TypeToken<List<String>>() {
                                             }.getType();
-                                            ArrayList<String> ar=gson.fromJson(preferences.getString("dictionaries",null),type);
+                                            ArrayList<String> ar = gson.fromJson(preferences.getString("dictionaries", null), type);
                                             //если пустой, создать новый
-                                            if(ar==null||ar.size()==0){
-                                                ar=new ArrayList<>();
+                                            if (ar == null) {
+                                                ar = new ArrayList<>();
                                             }
                                             ar.add(name);
+                                            new CategDictionary(context, name, description);
                                             //сохраняем изменения
-                                            editor.putString("dictionaries",gson.toJson(ar));
+                                            editor.putString("dictionaries", gson.toJson(ar));
                                             editor.apply();
                                             kek.hide();
                                             notifyDataSetChanged();
 
                                         }
                                         //иначе поругать
-                                        else{
-                                            Toast.makeText(context,"Заполните все поля!",Toast.LENGTH_SHORT).show();
+                                        else {
+                                            Toast.makeText(context, context.getString(R.string.fill_all_the_fields), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
@@ -515,14 +543,6 @@ public class DictionariesFragment extends Fragment implements ClickListener {
                             }
                         });
                     }
-                }
-            }else{
-
-//                final String name = dictionaries.get(position).name;
-//                if (holder.viewtype != 1) holder.name.setText(name);
-//                else
-                if (mclickListener == null) {
-
                 }
             }
         }
@@ -540,7 +560,8 @@ public class DictionariesFragment extends Fragment implements ClickListener {
             SharedPreferences.Editor editor=preferences.edit();
             String json=preferences.getString("dictionaries",null);
             String names[]=gson.fromJson(json,String[].class);
-            if(names!=null) return names.length;
+            //if(names!=null) return names.length;
+            if(dictionaries==null) return names.length+1;
             return dictionaries.size();
 
         }

@@ -24,13 +24,13 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_volume_up_black_24dp"
+            android:src="@drawable/ic_volume_up_black_48dp"
             android:background="@null"
             android:paddingLeft="20dp"
-            android:paddingVertical="20dp"
+            android:paddingTop="10dp"
             android:layout_toRightOf="@id/current_word_card"
             android:id="@+id/sound_btn_card"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +59,8 @@
             android:clickable="false"
             android:contextClickable="false"
             android:textColor="@android:color/background_dark"
+
+            android:layout_marginLeft="20dp"
             android:visibility="invisible"
 
             >

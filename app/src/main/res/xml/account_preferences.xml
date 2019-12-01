@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <PreferenceCategory android:title="Настройки аккаунта">
+        <Preference
+            android:summary="И выйти"
+            android:title="Поменять пароль"
+            android:key="reset_password">
+            <intent
+                android:action="com.chikeandroid.settingsscreendemo.SETTING_START_ACTIVITY"
+                android:targetClass="com.example.mp11.ResetPasswordActivity"
+                android:targetPackage="com.example.mp11" />
+        </Preference>
+        <Preference
+            android:summary=""
+            android:title="Выйти из аккаунта"
+            android:key="log_out">
+            <intent
+                android:action="com.chikeandroid.settingsscreendemo.SETTING_START_ACTIVITY"
+                android:targetClass="com.example.mp11.SettingsActivity"
+                android:targetPackage="com.example.mp11" />
+        </Preference>
+        <!--<SwitchPreference-->
+            <!--android:key="switch_load"-->
+            <!--android:title="Загружать все словари из аккаунта?"-->
+            <!--android:summary="На устройство"-->
+            <!--android:defaultValue="true"/>-->
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Синхронизация">
+        <!--<Preference-->
+            <!--android:summary="с устройством"-->
+            <!--android:title="Синхронизировать сервер"-->
+            <!--android:key="server">-->
+
+        <!--</Preference>-->
+        <Preference
+            android:summary="с сервером"
+            android:title="Синхронизировать устройство"
+            android:key="device">
+
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

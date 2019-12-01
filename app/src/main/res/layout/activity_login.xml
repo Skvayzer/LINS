@@ -1,49 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".LoginActivity"-->
-    <!--android:orientation="vertical"-->
-    <!--android:background="@drawable/backgrnd">-->
-    <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="vertical"-->
-        <!--&gt;-->
-        <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="Email"-->
-            <!--android:id="@+id/useremail"-->
-            <!--android:textColorHint="@android:color/holo_orange_light"-->
-            <!--android:shadowColor="@android:color/holo_red_light"-->
-            <!--android:textColorHighlight="@android:color/holo_red_light"-->
-            <!--android:outlineSpotShadowColor="@android:color/holo_red_light"-->
-            <!--/>-->
-        <!--<EditText-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="Password"-->
-            <!--android:inputType="textPassword"-->
-            <!--android:id="@+id/userpassword"-->
-            <!--android:shadowColor="@android:color/holo_red_light"-->
-            <!--android:textColorHint="@android:color/holo_orange_light"-->
-            <!--android:textColorHighlight="@android:color/holo_red_light"/>-->
 
-        <!--<Button-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="Log in"-->
-            <!--android:id="@+id/loginbtn"-->
-            <!--android:textColor="@android:color/holo_purple"-->
-            <!--/>-->
-    <!--</LinearLayout>-->
-
-
-<!--</LinearLayout>-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -139,7 +95,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="Ещё нет аккаунта? Создайте"
+            android:text="@string/create_account"
             android:gravity="center"
             android:textSize="16dip"
             android:textColor="@color/white"/>
@@ -147,7 +103,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="Забыли пароль?"
+            android:text="@string/reset_password"
             android:gravity="center"
             android:textSize="16dip"
             android:textColor="@color/white"/>

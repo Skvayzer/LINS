@@ -10,7 +10,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/diam"
@@ -18,7 +21,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AccountSettingsActivity"></activity>
+        <service
+            android:name=".activities.SynchronizerService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activities.AccountSettingsActivity" />
         <activity android:name=".activities.ResetPasswordActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.AddWordActivity" />
@@ -28,14 +36,13 @@
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.example.mp11.videoplayer.mydynvideoplayer.CastOptionsProvider" />
-
-        <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" -->
+            android:value="com.example.mp11.videoplayer.mydynvideoplayer.CastOptionsProvider" /> <!-- <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" -->
         <!-- android:theme="@style/Base.Theme.AppCompat"/> -->
         <service
             android:name=".ForDictionaries.EasyWordsBtn"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true"
+            android:stopWithTask="false"/>
 
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
@@ -44,12 +51,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
         <activity android:name=".activities.MyRegistrationActivity" />
-        <activity android:name=".activities.MainActivity" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".activities.UpdateDeleteActivity" />
         <activity android:name=".activities.GetAllWordsActivity" />
 
-        <receiver android:name=".AlarmReceiver" />
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
     </application>
 
 </manifest>

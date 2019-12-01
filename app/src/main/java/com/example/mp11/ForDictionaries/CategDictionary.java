@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.mp11.ForDatabases.MyDbHelper;
 import com.example.mp11.ForDatabases.WordModel;
+import com.example.mp11.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,11 +15,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 //класс, который реализует словарь по категориям
 //через него, а не помошник бд, можно добавлять слова
@@ -30,8 +34,8 @@ public class CategDictionary {
     //id пользователя в Firebase
     static String userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    DatabaseReference myRef = database.getReference("dictionaries").child(userID);
-    MyDbHelper databaseHelper;
+    private DatabaseReference myRef = database.getReference("dictionaries").child(userID);
+    private MyDbHelper databaseHelper;
     //по переданному названию создаём словарь и бд
     public CategDictionary(Context context, String name){
         myRef=myRef.child(name).child("dictionary");
@@ -50,7 +54,7 @@ public class CategDictionary {
         //просто кладём на Firebase имя словаря, его описание и дату создания
         FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
                 .child("description").setValue(description);
-
+        FirebaseDatabase.getInstance().getReference("search_list").child(name+"4el2psy97congree"+userID).setValue("");
         FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
                 .child("name").setValue(name);
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -58,6 +62,7 @@ public class CategDictionary {
         String thisDate = currentDate.format(todayDate);
         FirebaseDatabase.getInstance().getReference("dictionaries").child(userID).child(name)
                 .child("lastEdit").setValue(thisDate);
+
     }
     //скачать словарь по id пользователя и названию словаря из Firebase
     public static void downloadDict(String user, final String dict, final Context context){
@@ -80,8 +85,10 @@ public class CategDictionary {
                 SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor=preferences.edit();
                 String json=preferences.getString("dictionaries",null);
-                final String[] names=gson.fromJson(json,String[].class);
-                ArrayList<String> nameslist = new ArrayList<String>(Arrays.asList(names));
+                Type type = new TypeToken<List<String>>() {
+                }.getType();
+                ArrayList<String> nameslist=gson.fromJson(json,type);
+                if(nameslist==null) nameslist=new ArrayList<>();
 
                 //имя выбранного словаря
                 String res_dict=dict;
@@ -102,6 +109,7 @@ public class CategDictionary {
 
                     }
                     //копируем его к СЕБЕ на Firebase
+
                     DatabaseReference addToMeRef=database.getReference("dictionaries").child(userID).child(res_dict);
                     addToMeRef.setValue(dataSnapshot1.getValue());
                     //добавляем к названиям словарей устройства
@@ -109,20 +117,84 @@ public class CategDictionary {
                 }
                 //создаём словарь на устройстве
                 MyDbHelper dbhelp=new MyDbHelper(context,res_dict);
+                ArrayList<String> rest_words=new ArrayList<>();
                 for(StringTranslation tr: d) {
                     dbhelp.addWord(tr.word,tr.meaning,tr.syns,tr.ex);
-
+                    rest_words.add(tr.word);
                 }
+                //кладём массив слов как неизученных
+                editor.putString(res_dict+"-rest",gson.toJson(rest_words));
+
+                FirebaseDatabase db=FirebaseDatabase.getInstance();
+                String userId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+                final DatabaseReference ref=db.getReference().child("dictionaries").child(userId).child(res_dict).child("rest");
+                ref.setValue(rest_words);
+
                 //пихаем массиив с названиями словарей обратно в shared preferences
                 json=gson.toJson(nameslist);
                 editor.putString("dictionaries",json);
                 editor.apply();
-                Toast.makeText(context,"Скачано успешно!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,context.getString(R.string.downloaded_successfully),Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(context,"Что-то пошло не так",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,context.getString(R.string.somethings_wrong_error),Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    //скачать словарь по id пользователя и названию словаря из Firebase, но не добавляя к себе
+    public static void downloadDict(String user, final String dict, final Context context, boolean flag){
+        //просто ссылка на нужную часть Firebase бд
+        DatabaseReference dictRef=database.getReference("dictionaries").child(user).child(dict);
+        dictRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+
+                DataSnapshot dataSnapshot=dataSnapshot1.child("dictionary");
+                //для хранения переводов
+                ArrayList<StringTranslation> d=new ArrayList<>();
+                //пробегаемся по словам из словаря и добавляем их в d
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    for(DataSnapshot dsna: ds.getChildren()){
+                        StringTranslation item=new StringTranslation();
+                        item.word=ds.getKey();
+                        item.index=Integer.parseInt(dsna.getKey());
+                        item.meaning=dsna.child("definition").getValue().toString();
+                        if(dsna.child("syns").getValue()!=null)
+                        item.syns=dsna.child("syns").getValue().toString();
+                        if(dsna.child("ex").getValue()!=null)
+                        item.ex=dsna.child("ex").getValue().toString();
+
+
+                        d.add(item);
+                    }
+
+                }
+                Gson gson=new Gson();
+                //берем из shared preferences массив с названиями словарей, которые есть на стройстве
+                SharedPreferences preferences = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor=preferences.edit();
+
+                //имя выбранного словаря
+                  String res_dict=dict;
+                //создаём словарь на устройстве
+                MyDbHelper dbhelp=new MyDbHelper(context,res_dict);
+                ArrayList<String> rest_words=new ArrayList<>();
+                for(StringTranslation tr: d) {
+                    dbhelp.addWord(tr.word,tr.meaning,tr.syns,tr.ex);
+                    rest_words.add(tr.word);
+                }
+                //кладём массив слов как неизученных
+                editor.putString(res_dict+"-rest",gson.toJson(rest_words));
+                //пихаем массиив с названиями словарей обратно в shared preferences
+                editor.apply();
+                Toast.makeText(context,context.getString(R.string.downloaded_successfully),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(context,context.getString(R.string.somethings_wrong_error),Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -31,6 +31,8 @@ public class MyCustomAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(WordModelArrayList==null) return 0;
+        else
         return WordModelArrayList.size();
     }
 

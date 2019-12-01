@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Слово"
+                android:text="@string/word"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:textColor="#000"
@@ -49,45 +49,16 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
-                    android:hint="Слово"/>
+                    android:hint="@string/word"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Значения"
+                    android:text="@string/meanings1"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:textColor="#000"
                     android:textSize="20sp"/>
-                <!--<EditText-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:id="@+id/etdefinition"-->
-                <!--android:background="#fff"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:hint="Значения"/>-->
 
-
-                <!--<EditText-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:id="@+id/etsyns"-->
-                <!--android:background="#fff"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:hint="Синонимы"/>-->
-
-                <!--<EditText-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="40dp"-->
-                <!--android:id="@+id/etex"-->
-                <!--android:background="#fff"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_marginRight="10dp"-->
-                <!--android:hint="Примеры"/>-->
             </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -100,7 +71,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonstyle"
             android:textColor="@color/white"
-            android:text="Обновить"/>
+            android:text="@string/renew"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,7 +81,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonstyle"
             android:textColor="@color/white"
-            android:text="Удалить"/>
+            android:text="@string/delete"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

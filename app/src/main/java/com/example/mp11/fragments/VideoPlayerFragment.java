@@ -1,23 +1,27 @@
 package com.example.mp11.fragments;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mp11.activities.DynVideoPlayer;
 import com.example.mp11.R;
+import com.example.mp11.videoplayer.SubtitleView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -35,8 +39,11 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     EditText video,subs;
     Button btn,btn_get_subs;
+
+    TextView tv;
 
     boolean flagUrl=true;
     // TODO: Rename and change types of parameters
@@ -46,6 +53,13 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
     private OnFragmentInteractionListener mListener;
     String videoS,subsS;
     public  Uri videoUri,subsUri;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
+
+    String description;
+
+    int dt=0;
     public VideoPlayerFragment() {
         // Required empty public constructor
     }
@@ -75,7 +89,12 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
+        preferences=getActivity().getSharedPreferences("pref",MODE_PRIVATE);
+        editor=preferences.edit();
+        subsUri=Uri.parse(preferences.getString("subspath","android.resource://com.example.mp11/" + R.raw.thetrial));
+        description=getContext().getString(R.string.where_take_subs);
+        dt=preferences.getInt("dt",22000);
+        //if(preferences.getString("subspath",null)==null) dt=22000;
 
     }
 
@@ -87,32 +106,38 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
         btn_get_subs=(Button)view.findViewById(R.id.subs_path);
         video=(EditText)view.findViewById(R.id.video_url);
         subs=(EditText)view.findViewById(R.id.subs);
+        tv=(TextView)view.findViewById(R.id.descript);
+        subs.setText(subsUri.toString());
+        video.setText(preferences.getString("videopath","https://emerald.rev.lavenderhosted.com/s5e2.mp4"));
                 //клик на кнопку просмотра
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //если пользователь не выбирал субтитры с устройства, а вводил ссылку
-                        if(flagUrl) {
+
                             //собираем значения
                             videoS = video.getText().toString();
                             subsS = subs.getText().toString();
+                            editor.putString("subspath",subsS);
+                            editor.putString("videopath",videoS);
+                            editor.apply();
                             Intent i = new Intent(getContext(), DynVideoPlayer.class);
                             //передаём видеоплееру данные
                             i.putExtra("videourl", videoS);
+                            //если передали ссылку
+                            if(Uri.parse(subsS)==null)
                             i.putExtra("subsurl", subsS);
-                            i.putExtra("title", "Видео");
+                            else {
+                                i.putExtra("subsuri", subsUri.toString());
+
+
+                            }
+                            i.putExtra("title", R.string.video_name_in_player);
+                            i.putExtra("dt",dt);
                             startActivity(i);
-                        }
+
                         //иначе пользователь выбирал субтитры с устройства
-                        else{
-                            videoS = video.getText().toString();
-                            Intent i = new Intent(getContext(), DynVideoPlayer.class);
-                            //кладём данные видеплееру
-                            i.putExtra("videourl", videoS);
-                            i.putExtra("subsuri", subsUri.toString());
-                            i.putExtra("title", "Видео");
-                            startActivity(i);
-                        }
+
 
                     }
 
@@ -134,7 +159,29 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
                     }
                 });
 
+                tv.setText(description);
+                //разделительная строка с ссылкой
+        SpannableString link = makeLinkSpan("subscene.com", new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Uri webpage = Uri.parse("https://subscene.com/");
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                    startActivity(intent);
+            }
+        });
+        tv.append(link);
+        tv.append(getContext().getString(R.string.and_whitespaces));
+        link = makeLinkSpan("opensubtitles.org", new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Uri webpage = Uri.parse("https://www.opensubtitles.org/en/search");
+                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(intent);
+            }
+        });
+        tv.append(link);
         return view;
     }
     // TODO: Rename method, update argument and hook method into UI event
@@ -143,7 +190,25 @@ public class VideoPlayerFragment extends Fragment //implements SurfaceHolder.Cal
             mListener.onFragmentInteraction(uri);
         }
     }
+    private static class ClickableString extends ClickableSpan {
+        private View.OnClickListener mListener;
+        //прикручиваем листенер на клики
+        public ClickableString(View.OnClickListener listener) {
+            mListener = listener;
+        }
 
+        @Override
+        public void onClick(View v) {
+            mListener.onClick(v);
+        }
+    }
+
+    private SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
+        SpannableString link = new SpannableString(text);
+        link.setSpan(new ClickableString(listener), 0, text.length(),
+                SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+        return link;
+    }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

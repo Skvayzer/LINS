@@ -87,10 +87,10 @@ public class LoginActivity extends AppCompatActivity {
                                     if (!task.isSuccessful()) {
                                         //если нет подключения к интернету
                                         if(!isNetworkAvaliable(LoginActivity.this)) {
-                                            Toast.makeText(LoginActivity.this, "Нет подключения к интернету", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(LoginActivity.this, "No internet connection", Toast.LENGTH_LONG).show();
                                         }else {
                                             //иначе ввёл неправильно
-                                            Toast.makeText(LoginActivity.this, "Неверный E-mail или пароль", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(LoginActivity.this, getString(R.string.Wrong_email_or_password), Toast.LENGTH_LONG).show();
                                         }
 
                                     }

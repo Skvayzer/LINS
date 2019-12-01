@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory android:title="Настройки аккаунта">
+        <Preference
+            android:summary="Настройки"
+            android:title="Аккаунт">
+            <intent
+                android:action="com.chikeandroid.settingsscreendemo.SETTING_START_ACTIVITY"
+                android:targetClass="com.example.mp11.SettingsActivity"
+                android:targetPackage="com.example.mp11" />
+        </Preference>
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Общие настройки">
+        <CheckBoxPreference
+            android:key="checkbox"
+            android:summary="Tap to check if on or off"
+            android:title="Checkbox Preference" />
+
+        <EditTextPreference
+            android:dialogTitle="Enter a text"
+            android:key="text"
+            android:summary="Click to show a text entry dialog"
+            android:title="EditText Preference" />
+        <!--<ListPreference-->
+            <!--android:dialogTitle="Select duration"-->
+            <!--android:entries="@array/settings_list_preference_titles"-->
+            <!--android:entryValues="@array/settings_list_preference_values"-->
+            <!--android:key="list"-->
+            <!--android:summary="Click to show a list to choose from"-->
+            <!--android:title="List Preference" />-->
+        <SwitchPreference
+            android:key="switch"
+            android:title="Включить сервис?"
+            android:summary="Сервис вне приложения при копировании"
+            android:defaultValue="true"/>
+        <SwitchPreference
+            android:key="switch2"
+            android:title="Включить английский перевод?"
+            android:summary="Толкование на карточках на английском"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

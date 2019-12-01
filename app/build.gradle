@@ -18,11 +18,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
 }
 allprojects {
     repositories {
-
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
+        //maven { url 'https://jitpack.io' }
     }
 }
 dependencies {
@@ -46,7 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.firebaseui:firebase-ui-database:3.3.1'
     implementation 'com.android.support:design:28.0.0'
-    implementation 'com.github.lguipeng:BubbleView:1.0.1'
+    //implementation 'com.github.lguipeng:BubbleView:1.0.1'
     api 'com.android.support:multidex:1.0.3'
     implementation 'com.google.android.exoplayer:exoplayer:r1.5.8'
     implementation 'com.google.android.gms:play-services-cast-framework:16.1.2'
@@ -54,11 +57,14 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'org.jsoup:jsoup:1.10.3'
-
+    //implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:preference-v7:28.0.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     // api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     api 'com.github.bumptech.glide:glide:3.8.0'
+
+    //annotationProcessor 'androidx.annotation:annotation:1.1.0'
+    api'com.google.apis:google-api-services-translate:v2-rev51-1.25.0'
 }
 apply plugin: 'com.google.gms.google-services'

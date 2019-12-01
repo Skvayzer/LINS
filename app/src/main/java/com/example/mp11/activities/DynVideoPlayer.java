@@ -1,21 +1,29 @@
 package com.example.mp11.activities;
 
 
-import android.content.ContentResolver;
-import android.content.Context;
+
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.media.AudioManager;
+
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteButton;
+
 import android.support.v7.widget.PopupMenu;
-import android.util.DisplayMetrics;
+
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,18 +32,18 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.Window;
+
 import android.widget.ImageButton;
-import android.widget.ImageView;
+
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mp11.R;
-import com.example.mp11.videoplayer.mydynvideoplayer.ExpandedControlsActivity;
+
 import com.example.mp11.videoplayer.mydynvideoplayer.HpLib_ExtractorHpLibRendererBuilder;
 import com.example.mp11.videoplayer.mydynvideoplayer.HpLib_HlsHpLibRendererBuilder;
 
@@ -54,21 +62,17 @@ import com.google.android.exoplayer.upstream.BandwidthMeter;
 import com.google.android.exoplayer.util.MimeTypes;
 import com.google.android.exoplayer.util.PlayerControl;
 import com.google.android.exoplayer.util.Util;
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.gms.cast.framework.CastButtonFactory;
-import com.google.android.gms.cast.framework.CastContext;
+
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManager;
-import com.google.android.gms.cast.framework.SessionManagerListener;
-import com.google.android.gms.cast.framework.media.RemoteMediaClient;
+
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 //активность с видеоплеером для фильма с субтитрами
-public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource.EventListener, View.OnClickListener {
-    private static final String TAG = "DynVideoPlayer";
+public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource.EventListener, View.OnClickListener, RecognitionListener {
 
     public static final int RENDERER_COUNT = 2;
     public static final int TYPE_AUDIO = 1;
@@ -78,12 +82,12 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     private SurfaceView surface;
     //источники видео, субтитров и т.д.
     private String video_url, video_type, video_title,subs_source;
-   // private int currentTrackIndex;
+
     public Handler mainHandler;
     private HpLib_RendererBuilder hpLibRendererBuilder;
     private TrackRenderer videoRenderer;
     //панельки плеера
-    private LinearLayout root,top_controls, middle_panel, unlock_panel, bottom_controls,seekBar_center_text,onlySeekbar;
+    public static LinearLayout root,top_controls, bottom_controls,onlySeekbar;
     private double seekSpeed = 0;
     public static final int TYPE_VIDEO = 0;
     private View decorView;
@@ -94,14 +98,6 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     //верхняя полоска с названием видео и кнопкой выхода
     private ImageButton btn_back;
     private TextView txt_title;
-
-    //имплементирование Chromecast
-    public MediaRouteButton mMediaRouteButton;
-    private CastContext mCastContext;
-    private CastSession mCastSession;
-    private PlaybackState mPlaybackState;
-    private SessionManager mSessionManager;
-    private MediaItem mSelectedMedia;
 
     //ползунок, текущее проигранное время в плеере и общее время длительности видео
     private TextView txt_ct,txt_td;
@@ -127,8 +123,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     private ImageButton btn_next;
     private ImageButton btn_prev;
 
-    private ImageButton btn_lock;
-    private ImageButton btn_unlock;
+
     private ImageButton btn_settings;
     private ImageButton btnsubs;
 
@@ -144,15 +139,10 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     private Boolean tested_ok = false;
     private Boolean screen_swipe_move = false;
     private boolean immersiveMode, intLeft, intRight, intTop, intBottom, finLeft, finRight, finTop, finBottom;
-    private static final int MIN_DISTANCE = 150;
-    private ContentResolver cResolver;
-    private Window window;
-    private LinearLayout volumeBarContainer, brightnessBarContainer,brightness_center_text, vol_center_text;
-    private ProgressBar volumeBar, brightnessBar;
-    private TextView vol_perc_center_text, brigtness_perc_center_text,txt_seek_secs,txt_seek_currTime;
-    private ImageView volIcon, brightnessIcon, vol_image, brightness_image;
-    private int brightness, mediavolume,device_height,device_width;
-    private AudioManager audioManager;
+
+    public static int height, width;
+
+
 
     public static Uri subsUri, videoUri;
 
@@ -164,123 +154,18 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     private ScaleGestureDetector mScaleGestureDetector;
     private float mScaleFactor = 1.0f;
 
+    Bundle bundy = new Bundle();
 
 
-    private final SessionManagerListener<CastSession> mSessionManagerListener = new SessionManagerListenerImpl();
-    private class SessionManagerListenerImpl implements SessionManagerListener<CastSession> {
-        @Override
-        public void onSessionStarting(CastSession session) {
-
-        }
-
-        @Override
-        public void onSessionStarted(CastSession session, String sessionId) {
-            onApplicationConnected(session);
-        }
-
-        @Override
-        public void onSessionStartFailed(CastSession session, int i) {
-
-        }
-
-        @Override
-        public void onSessionEnding(CastSession session) {
-
-        }
-
-        @Override
-        public void onSessionResumed(CastSession session, boolean wasSuspended) {
-            onApplicationConnected(session);
-        }
-
-        @Override
-        public void onSessionResumeFailed(CastSession session, int i) {
-
-        }
-
-        @Override
-        public void onSessionSuspended(CastSession session, int i) {
-
-        }
-
-        @Override
-        public void onSessionEnded(CastSession session, int error) {
-            finish();
-        }
-
-        @Override
-        public void onSessionResuming(CastSession session, String s) {
-
-        }
-    }
-    private void onApplicationConnected(CastSession castSession) {
-        mCastSession = castSession;
-        loadRemoteMedia(0,true);
-    }
-    private MediaInfo buildMediaInfo() {
-        MediaMetadata movieMetadata = new MediaMetadata(MediaMetadata.MEDIA_TYPE_MOVIE);
+    private static final int REQUEST_RECORD_PERMISSION = 100;
+    public SpeechRecognizer speech = null;
+    private Intent recognizerIntent;
+    ImageButton micro;
 
 
-        mSelectedMedia = new MediaItem();
-        mSelectedMedia.setUrl(video_url);
+    public static boolean gravity_mode=false;
+    public static boolean shown_controls=false;
 
-        mSelectedMedia.setContentType(video_type);
-        mSelectedMedia.setTitle(video_title);
-
-        movieMetadata.putString(MediaMetadata.KEY_TITLE, mSelectedMedia.getTitle());
-
-        return new MediaInfo.Builder(mSelectedMedia.getUrl())
-                .setStreamType(MediaInfo.STREAM_TYPE_BUFFERED)
-                .setContentType("hls")
-                .setMetadata(movieMetadata)
-                .setStreamDuration(mSelectedMedia.getDuration() * 1000)
-                .build();
-    }
-    private void loadRemoteMedia(int position, boolean autoPlay) {
-        if (mCastSession == null) {
-            return;
-        }
-        final RemoteMediaClient remoteMediaClient = mCastSession.getRemoteMediaClient();
-        if (remoteMediaClient == null) {
-            return;
-        }
-
-        remoteMediaClient.addListener(new RemoteMediaClient.Listener() {
-            @Override
-            public void onStatusUpdated() {
-                Intent intent = new Intent(DynVideoPlayer.this, ExpandedControlsActivity.class);
-                startActivityForResult(intent,200);
-                remoteMediaClient.removeListener(this);
-                if(playerControl.isPlaying()){
-                    playerControl.pause();
-                }
-            }
-
-            @Override
-            public void onMetadataUpdated() {
-
-            }
-
-            @Override
-            public void onQueueStatusUpdated() {
-            }
-
-            @Override
-            public void onPreloadStatusUpdated() {
-            }
-
-            @Override
-            public void onSendingRemoteMediaRequest() {
-            }
-
-            @Override
-            public void onAdBreakStatusUpdated() {
-
-            }
-        });
-        remoteMediaClient.load(buildMediaInfo(), autoPlay, position);
-
-    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -291,6 +176,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         }
     }
     {
+        //на изменении состояния плеера
         updatePlayer = new Runnable() {
             @Override
             public void run() {
@@ -351,10 +237,14 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                 root.setVisibility(View.GONE);
             }
         }else if(controlsState==ControlsMode.LOCK){
-            if(unlock_panel.getVisibility()==View.VISIBLE){
-                unlock_panel.setVisibility(View.GONE);
-            }
+
         }
+        if(gravity_mode){
+            subView.setY(height-subView.getHeight());
+        }
+
+        shown_controls=false;
+        //полноэкранный режим
         decorView.setSystemUiVisibility(uiImmersiveOptions);
     }
     //показать меню плеера
@@ -365,10 +255,13 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                 root.setVisibility(View.VISIBLE);
             }
         }else if(controlsState==ControlsMode.LOCK){
-            if(unlock_panel.getVisibility()==View.GONE){
-                unlock_panel.setVisibility(View.VISIBLE);
-            }
+
         }
+        if(gravity_mode) {
+            subView.setY(height - bottom_controls.getHeight() - onlySeekbar.getHeight() - subView.getHeight());
+        }
+        shown_controls=true;
+
         mainHandler.removeCallbacks(hideControls);
         mainHandler.postDelayed(hideControls, 3000);
     }
@@ -413,11 +306,8 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                 //если открыто окно с переводом слова
                 if(subView.ispopupWindow){
                     //показать меню плеера на заднем плане
-                    seekBar_center_text.setVisibility(View.GONE);
-                    brightness_center_text.setVisibility(View.GONE);
-                    vol_center_text.setVisibility(View.GONE);
-                    brightnessBarContainer.setVisibility(View.GONE);
-                    volumeBarContainer.setVisibility(View.GONE);
+
+
                     onlySeekbar.setVisibility(View.VISIBLE);
                     top_controls.setVisibility(View.VISIBLE);
                     bottom_controls.setVisibility(View.VISIBLE);
@@ -427,18 +317,15 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                     subView.ispopupWindow=false;
                 }
                 break;
-            //если палец поднялся вверх
+            //если палец поднялся вверх, показать плеер
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 //показать меню плеера
                 screen_swipe_move=false;
                 tested_ok = false;
 
-                seekBar_center_text.setVisibility(View.GONE);
-                brightness_center_text.setVisibility(View.GONE);
-                vol_center_text.setVisibility(View.GONE);
-                brightnessBarContainer.setVisibility(View.GONE);
-                volumeBarContainer.setVisibility(View.GONE);
+
+
                 onlySeekbar.setVisibility(View.VISIBLE);
                 top_controls.setVisibility(View.VISIBLE);
                 bottom_controls.setVisibility(View.VISIBLE);
@@ -453,7 +340,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mSessionManager = CastContext.getSharedInstance(this).getSessionManager();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
@@ -462,7 +349,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         //достаём ссылки на видео, субтитры...
         video_url =getIntent().getExtras().getString("videourl");
 
-        video_title =getIntent().getExtras().getString("title");
+        video_title="";
         subs_source=getIntent().getExtras().getString("subsurl");
         if (getIntent().getExtras().getString("subsuri")!=null)
         subsUri=Uri.parse(getIntent().getExtras().getString("subsuri"));
@@ -473,6 +360,11 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         subView.setHighlightColor(Color.BLACK);
         subView.setLinkTextColor(Color.WHITE);
         subView.setBackgroundColor(Color.argb(75,0,0,0));
+        subView.bringToFront();
+        subView.dt=getIntent().getExtras().getInt("dt",0);
+
+        subView.decorView=getWindow().getDecorView();
+
 
         //когда зажимаешь, можно двигать субтитры по экрану
         subView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -493,33 +385,33 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         display.getSize(size);
         sWidth = size.x;
         sHeight = size.y;
+        //параметры экрана(как полноэкранность и т.д.)
+//        uiImmersiveOptions = (
+//                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//
+//
+//
+//
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//        );
 
+        uiImmersiveOptions=(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        //| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        //| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        device_height = displaymetrics.heightPixels;
-        device_width = displaymetrics.widthPixels;
-
-
-        //Chromecast
-        LinearLayout cast_container = (LinearLayout) findViewById(R.id.cast_container);
-        mMediaRouteButton = new MediaRouteButton(this);
-        cast_container.addView(mMediaRouteButton);
-        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), mMediaRouteButton);
-        mCastContext = CastContext.getSharedInstance(this);
-        mCastContext.getSessionManager().addSessionManagerListener(
-                mSessionManagerListener, CastSession.class);
-
-        uiImmersiveOptions = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        );
         decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(uiImmersiveOptions);
+        if(Build.VERSION.SDK_INT < 19){
+
+            decorView.setSystemUiVisibility(View.GONE);
+        } else {
+            decorView.setSystemUiVisibility(uiImmersiveOptions);
+        }
 
         loadingPanel = (RelativeLayout) findViewById(R.id.loadingVPanel);
         txt_ct = (TextView) findViewById(R.id.txt_currentTime);
@@ -552,34 +444,13 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         btn_rev = (ImageButton) findViewById(R.id.btn_rev);
         btn_prev = (ImageButton) findViewById(R.id.btn_prev);
         btn_next = (ImageButton) findViewById(R.id.btn_next);
-        btn_lock = (ImageButton) findViewById(R.id.btn_lock);
-        btn_unlock = (ImageButton) findViewById(R.id.btn_unlock);
         btn_settings = (ImageButton) findViewById(R.id.btn_settings);
         btnsubs=(ImageButton)findViewById(R.id.btn_sub);
 
-
-
-        txt_seek_secs = (TextView) findViewById(R.id.txt_seek_secs);
-        txt_seek_currTime = (TextView) findViewById(R.id.txt_seek_currTime);
-        seekBar_center_text = (LinearLayout) findViewById(R.id.seekbar_center_text);
         onlySeekbar = (LinearLayout) findViewById(R.id.seekbar_time);
         top_controls = (LinearLayout) findViewById(R.id.top);
         bottom_controls = (LinearLayout) findViewById(R.id.controls);
 
-        vol_perc_center_text = (TextView) findViewById(R.id.vol_perc_center_text);
-        brigtness_perc_center_text = (TextView) findViewById(R.id.brigtness_perc_center_text);
-        volumeBar = (ProgressBar) findViewById(R.id.volume_slider);
-        brightnessBar = (ProgressBar) findViewById(R.id.brightness_slider);
-        volumeBarContainer = (LinearLayout) findViewById(R.id.volume_slider_container);
-        brightnessBarContainer = (LinearLayout) findViewById(R.id.brightness_slider_container);
-        brightness_center_text = (LinearLayout) findViewById(R.id.brightness_center_text);
-        vol_center_text = (LinearLayout) findViewById(R.id.vol_center_text);
-
-        volIcon = (ImageView) findViewById(R.id.volIcon);
-        brightnessIcon = (ImageView) findViewById(R.id.brightnessIcon);
-        vol_image = (ImageView) findViewById(R.id.vol_image);
-        brightness_image = (ImageView) findViewById(R.id.brightness_image);
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 
         btn_back.setOnClickListener(this);
@@ -590,12 +461,11 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
 
-        btn_lock.setOnClickListener(this);
-        btn_unlock.setOnClickListener(this);
+
         btn_settings.setOnClickListener(this);
         btnsubs.setOnClickListener(this);
 
-        unlock_panel = (LinearLayout) findViewById(R.id.unlock_panel);
+
 
 
 
@@ -618,6 +488,9 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         btn_next.setVisibility(View.INVISIBLE);
         btn_prev.setVisibility(View.INVISIBLE);
 
+
+        subView.fading=findViewById(R.id.fading);
+
         //фунция инициализации работы плеера
         execute();
         //передаём субтитрам кнопки паузы и плея
@@ -628,6 +501,38 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         //устанавливаем субтитрам текущий плеер и inflater отсюда
         subView.setPlayer(playerControl);
         subView.inflater=getLayoutInflater();
+
+        micro=(ImageButton) findViewById(R.id.micro);
+        subView.micro=micro;
+
+        speech = SpeechRecognizer.createSpeechRecognizer(this);
+
+        speech.setRecognitionListener(this);
+        recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE,
+                "en");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+
+
+
+        micro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                speech.startListening(recognizerIntent);
+            }
+        });
+
+
+
+
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
     }
     //обработка нажатий на кнопки
     @Override
@@ -642,7 +547,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             //пауза
             if (playerControl.isPlaying()) {
                 playerControl.pause();
-
+                subView.isStopped=true;
                 btn_pause.setVisibility(View.GONE);
                 btn_play.setVisibility(View.VISIBLE);
             }
@@ -651,8 +556,13 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             //проигрывание
             if (!playerControl.isPlaying()) {
                 playerControl.start();
+                //subView.isReadyToSpeak=false;
+                subView.isStopped=false;
                 btn_pause.setVisibility(View.VISIBLE);
                 btn_play.setVisibility(View.GONE);
+                if(micro.getVisibility()==View.VISIBLE){
+                    micro.setVisibility(View.GONE);
+                }
             }
         }
         if (i1 == R.id.btn_fwd) {
@@ -673,48 +583,64 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
 
             execute();
         }
-        if (i1 == R.id.btn_lock) {
-            controlsState = ControlsMode.LOCK;
-            root.setVisibility(View.GONE);
-            unlock_panel.setVisibility(View.VISIBLE);
-        }
-        if (i1 == R.id.btn_unlock) {
-            controlsState = ControlsMode.FULLCONTORLS;
-            root.setVisibility(View.VISIBLE);
-            unlock_panel.setVisibility(View.GONE);
-        }
+
         //настройки субтитров
         if(i1==R.id.btn_sub){
             //открываем в уголке окошко с ними
-            PopupMenu popup = new PopupMenu(DynVideoPlayer.this, v);
+            final PopupMenu popup = new PopupMenu(DynVideoPlayer.this, v);
             MenuInflater inflater=popup.getMenuInflater();
-
+           // popup.inflate(R.menu.popsubs);
             inflater.inflate(R.menu.popsubs,popup.getMenu());
+            popup.getMenu().findItem(R.id.menu1).setChecked(popup.getMenu().findItem(R.id.menu1).isChecked());
+            popup.getMenu().findItem(R.id.menu2).setChecked(popup.getMenu().findItem(R.id.menu2).isChecked());
+            popup.getMenu().findItem(R.id.menu3).setChecked(popup.getMenu().findItem(R.id.menu3).isChecked());
+            popup.getMenu().findItem(R.id.menu4).setChecked(popup.getMenu().findItem(R.id.menu4).isChecked());
+
+            //popup.getMenu().setGroupCheckable(1, true, true);
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.menu1:
-                            //включить/выключить субтитры вообщк
+                           MenuItem subMenuItem = popup.getMenu().getItem(0);
+                            //включить/выключить субтитры вообще
                             if(subView.getVisibility()==View.VISIBLE){
                                 subView.setVisibility(View.INVISIBLE);
-                            }else subView.setVisibility(View.VISIBLE);
+                               subMenuItem.setChecked(false);
+                                //popup.getMenu().findItem(R.id.menu1).setChecked(false);
+                                //item.setChecked(false);
+                            }else {
+                                subMenuItem.setChecked(true);
+                                //popup.getMenu().findItem(R.id.menu1).setChecked(true);
+                                subView.setVisibility(View.VISIBLE);
+                                //item.setChecked(true);
+                            }
                             return true;
+
                         case R.id.menu2:
+
                             //включить/выключить русский перевод субтитров
                             if(!subView.rus_mode){
-                                new RusParseTask().execute();
+                                subView.rus_mode=true;
+                                item.setChecked(true);
+                                popup.getMenu().findItem(R.id.menu2).setChecked(true);
+                                //new RusParseTask().execute();
                             }else {
                                 subView.rus_mode=false;
+                                item.setChecked(false);
+                                popup.getMenu().findItem(R.id.menu2).setChecked(false);
                             }
                             return true;
                         case R.id.menu3:
+
                             //заморозить субтитры
                             if(!isSubsFrozen){
                                 isSubsFrozen=true;
+                                item.setChecked(true);
                                 //запоминаем положение до заморозки
                                 subView.last_position=player.getCurrentPosition();
                                 subView.isStopped=true;
+                                popup.getMenu().findItem(R.id.menu3).setChecked(true);
                             }else{
                                 isSubsFrozen=false;
                                 //запоминаем положение после разморозки
@@ -723,14 +649,39 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                                 int dt=(int)(subView.cur_position-subView.last_position);
                                 //на эту разницу перематываем субтитры, чтобы они сходились с видео
                                 subView.dt+=dt;
-
-
+                                popup.getMenu().findItem(R.id.menu3).setChecked(false);
+                                item.setChecked(false);
                                 subView.isStopped=false;
                             }
-                            item.setChecked(!item.isChecked());
+
                             Toast.makeText(getApplicationContext(),
-                                    "Freeze subs",
+                                    getString(R.string.freeze_subs),
                                     Toast.LENGTH_SHORT).show();
+                            return true;
+
+                        case R.id.menu4:
+                            if(!subView.isWatchAndSpeakMode) {
+                                subView.isWatchAndSpeakMode=true;
+                                item.setChecked(true);
+                                ActivityCompat.requestPermissions
+                                        (DynVideoPlayer.this,
+                                                new String[]{Manifest.permission.RECORD_AUDIO},
+                                                REQUEST_RECORD_PERMISSION);
+
+                                subView.speech=speech;
+                                subView.isReadyToSpeak=true;
+                                subView.recognizerIntent=recognizerIntent;
+                                popup.getMenu().findItem(R.id.menu4).setChecked(true);
+                            }
+                            else {
+                                popup.getMenu().findItem(R.id.menu4).setChecked(false);
+                                subView.isWatchAndSpeakMode=false;
+                                item.setChecked(false);
+                            }
+                            return true;
+
+                        case R.id.menu5:
+                            gravity_mode=!gravity_mode;
                             return true;
                         default:
                             return false;
@@ -755,7 +706,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                 }
             });
             Menu menu = popup.getMenu();
-            menu.add(Menu.NONE, 0, 0, "Качество видео");
+            menu.add(Menu.NONE, 0, 0, getString(R.string.video_quality));
             //считаем качество видео
             for (int i = 0; i < player.getTrackCount(0); i++) {
                 MediaFormat format = player.getTrackFormat(0, i);
@@ -774,18 +725,14 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
     }
     //фунция инициализации работы плеера
     private void execute() {
+        //создаем новый плеер
         player=ExoPlayer.Factory.newInstance(RENDERER_COUNT);
         playerControl = new PlayerControl(player);
 
         txt_title.setText(video_title);
 
-      //  subView.setSubSource(R.raw.sub2,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
-      //  subView.dt=22500;
-
-
         new MySubsParseTask().execute();
-       // new MySubsParseTask().execute();
-       // subView.setSubSource(R.raw.sub1,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+
         //устанавливаем текуший плеер на субтитры
         subView.setPlayer(playerControl);
 
@@ -798,9 +745,11 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             controlsState = ControlsMode.FULLCONTORLS;
 
         }
+     //if(!playerControl.isPlaying()) playerControl.start();
 
     }
 
+    //какой тип стриминга видео
     private HpLib_RendererBuilder getHpLibRendererBuilder() {
         String userAgent = Util.getUserAgent(this, "HpLib");
         switch (video_type){
@@ -809,7 +758,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             case "others":
                 return new HpLib_ExtractorHpLibRendererBuilder(this,userAgent, Uri.parse(video_url));
             default:
-                throw new IllegalStateException("Unsupported type: " + video_url);
+                throw new IllegalStateException(getString(R.string.Not_supported_format) + video_url);
         }
     }
 
@@ -904,6 +853,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
 
     @Override
     protected void onPause(){
+
         super.onPause();
         //если плеер играет, то остановить
         if (playerControl.isPlaying()) {
@@ -912,38 +862,30 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
             btn_pause.setVisibility(View.GONE);
             btn_play.setVisibility(View.VISIBLE);
         }
+        if(subView.tts!=null) {
+            subView.tts.stop();
+            subView.tts.shutdown();
+        }
+        //onStop();
     }
     @Override
     protected void onResume(){
+
         super.onResume();
-        seekBar_center_text.setVisibility(View.GONE);
-        brightness_center_text.setVisibility(View.GONE);
-        vol_center_text.setVisibility(View.GONE);
-        brightnessBarContainer.setVisibility(View.GONE);
-        volumeBarContainer.setVisibility(View.GONE);
+
+
+        onSaveInstanceState(bundy);
+        onRestoreInstanceState(bundy);
         onlySeekbar.setVisibility(View.VISIBLE);
         top_controls.setVisibility(View.VISIBLE);
         bottom_controls.setVisibility(View.VISIBLE);
         root.setVisibility(View.VISIBLE);
         showControls();
-    }
-    //для выполнения перевода на русский субтитров в другом потоке
-    class RusParseTask extends AsyncTask<String,Void,String> {
-        @Override
-        protected  void onPreExecute(){
 
-        }
-        @Override
-        protected String doInBackground(String... voids) {
-            //вызов функции перевода в субтитрах
-            subView.rus_parse();
-            return "";
-        }
-        @Override
-        protected  void onPostExecute(String a){
-            subView.rus_mode=true;
-        }
+
+
     }
+
     //для парсинга файла с английскими субтитрами во внешнем потоке
     class MySubsParseTask extends AsyncTask<Void,Void,Void>
     {
@@ -955,7 +897,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
         }
         protected Void doInBackground(Void... params) {
             //источник субтитров - ссылка
-           // subView.setSubSource(subs_source,MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
+
             try {
                 //если субтитры выбраны с устройства в формате srt
                 if (subsUri != null)
@@ -963,7 +905,7 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
                     //иначе выбираем по ссылке
                 else subView.setSubSource(subs_source, MediaPlayer.MEDIA_MIMETYPE_TEXT_SUBRIP);
             }catch (Exception e){
-                Toast.makeText(getApplicationContext(),"Выберите файлы!",Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),getString(R.string.choose_files),Toast.LENGTH_SHORT);
             }
             return null;
         }
@@ -974,5 +916,145 @@ public class DynVideoPlayer extends AppCompatActivity implements HlsSampleSource
 
         }
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(player!=null){
+            outState.putLong("seek_time", player.getCurrentPosition());
+            outState.putFloat("scaleFactor", mScaleFactor);
+            outState.putFloat("subX", subView.getX());
+            outState.putFloat("subY", subView.getY());
+        }
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        subView.setX(savedInstanceState.getFloat("subX"));
+        subView.setY(savedInstanceState.getFloat("subY"));
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_RECORD_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(DynVideoPlayer.this, "Permission Denied!", Toast
+                            .LENGTH_SHORT).show();
+                }
+        }
+    }
+
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (speech != null) {
+            speech.destroy();
+
+        }
+    }
+
+
+    @Override
+    public void onBeginningOfSpeech() {
+
+
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+
+    }
+
+    @Override
+    public void onError(int errorCode) {
+        String errorMessage = getErrorText(errorCode);
+
+        subView.setText(errorMessage);
+        subView.appendRussian();
+    }
+
+    @Override
+    public void onEvent(int arg0, Bundle arg1) {
+
+    }
+
+    @Override
+    public void onPartialResults(Bundle arg0) {
+
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle arg0) {
+
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+
+        ArrayList<String> matches = results
+                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = "";
+//        for (String result : matches)
+//            text += result + "\n";
+
+        subView.setText(matches.get(0));
+        subView.appendRussian();
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+
+
+    }
+
+    public static String getErrorText(int errorCode) {
+        String message;
+        switch (errorCode) {
+            case SpeechRecognizer.ERROR_AUDIO:
+                message = "Audio recording error";
+                break;
+            case SpeechRecognizer.ERROR_CLIENT:
+                message = "Client side error";
+                break;
+            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                message = "Insufficient permissions";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK:
+                message = "Network error";
+                break;
+            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                message = "Network timeout";
+                break;
+            case SpeechRecognizer.ERROR_NO_MATCH:
+                message = "No match";
+                break;
+            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                message = "RecognitionService busy";
+                break;
+            case SpeechRecognizer.ERROR_SERVER:
+                message = "error from server";
+                break;
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                message = "No speech input";
+                break;
+            default:
+                message = "Didn't understand, please try again.";
+                break;
+        }
+        return message;
+    }
 }

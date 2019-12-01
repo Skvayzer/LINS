@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/name_new_dict"
-        android:text="Назовите новый словарь"
+        android:text="@string/name_your_dict"
         android:gravity="center_horizontal"
         android:textSize="30dp"
         android:layout_centerHorizontal="true"
@@ -16,20 +16,20 @@
    <EditText
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:hint="Введите название словаря"
+       android:hint="@string/type_dict_name"
        android:id="@+id/type_new_dict"
        android:layout_below="@id/name_new_dict"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Введите описание словаря"
+        android:hint="@string/type_dict_description"
         android:id="@+id/new_dict_description"
         android:layout_below="@id/type_new_dict"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="Создать словарь"
+        android:text="@string/create_dict"
         android:textSize="20dp"
         android:id="@+id/add_new_dict"
         android:layout_centerHorizontal="true"

@@ -18,6 +18,7 @@ import com.google.android.exoplayer.upstream.DefaultAllocator;
 import com.google.android.exoplayer.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer.upstream.DefaultUriDataSource;
 
+//класс для рендеринга видео и буфферизации, сторонняя библиотека
 public class HpLib_ExtractorHpLibRendererBuilder implements HpLib_RendererBuilder {
 
     private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;

@@ -27,7 +27,7 @@ import com.google.android.exoplayer.util.ManifestFetcher;
 
 import java.io.IOException;
 
-
+//класс для рендеринга видео и буфферизации, сторонняя библиотека
 public class HpLib_HlsHpLibRendererBuilder implements HpLib_RendererBuilder {
     private static final int BUFFER_SEGMENT_SIZE = 64 * 1024;
     private static final int MAIN_BUFFER_SEGMENTS = 254;

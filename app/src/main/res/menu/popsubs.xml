@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<group android:id="@+id/menugroup1"-->
-        <!--&gt;-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
-        <!--<item-->
-            <!--android:id="@+id/menu1"-->
-            <!--android:title="Eng subs">-->
-            <!--<menu>-->
-                <!--<item-->
-                    <!--android:id="@+id/submenu1"-->
-                    <!--android:title="Подменю"/>-->
-            <!--</menu>-->
-        <!--</item>-->
-        <!--<item-->
-            <!--android:id="@+id/menu2"-->
-            <!--android:title="Rus subs">-->
-            <!--<menu>-->
-                <!--<item-->
-                    <!--android:id="@+id/submenu2"-->
-                    <!--android:title="Подменю"/>-->
-            <!--</menu>-->
-        <!--</item>-->
-
-    <!--</group>-->
     <group
-android:checkableBehavior="single"
+        android:checkableBehavior="all"
         android:id="@+id/menugroup2"
         >
 
 
                 <item
+                    android:orderInCategory="0"
                     android:id="@+id/menu1"
-                    android:title="Eng subs"/>
+                    android:title="@string/eng_subs"
+                    android:checkable="true"
+                    app:showAsAction="never"
+                    android:checked="true"
+                    />
 
 
 
 
                 <item
+                    android:orderInCategory="1"
                     android:id="@+id/menu2"
-                    android:title="Rus subs"/>
+                    android:checkable="true"
+                    app:showAsAction="never"
+                    android:title="@string/rus_subs"/>
 
 
         <item
             android:id="@+id/menu3"
+            android:checkable="true"
+            app:showAsAction="never"
+            android:orderInCategory="2"
+            android:title="@string/freeze_subs"
+            />
+
+        <item
+            android:id="@+id/menu4"
             android:orderInCategory="3"
-            android:title="Freeze subs"
+            app:showAsAction="never"
+            android:checkable="true"
+            android:title="@string/watch_and_speak_mode"
+            />
+
+        <item
+            android:id="@+id/menu5"
+            android:orderInCategory="4"
+            app:showAsAction="never"
+            android:checkable="true"
+            android:title="Gravity"
             />
     </group>
 

@@ -4,15 +4,97 @@
     <string name="swipe_right">Повторять </string>
     <string name="view_swiped_right">Не помню </string>
     <string name="view_swiped_left">Помню </string>
-    <string name="stack_empty">Пусто</string>
-    <string name="stack_reset">Сбросить</string>
-    <string name="dummy_text">делай проект дебил </string>
-    <string name="dummy_fab">прошу улучшай меня каждый день </string>
+    <string name="stack_empty" translatable="false">Пусто</string>
+    <string name="stack_reset" translatable="false">Сбросить</string>
+    <string name="dummy_text" translatable="false">делай проект дебил </string>
+    <string name="dummy_fab" translatable="false">прошу улучшай меня каждый день </string>
 
-    <string name="Open">Open</string>
-    <string name="Close">Close</string>
+    <string name="Open" translatable="false">Open</string>
+    <string name="Close" translatable="false">Close</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+    <string name="title_activity_fullscreen" translatable="false">FullscreenActivity</string>
+
+    <string name="video_name_in_player">Видео</string>
+    <string name="where_take_subs">"Субтитры могут быть легко найдены на сайтах "</string>
+    <string name="and_whitespaces">" и "</string>
+    <string name="type_video_url">Введите ссылку на видео</string>
+    <string name="type_subs_url">Введите ссылку на субтитры</string>
+    <string name="watch">Смотреть</string>
+    <string name="save_to_dictionary">Сохранить в словарь</string>
+
+    <string name="you_have_no_words">У вас ещё нет слов</string>
+    <string name="saved_successfully">Сохранено успешно!</string>
+    <string name="video_quality">Качество видео</string>
+
+    <string name="Not_supported_format">Неподдерживаемый формат:</string>
+    <string name="choose_files">Выберите файлы!</string>
+    <string name="Wrong_email_or_password">Неверный E-mail или пароль</string>
+    <string name="passwords_doesnt_match">Не совпадают пароли</string>
+    <string name="somethings_wrong_try_again">Что-то пошло не так. Возможно, ввод некорректен</string>
+    <string name="type_email_you_registered">Введите e-mail, с которым Вы регистрировались</string>
+    <string name="we_sent_email">Мы отправили на e-mail инструкции для восстановления пароля</string>
+    <string name="error_with_email">Ошибка с e-mail восстановления пароля</string>
+    <string name="meanings">Значения слова</string>
+    <string name="synonims">Синонимы</string>
+    <string name="examples">Примеры</string>
+    <string name="changed_successfully">Изменено успешно!</string>
+    <string name="deleted_successfully">Удалено успешно!</string>
+    <string name="definition">Определение: </string>
+    <string name="synonim">Синонимы:</string>
+    <string name="example">Примеры:</string>
+    <string name="word_isnot_found">Похоже, это слово не нашлось :^(</string>
+    <string name="downloaded_successfully">Скачано успешно!</string>
+    <string name="somethings_wrong_error">Что-то пошло не так</string>
+    <string name="type_nickname">Введите никнейм!</string>
+    <string name="choose">Выберите!</string>
+    <string name="image_isnt_chosen">Изображение не выбрано</string>
+    <string name="notification_message">Its time to learn some words!</string>
+    <string name="adding_word">Добавление слова или определения</string>
+    <string name="type_word">Введите слово</string>
+    <string name="type_meaning">Введите определение</string>
+    <string name="type_synonims">Введите синонимы</string>
+    <string name="type_examples">Введите примеры употребления</string>
+    <string name="save">Сохранить</string>
+    <string name="create_account">Ещё нет аккаунта? Создайте</string>
+    <string name="reset_password">Забыли пароль?</string>
+    <string name="type_email">Нам нужен Ваш e-mail для восстановления пароля</string>
+    <string name="renew_password">Восстановить пароль</string>
+    <string name="back">Назад</string>
+    <string name="word">Слово</string>
+
+    <string name="meanings1">Значения</string>
+    <string name="renew">Обновить</string>
+    <string name="delete">Удалить</string>
+    <string name="name_your_dict">Назовите новый словарь</string>
+    <string name="type_dict_description">Введите описание словаря</string>
+    <string name="type_dict_name">Введите название словаря</string>
+    <string name="create_dict">Создать словарь</string>
+    <string name="change_username">Изменить имя пользователя</string>
+    <string name="words_count">Кол-во слов</string>
+    <string name="downloading">Скачивание</string>
+    <string name="available">Доступно</string>
+    <string name="changed">Изменён</string>
+    <string name="dictionaries">Словари</string>
+    <string name="status">Статус</string>
+    <string name="status_value" translatable="false">Unknown</string>
+    <string name="level">Уровень</string>
+    <string name="account">Аккаунт</string>
+    <string name="settings">Настройки</string>
+    <string name="profile">Профиль</string>
+    <string name="opened">Открытый</string>
+    <string name="select_english_level">Выберите Ваш уровень владения английским</string>
+    <string name="social">Социальное</string>
+    <string name="dictionaries_menu">Словари</string>
+    <string name="cards">Карточки</string>
+    <string name="eng_subs">Английские субтитры</string>
+    <string name="rus_subs">Русские субтитры</string>
+    <string name="freeze_subs">Заморозить субтитры</string>
+    <string name="watch_and_speak_mode">"Смотри и говори" режим</string>
+    <string name="fill_all_the_fields">Заполните все поля!</string>
+    <string name="learn">Изучать</string>
+
 
 </resources>

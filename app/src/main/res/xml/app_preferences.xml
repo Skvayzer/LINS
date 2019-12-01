@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <PreferenceCategory android:title="Общие настройки">
+        <!--<CheckBoxPreference-->
+            <!--android:key="checkbox"-->
+            <!--android:summary="Tap to check if on or off"-->
+            <!--android:title="Checkbox Preference" />-->
+
+        <!--<EditTextPreference-->
+            <!--android:dialogTitle="Сколько изученных слов показывать?"-->
+            <!--android:key="wordsCount"-->
+            <!--android:summary="При повторении на карточках"-->
+            <!--android:title="Сколько изученных слов показывать?"-->
+            <!--android:defaultValue="5"-->
+            <!--android:numeric="integer"/>-->
+        <!--<ListPreference-->
+        <!--android:dialogTitle="Select duration"-->
+        <!--android:entries="@array/settings_list_preference_titles"-->
+        <!--android:entryValues="@array/settings_list_preference_values"-->
+        <!--android:key="list"-->
+        <!--android:summary="Click to show a list to choose from"-->
+        <!--android:title="List Preference" />-->
+        <SwitchPreference
+            android:key="switch_service"
+            android:title="Включить сервис?"
+            android:summary="Сервис вне приложения при копировании"
+            android:defaultValue="true"/>
+        <!--<SwitchPreference-->
+            <!--android:key="switch_translation"-->
+            <!--android:title="Включить английский перевод?"-->
+            <!--android:summary="Толкование на карточках на английском"-->
+            <!--android:defaultValue="true"/>-->
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

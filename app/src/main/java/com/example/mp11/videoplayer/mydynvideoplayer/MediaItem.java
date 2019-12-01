@@ -5,7 +5,7 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 
-
+//класс для хранения параметров видео
 public class MediaItem {
 
     private String mTitle;
@@ -64,30 +64,12 @@ public class MediaItem {
         mSubTitle = subTitle;
     }
 
-    public String getStudio() {
-        return mStudio;
-    }
 
     public void setStudio(String studio) {
         mStudio = studio;
     }
 
-    public void addImage(String url) {
-        mImageList.add(url);
-    }
 
-    public void addImage(String url, int index) {
-        if (index < mImageList.size()) {
-            mImageList.set(index, url);
-        }
-    }
-
-    public String getImage(int index) {
-        if (index < mImageList.size()) {
-            return mImageList.get(index);
-        }
-        return null;
-    }
 
     public boolean hasImage() {
         return !mImageList.isEmpty();
@@ -116,8 +98,8 @@ public class MediaItem {
         media.setUrl(wrapper.getString(KEY_URL));
         media.setTitle(wrapper.getString(KEY_TITLE));
         media.setSubTitle(wrapper.getString(KEY_SUBTITLE));
-        media.setStudio(wrapper.getString(KEY_STUDIO));
-        media.mImageList.addAll(wrapper.getStringArrayList(KEY_IMAGES));
+
+
         media.setContentType(wrapper.getString(KEY_CONTENT_TYPE));
         return media;
     }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+
 import com.bumptech.glide.Glide;
 import com.example.mp11.R;
 import com.example.mp11.ForDictionaries.UsersDictionary;
@@ -70,8 +71,9 @@ public class DictAdapter extends BaseAdapter {
         dict.setText(name);
         hold.setText(holder);
         //загружаем по ссылке из Firebase фото профиля владельца словаря
-        Glide.with(context).load(ud.imageUrl).into(image);
+        Glide.with(context).load(ud.imageUrl).placeholder(context.getResources().getDrawable(R.drawable.diam)).error(context.getResources().getDrawable(R.drawable.diam)).into(image);
 
+        //Picasso.get().load(ud.imageUrl).placeholder(context.getResources().getDrawable(R.drawable.diam)).error(context.getResources().getDrawable(R.drawable.diam)).into(image);
         return convertView;
     }
 }

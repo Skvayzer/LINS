@@ -15,7 +15,7 @@
         android:textColor="#555"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
-        android:text="Добавление слова или определения"
+        android:text="@string/adding_word"
         android:paddingVertical="20dp"/>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:background="@color/graylight"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Введите слово"
+                android:hint="@string/type_word"
                 />
 
             <EditText
@@ -51,7 +51,7 @@
                 android:background="@color/graylight"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Введите определение"/>
+                android:hint="@string/type_meaning"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:background="@color/graylight"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Введите синонимы"/>
+                android:hint="@string/type_synonims"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -68,7 +68,7 @@
                 android:background="@color/graylight"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:hint="Введите примеры употребления"/>
+                android:hint="@string/type_examples"/>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
@@ -82,17 +82,11 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:text="Сохранить"
+        android:text="@string/save"
         android:textSize="20dp"
         android:textColor="@color/white"
         android:background="@drawable/buttonstyle"
         />
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/btnget"-->
-        <!--android:layout_marginLeft="20dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:text="Get All Words"/>-->
+
 
 </LinearLayout>

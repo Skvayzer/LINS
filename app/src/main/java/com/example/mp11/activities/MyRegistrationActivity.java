@@ -129,7 +129,7 @@ public class MyRegistrationActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(!task.isSuccessful()){
-                                        Toast.makeText(MyRegistrationActivity.this,"Что-то пошло не так. Возможно, ввод некорректен", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(MyRegistrationActivity.this,getString(R.string.somethings_wrong_try_again), Toast.LENGTH_LONG).show();
                                     }
 
                                 }
@@ -137,7 +137,7 @@ public class MyRegistrationActivity extends AppCompatActivity {
 
 
                 }else{
-                    Toast.makeText(MyRegistrationActivity.this,"Не совпадают пароли", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MyRegistrationActivity.this,getString(R.string.passwords_doesnt_match), Toast.LENGTH_LONG).show();
                 }
             }
         });

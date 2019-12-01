@@ -1,58 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/word_container">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/container_word">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/goToEng"
+                android:src="@drawable/ic_wrap_text_black_24dp"
+                android:background="@android:color/transparent"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/phrasesIdioms"
+                android:src="@drawable/ic_sort_by_alpha_black_48dp"
+                android:background="@null"
+                android:layout_below="@id/goToEng"
+                android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:visibility="gone"
+                />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/current_word"
-        android:text="Time"
-        android:gravity="center_horizontal"
-        android:textSize="50dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/background_dark"/>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_volume_up_black_24dp"
-        android:background="@null"
-        android:paddingLeft="20dp"
-        android:paddingVertical="20dp"
-        android:layout_toRightOf="@id/current_word"
-        android:id="@+id/sound_btn"
-        android:visibility="invisible"/>
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/word_layout"
+            android:layout_toLeftOf="@id/sound_btn"
+            android:layout_toRightOf="@id/container_word"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/current_word"
+                android:text="Time"
+                android:layout_gravity="center"
+                android:gravity="center_horizontal"
+                android:textAlignment="center"
+
+                android:textSize="35dp"
+
+
+                android:paddingLeft="20dp"
+                android:textColor="@android:color/background_dark"
+
+                />
+
+        </LinearLayout>
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_volume_up_black_48dp"
+            android:background="@null"
+            android:layout_alignParentRight="true"
+            android:id="@+id/sound_btn"
+            android:paddingTop="15dp"
+            android:paddingHorizontal="20dp"
+
+            android:visibility="visible"/>
+
+    </RelativeLayout>
+
+
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"
-        android:layout_below="@id/current_word"
+        android:layout_below="@id/word_container"
+
         android:id="@+id/linesep"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/word_list"
         android:layout_above="@id/addToDict_btn"
-        android:layout_below="@id/current_word"
+        android:layout_below="@id/linesep"
         android:clickable="false"
         android:contextClickable="false"
         android:textColor="@android:color/background_dark"
+        android:paddingHorizontal="20dp"
+        >
+    </ListView>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pai_list"
+        android:layout_above="@id/addToDict_btn"
+        android:layout_below="@id/linesep"
+
+        android:textColor="@android:color/background_dark"
+        android:paddingHorizontal="20dp"
+        android:visibility="gone"
         >
     </ListView>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:text="Добавить в словарь"
-        android:textSize="20dp"
+        android:text="@string/save_to_dictionary"
+        android:textSize="15dp"
         android:id="@+id/addToDict_btn"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/buttonstyle"
         android:textColor="@color/white"
         />
-    <TextView
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:id="@+id/load_eng_bar"
+        android:theme="@style/AppTheme"/>
+
 </RelativeLayout>

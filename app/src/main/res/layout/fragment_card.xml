@@ -20,24 +20,7 @@
         app:stack_size="1"
         />
 
-    <android.support.design.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@id/navigation"
-        android:id="@+id/coordinatorlayout">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="@dimen/margin_fab"
-            android:src="@drawable/ic_add_circle_outline_black_24dp"
-            app:fabSize="normal"
-            android:visibility="invisible"
-            />
-
-    </android.support.design.widget.CoordinatorLayout>
     <Button
         android:id="@+id/buttonSwipeLeft"
         style="?android:attr/borderlessButtonStyle"
@@ -55,13 +38,5 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/swipe_right"/>
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_settings_black_48dp"
-        android:background="@android:color/transparent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:id="@+id/card_settings"
-        />
+
 </RelativeLayout>

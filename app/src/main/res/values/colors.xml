@@ -18,4 +18,6 @@
     <color name="startgreen">#09dfd6</color>
     <color name="endgreen">#09df22</color>
     <color name="profprimarydark">#292b3d</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

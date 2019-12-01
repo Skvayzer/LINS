@@ -28,6 +28,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.bumptech.glide.Glide;
 import com.example.mp11.R;
 import com.example.mp11.activities.AccountSettingsActivity;
@@ -47,6 +48,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -166,10 +168,12 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                 //ссылка на фото профиля
                 mUri=preferences.getString("profile_image_url","");
                 //если она не пустая, отобразить фото
-                if(mUri!=null&&!mUri.equals("")) Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
+                if(mUri!=null&&!mUri.equals("")) Glide.with(mActivity.getApplicationContext()).load(mUri).placeholder(getResources().getDrawable(R.drawable.diam)).error(getResources().getDrawable(R.drawable.diam)).into(profile_image);
+                //Picasso.get().load(mUri).placeholder(getResources().getDrawable(R.drawable.diam)).error(getResources().getDrawable(R.drawable.diam)).into(profile_image);
                 //иначе взять ссылку с Firebase, если она есть, и отобразить фото
                 else if(dataSnapshot.child("imageURL").getValue()!=null){ mUri=dataSnapshot.child("imageURL").getValue().toString();
-                Glide.with(mActivity.getApplicationContext()).load(mUri).into(profile_image);
+                Glide.with(mActivity.getApplicationContext()).load(mUri).placeholder(getResources().getDrawable(R.drawable.diam)).error(getResources().getDrawable(R.drawable.diam)).into(profile_image);
+                    //Picasso.get().load(mUri).placeholder(getResources().getDrawable(R.drawable.diam)).error(getResources().getDrawable(R.drawable.diam)).into(profile_image);
                 }
                 //если есть на Firebase, отобразить уровень английского
                 if(dataSnapshot.child("level").getValue()!=null){
@@ -246,7 +250,7 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                            FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("username").setValue(name);
                             kek.hide();
                         }else{
-                        Toast.makeText(getContext(),"Введите никнейм!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),getString(R.string.type_nickname),Toast.LENGTH_SHORT).show();
                     }
                     }
                 });
@@ -297,7 +301,7 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                             databaseReference.child("level").setValue(your_level);
                             kek.hide();
                         }else{
-                            Toast.makeText(l_level.getContext(),"Выберите!",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(l_level.getContext(),getString(R.string.choose),Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -350,19 +354,19 @@ public class SettingsFragment //extends PreferenceFragmentCompat {
                         pd.dismiss();
 
                     }else{
-                        Toast.makeText(getContext(),"Что-то пошло не так",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),context.getString(R.string.somethings_wrong_error),Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(),"Что-то пошло не так",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),context.getString(R.string.somethings_wrong_error),Toast.LENGTH_SHORT).show();
                     pd.dismiss();
                 }
             });
         }else{
-            Toast.makeText(getContext(),"Изображение не выбрано",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(),getString(R.string.image_isnt_chosen),Toast.LENGTH_SHORT).show();
         }
     }
 

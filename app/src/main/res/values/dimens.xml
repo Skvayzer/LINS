@@ -19,10 +19,12 @@
     <dimen name="tile_padding">8dp</dimen>
     <dimen name="tile_height">160dp</dimen>
     <dimen name="app_bar_height">256dp</dimen>
+
     <dimen name="article_keylines">72dp</dimen>
     <dimen name="teacher_size">40dp</dimen>
     <dimen name="card_title_height">40dp</dimen>
     <dimen name="article_titles">20sp</dimen>
+
     <dimen name="cards_button_width">48dp</dimen>
     <dimen name="cards_button_height">48dp</dimen>
     <dimen name="article_subheading">16sp</dimen>

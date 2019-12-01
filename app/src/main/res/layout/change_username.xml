@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/name_new_dict"
+        android:text="@string/change_username"
+        android:gravity="center_horizontal"
+        android:textSize="30dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/background_dark"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/type_nickname"
+        android:id="@+id/new_username"
+        android:layout_below="@id/name_new_dict"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="@string/save"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:id="@+id/change_username"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/buttonstyle"
+        android:layout_below="@id/new_username"
+        />
+</RelativeLayout>

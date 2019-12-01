@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.mp11.adapters.MessageListAdapter;
+
 import com.example.mp11.ForDatabases.MyDbHelper;
 import com.example.mp11.R;
 import com.google.gson.Gson;
@@ -78,7 +78,7 @@ public class AddWordActivity extends AppCompatActivity {
                 etsyns.setText("");
                 etex.setText("");
 
-                Toast.makeText(AddWordActivity.this, "Сохранено успешно!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddWordActivity.this, getString(R.string.saved_successfully), Toast.LENGTH_SHORT).show();
             }
         });
 

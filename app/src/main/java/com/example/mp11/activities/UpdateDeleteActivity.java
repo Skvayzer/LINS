@@ -39,9 +39,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         etdef.setLayoutParams(p);
         etex.setLayoutParams(p);
         etsyns.setLayoutParams(p);
-        etdef.setHint("Значения слова");
-        etsyns.setHint("Синонимы");
-        etex.setHint("Примеры");
+        etdef.setHint(getString(R.string.meanings));
+        etsyns.setHint(getString(R.string.synonims));
+        etex.setHint(getString(R.string.examples));
         //добавляем к layout'у
         ll.addView(etdef);
         ll.addView(etsyns);
@@ -61,9 +61,9 @@ public class UpdateDeleteActivity extends AppCompatActivity {
         etdef.setLayoutParams(p);
         etex.setLayoutParams(p);
         etsyns.setLayoutParams(p);
-        etdef.setHint("Значения слова");
-        etsyns.setHint("Синонимы");
-        etex.setHint("Примеры");
+        etdef.setHint(getString(R.string.meanings));
+        etsyns.setHint(getString(R.string.synonims));
+        etex.setHint(getString(R.string.examples));
         etdef.setBackgroundColor(getResources().getColor(R.color.graydark));
         etsyns.setBackgroundColor(getResources().getColor(R.color.graydark));
         etex.setBackgroundColor(getResources().getColor(R.color.graydark));
@@ -119,7 +119,7 @@ public class UpdateDeleteActivity extends AppCompatActivity {
                     databaseHelper.updateWord(WordModel.getId(), etword.getText().toString(),aretdef.get(i).getText().toString(),
                             aretsyns.get(i).getText().toString(), aretex.get(i).getText().toString());
                 }
-                    Toast.makeText(UpdateDeleteActivity.this, "Изменено успешно!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UpdateDeleteActivity.this, getString(R.string.changed_successfully), Toast.LENGTH_SHORT).show();
 
                 finish();
 
@@ -132,7 +132,7 @@ public class UpdateDeleteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //удаляем слово
                 databaseHelper.deleteWord(WordModel.getId());
-                Toast.makeText(UpdateDeleteActivity.this, "Удалено успешно!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UpdateDeleteActivity.this, getString(R.string.deleted_successfully), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

@@ -69,16 +69,16 @@ public class DbCustomAdapter extends BaseAdapter {
 
         //берём слово и формируем его отображение
         WordModel now=WordModelArrayList.get(position);
-        String def=now.getWord()+'\n'+'\n',syns="",ex="";
+        String def=now.getWord()+'\n'+'\n';
         for(int i=0;i<now.definition.size();i++) {
 
 
-            def += "Определение: " + now.getdefinition(i) + '\n'+'\n';
+            def += context.getString(R.string.definition) + now.getdefinition(i) + '\n'+'\n';
 
 
-            def += "Синонимы: " + now.getSyns(i) + '\n'+'\n';
+            if(now.getSyns(i)!=null) def += context.getString(R.string.synonim) + now.getSyns(i) + '\n'+'\n';
 
-            def += "Примеры: " + now.getEx(i);
+            if(now.getEx(i)!=null) def += context.getString(R.string.example) + now.getEx(i);
 
         }
 

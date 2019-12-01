@@ -1,84 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".SettingsFragment"-->
-    <!--android:orientation="vertical"-->
-    <!--android:layout_marginTop="40dp"-->
-    <!--android:layout_gravity="center_horizontal">-->
 
-    <!--&lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
-
-    <!--<CheckBox-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="Включить сервис?"-->
-    <!--android:textSize="30dp"-->
-    <!--android:id="@+id/chckservice"-->
-    <!--android:layout_gravity="center_horizontal"-->
-    <!--android:gravity="center_horizontal"/>-->
-    <!--<CheckBox-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Включить английский перевод?"-->
-        <!--android:textSize="30dp"-->
-        <!--android:id="@+id/chcktranslation"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:gravity="center_horizontal"/>-->
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Ваш аккаунт"-->
-        <!--android:textSize="20dp"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:layout_gravity="center_horizontal"/>-->
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Выйти из аккаунта"-->
-        <!--android:textSize="20dp"-->
-        <!--android:id="@+id/logout"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:layout_gravity="center_horizontal"/>-->
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/govideo"-->
-        <!--android:text="Video"-->
-        <!--android:textSize="30dp"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--/>-->
-
-
-    <!--<ImageView-->
-        <!--android:layout_width="70dp"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:layout_marginBottom="15dp"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:background="@drawable/diam"/>-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Nickname"-->
-        <!--android:id="@+id/nickname"-->
-
-        <!--android:textSize="20dp"/>-->
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="E-mail"-->
-        <!--android:id="@+id/users_email"-->
-
-        <!--android:textSize="20dp"/>-->
-<!--</LinearLayout>-->
-<!--</FrameLayout>-->
-<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:id="@+id/activity_settings"-->
-    <!--android:name="com.example.mp11.fragments.SettingsFragment"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -154,7 +75,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Словари"
+                        android:text="@string/dictionaries"
                         android:textSize="20sp"
                         />
                     <TextView
@@ -177,13 +98,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Статус"
+                        android:text="@string/status"
                         android:textSize="20sp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Онлайн"
+                        android:text="@string/status_value"
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:paddingTop="10dp"
@@ -200,13 +121,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Уровень"
+                        android:text="@string/level"
                         android:textSize="20sp"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Unknown"
+                        android:text="@string/status_value"
                         android:id="@+id/level"
                         android:textStyle="bold"
                         android:textSize="20sp"
@@ -246,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="Аккаунт"
+                android:text="@string/account"
                 android:textSize="20dp"/>
         </LinearLayout>
         <LinearLayout
@@ -270,63 +191,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="Настройки"
+                android:text="@string/settings"
                 android:textSize="20dp"/>
         </LinearLayout>
-        <!--<LinearLayout-->
-            <!--android:layout_marginTop="25dp"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:paddingLeft="25dp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:clickable="true"-->
-            <!--android:focusable="true"-->
-            <!--android:background="?attr/selectableItemBackground">-->
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@drawable/ic_email_black_40dp"/>-->
-            <!--<TextView-->
-                <!--android:textStyle="bold"-->
-                <!--android:textSize="20dp"-->
-                <!--android:layout_gravity="center_vertical"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingLeft="20dp"-->
-                <!--android:text="Написать сообщение"/>-->
-        <!--</LinearLayout>-->
-        <LinearLayout
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/curious"/>
-            <TextView
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_gravity="center_vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:text="Что-то ещё"/>
-        </LinearLayout>
+
     </LinearLayout>
 
-    <!--<Button-->
-        <!--android:textColor="#fff"-->
-        <!--android:background="@drawable/buttonstyle"-->
-        <!--android:layout_marginTop="35dp"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Обосрать"-->
-        <!--/>-->
+
     </LinearLayout>
 </ScrollView>

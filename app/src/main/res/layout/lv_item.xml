@@ -18,11 +18,6 @@
 
         card_view:cardBackgroundColor="@color/graydark"
        >
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="#298"-->
-            <!--android:orientation="vertical">-->
 
             <TextView
                 android:id="@+id/word"
@@ -35,44 +30,9 @@
                 android:paddingLeft="10dp"
                 android:paddingVertical="10dp"
                 android:text="Word" />
-            <!--<TextView-->
-            <!--android:id="@+id/definition"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="#fff"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="" />-->
-            <!--<TextView-->
-            <!--android:id="@+id/syn"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="#fff"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="" />-->
-            <!--<TextView-->
-            <!--android:id="@+id/ex"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="#fff"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="" />-->
 
-
-        <!--</LinearLayout>-->
     </android.support.v7.widget.CardView>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_marginLeft="10dp"-->
-        <!--android:layout_marginRight="10dp"-->
-        <!--android:background="@color/colorAccent"/>-->
+
 
 </LinearLayout>

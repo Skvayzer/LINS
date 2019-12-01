@@ -12,43 +12,60 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mp11.R;
+import com.example.mp11.activities.GetAllWordsActivity;
+import com.example.mp11.adapters.StringAdapter;
 import com.example.mp11.fragments.ClickListener;
 import com.example.mp11.fragments.DictionariesFragment;
-import com.example.mp11.ForDictionaries.googleEmulatorApi.GoogleDictApi;
-import com.example.mp11.ForDictionaries.googleEmulatorApi.GoogleTranslation;
+
 import com.example.mp11.adapters.TranslationAdapter;
 import com.example.mp11.ForDictionaries.yandexdictslate.Model;
 import com.example.mp11.ForDictionaries.yandexdictslate.RestApi;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -81,7 +98,12 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
     //английский ли перевод?
     public static boolean eng=false;
 
+    private boolean EngTranslation=false;
+    private boolean isPai=false;
 
+    private TextToSpeech tts;
+
+    private String merriam_key="5e710d58-4d0b-4435-a025-d455b7437bfc";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -105,9 +127,9 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
         PendingIntent restartServicePI = PendingIntent.getService(
                 getApplicationContext(), 1, restartService,
                 PendingIntent.FLAG_ONE_SHOT);
-        //спустя какое-то время
+        //спустя 2 cek
         AlarmManager alarmService = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmService.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() +1, restartServicePI);
+        alarmService.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis()+2000, restartServicePI);
     }
 
     @Override
@@ -148,10 +170,18 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
     @Override
     public void onDestroy() {
-
+//        Intent restartService = new Intent(getApplicationContext(),
+//                this.getClass());
+//        restartService.setPackage(getPackageName());
+//        PendingIntent restartServicePI = PendingIntent.getService(
+//                getApplicationContext(), 1, restartService,
+//                PendingIntent.FLAG_ONE_SHOT);
+//        //спустя какое-то время
+//        AlarmManager alarmService = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+//        alarmService.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis()+1000, restartServicePI);
     }
 
-    //на тыке
+    //на тыке перемещаем кнопку
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
@@ -208,16 +238,12 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
     @Override
     public void onClick(View v) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        //если включён перевод на английском, перевести на английском(пока отключено в связи с тем,
-        //что настоящий гугл словарь упразднён как апи и использовался изначально его нефициальный эмулятор
-        //но он работает медленно
-        if(eng){
-            googleDict(message);
-        }else{
+
+
             //во внешнем потоке лемматизация слова и перевод
             CallbackTask task=new CallbackTask();
             task.execute(inflections(message));
-        }
+
 
 
 
@@ -254,7 +280,7 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
             }
             //появляется кнопка на 10 секунд
             overlayedButton.setVisibility(View.VISIBLE);
-            Toast.makeText(getApplicationContext(),"onPrimaryClip",Toast.LENGTH_SHORT).show();
+
             new Handler().postDelayed(new Runnable() {
                 public void run() {
                     overlayedButton.setVisibility(View.INVISIBLE);
@@ -267,153 +293,19 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
     }
     //перевод эмулятором гугл слова на английском(уже не используется в связи с его медлительностью и
     //багом с парсингом json'a, возникшим накануне
-    void googleDict(final String text){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://googledictionaryapi.eu-gb.mybluemix.net")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        GoogleDictApi service = retrofit.create(GoogleDictApi.class);
-        Call<GoogleTranslation> call = service.define(text);
-        call.enqueue(new Callback<GoogleTranslation>() {
-            @Override
-            public void onResponse(Call<GoogleTranslation> call, Response<GoogleTranslation> response) {
-
-                //String textWord = response.toString();
-                Gson gson = new Gson();
-                if (response.isSuccessful()) {
-
-                    String successResponse = gson.toJson(response.body());
-                    Log.d("RESULT", "successResponse: " + successResponse);
-                } else {
-
-                    if (null != response.errorBody()) {
-                        String errorResponse = null;
-                        try {
-                            errorResponse = response.errorBody().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        Log.d("RUSELT", "errorResponse: " + errorResponse);
-                    }
-
-                }
-
-                //тут всё парсится в соответствующие строки
-                String meanings="";
-                String syns="(";
-                String ex="";
+    void merriamDict(final String text){
 
 
 
-                String transcription="["+response.body().phonetic+"]";
+
                 //массив со строковыми переводами, куда всё запихнётся
                 final ArrayList<StringTranslation> stlist=new ArrayList<>();
                 //если есть определение
-                if (response.body().meaning.noun!=null)
-                for (int i = 0; i < response.body().meaning.noun.length; i++) {
-                    //если существительное, спарсить
-                    StringTranslation item=new StringTranslation();
-
-                    //берём определения, синонимы, примеры
-                    meanings=response.body().meaning.noun[i].definition;
-                    ex=response.body().meaning.noun[i].example;
-                    if(response.body().meaning.noun[i].synonyms!=null) {
-                        for (String s : response.body().meaning.noun[i].synonyms) syns += s + ", ";
-                        syns = syns.substring(0, syns.length() - 2) + ")";
-                    }
-                    item.word=response.body().word;
-
-                    if(meanings.length()!=0)item.meaning=meanings;
-                    meanings="";
-
-                    if(syns.length()!=0) item.syns=syns;
-                    syns="";
-
-                    if(ex.length()!=0)item.ex=ex;
-                    ex="";
-                    //добавляем
-                    stlist.add(item);
 
 
-                }
-                //если прилагательное есть, сделать то же самое
-                if (response.body().meaning.adjective!=null)
-                for (int i = 0; i < response.body().meaning.adjective.length; i++) {
-
-                    StringTranslation item=new StringTranslation();
-                    meanings=response.body().meaning.adjective[i].definition;
-                    ex=response.body().meaning.adjective[i].example;
-                    if(response.body().meaning.adjective[i].synonyms!=null) {
-                        for (String s : response.body().meaning.adjective[i].synonyms)
-                            syns += s + ", ";
-                        syns = syns.substring(0, syns.length() - 2) + ")";
-                    }
-                    item.word=response.body().word;
-
-                    if(meanings.length()!=0)item.meaning=meanings;
-                    meanings="";
-
-                    if(syns.length()!=0) item.syns=syns;
-                    syns="";
-
-                    if(ex.length()!=0)item.ex=ex;
-                    ex="";
-                    stlist.add(item);
 
 
-                }
-                //если есть глагол, то же самое
-                if (response.body().meaning.verb!=null)
-                for (int i = 0; i < response.body().meaning.verb.length; i++) {
 
-                    StringTranslation item=new StringTranslation();
-                    meanings=response.body().meaning.verb[i].definition;
-                    ex=response.body().meaning.verb[i].example;
-                    if(response.body().meaning.verb[i].synonyms!=null) {
-                        for (String s : response.body().meaning.verb[i].synonyms) syns += s + ", ";
-                        syns = syns.substring(0, syns.length() - 2) + ")";
-                    }
-
-                    item.word=response.body().word;
-
-                    if(meanings.length()!=0)item.meaning=meanings;
-                    meanings="";
-
-                    if(syns.length()!=0) item.syns=syns;
-                    syns="";
-
-                    if(ex.length()!=0)item.ex=ex;
-                    ex="";
-                    stlist.add(item);
-
-
-                }
-                //если наречие, то же самое
-                if (response.body().meaning.adverb!=null)
-                for (int i = 0; i < response.body().meaning.adverb.length; i++) {
-
-                    StringTranslation item=new StringTranslation();
-                    meanings=response.body().meaning.adverb[i].definition;
-                    ex=response.body().meaning.adverb[i].example;
-                    if(response.body().meaning.adverb[i].synonyms!=null) {
-                        for (String s : response.body().meaning.adverb[i].synonyms)
-                            syns += s + ", ";
-                        syns = syns.substring(0, syns.length() - 2) + ")";
-                    }
-                    item.word=response.body().word;
-
-                    if(meanings.length()!=0)item.meaning=meanings;
-                    meanings="";
-
-                    if(syns.length()!=0) item.syns=syns;
-                    syns="";
-
-                    if(ex.length()!=0)item.ex=ex;
-                    ex="";
-                    stlist.add(item);
-
-
-                }
                 //всплывающее окошко для перевода
                 AlertDialog.Builder pop = new AlertDialog.Builder(getApplicationContext());
                 final AlertDialog kek=pop.create();
@@ -426,8 +318,8 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 //список с определениями, которых может быть несколько(как существительное, глагол и т.д.)
                 ListView lv = (ListView) view.findViewById(R.id.word_list);
                 //показать транскрипцию и слово
-                ((TextView)view.findViewById(R.id.current_word)).setText(text+" "+transcription);
-                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stlist.toArray(new StringTranslation[stlist.size()]));
+                ((TextView)view.findViewById(R.id.current_word)).setText(text);
+                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stlist.toArray(new StringTranslation[stlist.size()]),false);
                 lv.setAdapter(adapter);
                 Button btn=(Button)view.findViewById(R.id.addToDict_btn);
 
@@ -473,18 +365,9 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 });
 
                 kek.show();
-            }
 
-            @Override
-            public void onFailure(Call<GoogleTranslation> call, Throwable t) {
-                try {
-                    throw t;
-                } catch (Throwable throwable) {
 
-                    throwable.printStackTrace();
-                }
-            }
-        });
+
     }
     //перевод в яндекс словаре, в качестве толкового словаря(перевода с английского на английский) он не очень
     void getReport(final String text) {
@@ -595,10 +478,10 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
 
                     if(syns.length()!=0 && syns.length()>=4) {
                         syns=syns.substring(0,syns.length()-2);
-                        item.syns=syns;
+                        item.syns=syns+")";
                     }
-                    defsyns.add(syns);
-                    syns="";
+                    defsyns.add(syns+")");
+                    syns="(";
 
                     if(ex.length()!=0){
                         item.ex=ex;
@@ -617,11 +500,45 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 view.setBackgroundColor(Color.WHITE);
                 kek.setView(view);
                 //список определений слова
-                ListView lv = (ListView) view.findViewById(R.id.word_list);
-                ((TextView)view.findViewById(R.id.current_word)).setText(text+" "+transcription);
+                final ListView lv = (ListView) view.findViewById(R.id.word_list);
+                final ListView pai_lv=(ListView)view.findViewById(R.id.pai_list);
+                final TextView header=(TextView)view.findViewById(R.id.current_word);
+                header.setText(text+"\n"+transcription);
                 //адаптер для этого списка, передаём туда строковый перевод
-                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stringDict.toArray(new StringTranslation[stringDict.size()]));
+                final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stringDict.toArray(new StringTranslation[stringDict.size()]),false);
+                final Button addToDict=(Button)view.findViewById(R.id.addToDict_btn);
+
+                ImageButton sound_btn=(ImageButton)view.findViewById(R.id.sound_btn);
+                tts=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                    @Override
+                    public void onInit(int status) {
+                        if(status == TextToSpeech.SUCCESS){
+                            int result=tts.setLanguage(Locale.US);
+                            if(result==TextToSpeech.LANG_MISSING_DATA ||
+                                    result==TextToSpeech.LANG_NOT_SUPPORTED){
+                                Toast.makeText(getApplicationContext(),"Язык не поддерживается",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                });
+                tts.setLanguage(Locale.US);
+                sound_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String s=header.getText().toString();
+                        if(s.contains("[")) tts.speak(s.substring(0,s.indexOf("[")), TextToSpeech.QUEUE_FLUSH, null);
+                        else tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+                    }
+
+                });
                 lv.setAdapter(adapter);
+
+                //final ArrayList<StringTranslation> stlist=stringDict;
+                final ArrayList<StringTranslation> eng_list=new ArrayList<>(), pai_eng_list=new ArrayList<>();
+                final String[] pai_word = {text};
+                final ArrayList<String> PAI_list=new ArrayList<>();
+                final HashMap<String,ArrayList<StringTranslation>> map=new HashMap<>();
 
                 //кнопка "добавить в словарь"
                 Button btn=(Button)view.findViewById(R.id.addToDict_btn);
@@ -638,14 +555,36 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                         RecyclerView recyclerView = (RecyclerView) inflater.inflate(
                                 R.layout.recycler_view, null, false);
 
-                        ArrayList<StringTranslation> stlist=new ArrayList<>();
-                        for(int q=0;q<defmean.size();q++){
-                            //кладём строковые переводы в массив
-                            stlist.add(new StringTranslation(text.toLowerCase(), defmean.get(q), defsyns.get(q)+")",defex.get(q)));
-                        }
                         //адаптер для словарей
-                        DictionariesFragment.MyContentAdapter adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
-                                stlist, lol,text);
+                        DictionariesFragment.MyContentAdapter adapter=null;
+                        if(EngTranslation) {
+                            ArrayList<StringTranslation> f=null;
+                            if(!isPai) {
+                                f=eng_list;
+                            }else{
+                                f=pai_eng_list;
+                            }
+                            ArrayList<StringTranslation> noHtml = new ArrayList<>();
+                            for (StringTranslation a : f) {
+                                StringTranslation it = new StringTranslation();
+                                String s=android.text.Html.fromHtml(a.meaning).toString();
+                                while(s.endsWith("\n")){
+                                    s=s.substring(0,s.length()-1);
+                                }
+                                it.meaning = s;
+                                Object b=android.text.Html.fromHtml(a.ex);
+                                if(b!=null)
+                                it.ex = b.toString();
+                                else it.ex="";
+                                it.syns = "";
+                                noHtml.add(it);
+                            }
+                            adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
+                                    noHtml, lol, pai_word[0]);
+                        }else{
+                            adapter = new DictionariesFragment.MyContentAdapter(recyclerView.getContext(),
+                                    stringDict, lol, pai_word[0]);
+                        }
 
                         recyclerView.setAdapter(adapter);
                         recyclerView.setHasFixedSize(true);
@@ -661,6 +600,64 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                         lol.setView(recyclerView);
                         lol.show();
                         kek.hide();
+                    }
+                });
+                ImageButton goToEng=(ImageButton)view.findViewById(R.id.goToEng);
+                final View v=view;
+
+                final ProgressBar pb=(ProgressBar)view.findViewById(R.id.load_eng_bar);
+
+                final String finalTranscription = transcription;
+                //если режим английского, то спарсить определения,сохранить в массив, чтобы не загрузать снова при переходе
+                goToEng.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        lv.setOnItemClickListener(null);
+                        isPai=false;
+                        pai_word[0]=text;
+                        addToDict.setVisibility(View.VISIBLE);
+                        ImageButton phraseid=(ImageButton)v.findViewById(R.id.phrasesIdioms);
+                        if(!EngTranslation){
+                            MerriamWebsterApi task=new MerriamWebsterApi(text, eng_list,lv,pb);
+                            task.execute(requestBuilder(text,merriam_key));
+
+                            phraseid.setVisibility(View.VISIBLE);
+                            //если режим фразовых глаголов и идиом, спарсить их, сохранить в массив, чтобы не загрузать снова при переходе
+                            phraseid.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    addToDict.setVisibility(View.GONE);
+                                    MerriamWebsterApiPhrasVAndIdioms parse_task=new MerriamWebsterApiPhrasVAndIdioms(text,PAI_list,map,lv,pb);
+                                    parse_task.execute(requestBuilder(text,merriam_key));
+                                    header.setText(text+"\n"+ finalTranscription);
+
+                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                            //онклик - открыть определение идиомы или фразового глагола
+                                            String s=(String)adapterView.getItemAtPosition(i);
+                                            pai_eng_list.clear();
+                                            isPai=true;
+                                            pai_word[0] =s;
+                                            addToDict.setVisibility(View.VISIBLE);
+                                            pai_eng_list.addAll(map.get(s));
+                                            header.setText(s);
+                                            TranslationAdapter adapta=new TranslationAdapter(getApplicationContext(), true,map.get(s).toArray(new StringTranslation[map.get(s).size()]),false);
+                                            lv.setAdapter(adapta);
+                                            lv.setOnItemClickListener(null);
+                                        }
+                                    });
+                                }
+                            });
+                            EngTranslation=true;
+                        }else{
+                            header.setText(text+"\n"+finalTranscription);
+                            phraseid.setVisibility(View.GONE);
+                            lv.setAdapter(adapter);
+                            EngTranslation=false;
+                        }
+
                     }
                 });
 
@@ -736,10 +733,341 @@ public class EasyWordsBtn extends Service implements View.OnTouchListener, View.
                 .getJSONObject(0)
                 .getJSONArray("inflectionOf").getJSONObject(0)
                 .getString("text");
-                getReport(lemma);
+             getReport(lemma);
             } catch (JSONException e) {
                 e.printStackTrace();
+                try {
+                    getReport(new JSONArray(result).getString(0));
+                }catch (JSONException q){
+                    q.printStackTrace();
+                }
             }
         }
     }
+//особый парсинг слова
+public class MerriamWebsterApi extends AsyncTask<String, Integer, Object> {
+    String word;
+    ArrayList<StringTranslation> stlist=new ArrayList<>();
+    ListView lv;
+    ProgressBar pb;
+    public MerriamWebsterApi(String s, ArrayList<StringTranslation> stlist, ListView lv, ProgressBar pb){
+        word=s;
+        if(stlist!=null) this.stlist=stlist;
+        this.lv=lv;
+        this.pb=pb;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        lv.setVisibility(View.INVISIBLE);
+        pb.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected Object doInBackground(String... params) {
+
+        //тут получаем json
+
+        if(stlist.size()==0)
+        try {
+            URL url = new URL(params[0]);
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+
+            // читаем ответ сервера и кладём его в строку
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+
+            //тут json парсим
+            try {
+
+                JSONArray root=new JSONArray(stringBuilder.toString());
+                for(int i=0;i<root.length();i++){
+                    if(!root.getJSONObject(i).getJSONObject("meta").getString("id").contains(word)) continue;
+
+                    if(root.getJSONObject(i).has("def")) {
+                        JSONArray def = root.getJSONObject(i).getJSONArray("def");
+                        for (int j = 0; j < def.length(); j++) {
+                            JSONArray sseq = def.getJSONObject(j).getJSONArray("sseq");
+                            for (int q = 0; q < sseq.length(); q++) {
+                                StringTranslation item=new StringTranslation();
+
+                                item.index=stlist.size()+1;
+                                item.meaning="";
+                                item.syns="";
+                                item.ex="";
+
+                                JSONArray sseq2 = sseq.getJSONArray(q);
+                                for (int w = 0; w < sseq2.length(); w++) {
+                                    JSONObject sseq3 = sseq2.getJSONArray(w).getJSONObject(1);
+                                    if (sseq3.has("dt")) {
+                                        JSONArray dt = sseq3.getJSONArray("dt");
+                                        for (int e = 0; e < dt.length(); e++) {
+                                            JSONArray inner = dt.getJSONArray(e);
+                                            if (inner.getString(0).equals("text")) {
+                                                String bc= inner.getString(1).substring(4);
+                                                String without_bc=bc.replaceAll("\\{bc\\}","<br/>")+ "<br/>";;//cutTag(bc,"{bc}","{bc}","<br/>","")+ "<br/>";
+                                                without_bc=without_bc.replaceAll("\\{it\\}","<b>").replaceAll("\\{/it\\}","</b>");
+                                                without_bc=without_bc.replaceAll("\\{dxt\\|","<b>");
+                                                without_bc=without_bc.replaceAll("\\|\\|\\}\\{/dx\\}}","</b>");
+                                                item.meaning+=without_bc;
+                                            } else if (inner.getString(0).equals("vis")) {
+                                                JSONArray vises = inner.getJSONArray(1);
+                                                for (int y = 0; y < vises.length(); y++) {
+                                                    String current = vises.getJSONObject(y).getString("t") +"<br/>";
+                                                    current=current.replaceAll("\\{it\\}","<b>").replaceAll("\\{/it\\}","</b>"); //cutTag(current,"{it}","{/it}","<b>","</b>");
+                                                    current=current.replaceAll("\\{ldquo\\}","<br/>-").replaceAll("\\{rdquo\\}","");//cutTag(bold,"{ldquo}","{rdquo}","<br/>-","");
+                                                    current=current.replaceAll("\\{bc\\}","<br/>");//cutTag(quote,"{bc}","{bc}","<br/>","");
+                                                    current=current.replaceAll("\\{phrase\\}","<b>").replaceAll("\\{/phrase\\}","</b>");
+                                                    item.ex += current;
+                                                    // builder += vises.getJSONObject(y).getString("t") + '\n';
+                                                }
+
+                                            }
+                                        }
+
+                                    }
+                                }
+                                if(item.meaning!=null&&!item.meaning.equals("")) stlist.add(item);
+                            }
+
+                        }
+
+                    }
+
+                }
+
+
+
+                //  tv.setText(Html.fromHtml(builder));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return e.toString();
+        }
+        return stlist;
+    }
+
+    @Override
+    protected void onPostExecute(Object result) {
+        super.onPostExecute(result);
+        if(stlist.size()==0){
+            StringTranslation fail=new StringTranslation();
+            fail.meaning="";
+            stlist.add(fail);
+        }
+        TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stlist.toArray(new StringTranslation[stlist.size()]),true);
+        lv.setAdapter(adapter);
+        pb.setVisibility(View.INVISIBLE);
+        lv.setVisibility(View.VISIBLE);
+    }
+}
+//для фразовых глаголов и идиом
+    public class MerriamWebsterApiPhrasVAndIdioms extends AsyncTask<String, Integer, Object> {
+        String word;
+
+        ArrayList<String> word_list=new ArrayList<>();
+        HashMap<String, ArrayList<StringTranslation>> map=new HashMap<>();
+        ListView lv;
+        ProgressBar pb;
+        public MerriamWebsterApiPhrasVAndIdioms(String s,  ArrayList<String> word_list,HashMap<String, ArrayList<StringTranslation>> map, ListView lv, ProgressBar pb){
+            word=s;
+            if(map!=null) this.map=map;
+            if(word_list!=null) this.word_list=word_list;
+            this.lv=lv;
+            this.pb=pb;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            lv.setVisibility(View.INVISIBLE);
+            pb.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Object doInBackground(String... params) {
+
+            //тут получаем json
+
+            if(map.size()==0)
+                try {
+                    URL url = new URL(params[0]);
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+
+                    // читаем ответ сервера и кладём его в строку
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line + "\n");
+                    }
+
+                    //тут json парсим
+                    try {
+
+                        JSONArray root=new JSONArray(stringBuilder.toString());
+                        for(int i=0;i<root.length();i++){
+                            if(!root.getJSONObject(i).getJSONObject("meta").getString("id").contains(word)) continue;
+                    if(root.getJSONObject(i).has("dros")){
+
+
+                        JSONArray obj=root.getJSONObject(i).getJSONArray("dros");
+                        for(int j=0;j<obj.length();j++) {
+
+                            JSONObject def = obj.getJSONObject(j);
+
+                            String word=def.getString("drp");
+                            ArrayList<StringTranslation> stlist=new ArrayList<>();
+                            word_list.add(word);
+                            JSONArray subdef = def.getJSONArray("def");
+                            for (int q = 0; q < subdef.length(); q++) {
+                                JSONObject mean = subdef.getJSONObject(q);
+                                JSONArray sseq = mean.getJSONArray("sseq");
+                                for (int w = 0; w < sseq.length(); w++) {
+                                    StringTranslation it=new StringTranslation();
+                                    it.meaning="";
+                                    it.syns="";
+                                    it.ex="";
+                                    it.word=word;
+                                    JSONArray sseq1 = sseq.getJSONArray(w);
+                                    for (int e = 0; e < sseq1.length(); e++) {
+                                        JSONArray sseq2 = sseq1.getJSONArray(e);
+
+                                        JSONObject sense = sseq2.getJSONObject(1);
+
+                                        JSONArray phrasev = null;
+                                        if (sense.has("phrasev")) {
+                                            phrasev = sense.getJSONArray("phrasev");
+                                            for (int t = 0; t < phrasev.length(); t++) {
+                                                it.word="";
+                                                if (phrasev.getJSONObject(t).has("pvl"))
+                                                    it.word+= phrasev.getJSONObject(t).getString("pvl") + " ";
+                                                it.word += phrasev.getJSONObject(t).getString("pva") + " ";
+
+                                            }
+                                            //item.meaning += "<br/>"+"<br/>";
+                                        }
+                                        if (sense.has("dt")) {
+                                            phrasev = sense.getJSONArray("dt");
+                                            for (int t = 0; t < phrasev.length(); t++) {
+                                                JSONArray dt = phrasev.getJSONArray(t);
+                                                if (dt.getString(0).equals("text")) {
+                                                    it.meaning += dt.getString(1).substring(4) +"<br/>"+"<br/>";
+                                                } else if (dt.getString(0).equals("vis")) {
+                                                    JSONArray vises = dt.getJSONArray(1);
+                                                    for (int y = 0; y < vises.length(); y++) {
+                                                        String current= vises.getJSONObject(y).getString("t")+"<br/>";
+
+                                                        current=current.replaceAll("\\{it\\}","<b>").replaceAll("\\{/it\\}","</b>"); //cutTag(current,"{it}","{/it}","<b>","</b>");
+                                                        current=current.replaceAll("\\{ldquo\\}","<br/>-").replaceAll("\\{rdquo\\}","");//cutTag(bold,"{ldquo}","{rdquo}","<br/>-","");
+                                                        current=current.replaceAll("\\{dxt\\|","<b>");
+                                                        current=current.replaceAll("\\|\\|\\}\\{/dx\\}}","</b>");
+                                                        it.ex+=current;
+
+                                                    }
+                                                    //item+="<br/>";
+                                                }else if(dt.getString(0).equals("uns")){
+                                                    JSONArray unses = dt.getJSONArray(1);
+                                                    for (int y = 0; y < unses.length(); y++) {
+                                                        JSONArray unses1=unses.getJSONArray(y);
+                                                        for(int u=0;u<unses1.length();u++){
+                                                            JSONArray dt1 = unses1.getJSONArray(u);
+                                                            if (dt1.getString(0).equals("text")) {
+                                                                it.meaning += dt1.getString(1) +"<br/>"+"<br/>";
+                                                            } else if (dt1.getString(0).equals("vis")) {
+                                                                JSONArray vises = dt1.getJSONArray(1);
+                                                                for (int o = 0; o < vises.length(); o++) {
+                                                                    String current = vises.getJSONObject(o).getString("t") + "<br/>";
+                                                                    current=current.replaceAll("\\{it\\}","<b>").replaceAll("\\{/it\\}","</b>"); //cutTag(current,"{it}","{/it}","<b>","</b>");
+                                                                    current=current.replaceAll("\\{ldquo\\}","<br/>-").replaceAll("\\{rdquo\\}","");//cutTag(bold,"{ldquo}","{rdquo}","<br/>-","");
+                                                                    current=current.replaceAll("\\{bc\\}","<br/>");//cutTag(quote,"{bc}","{bc}","<br/>","");
+                                                                    current=current.replaceAll("\\{phrase\\}","<b>").replaceAll("\\{/phrase\\}","</b>");
+                                                                    it.ex+=current;
+                                                                    // builder += vises.getJSONObject(y).getString("t") + '\n';
+                                                                }
+                                                               // builder += "<br/>";
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    stlist.add(it);
+                                }
+                            }
+                            //stlist.add(item);
+                            map.put(word,stlist);
+                        }
+
+                    }
+
+
+                        }
+
+
+
+                        //  tv.setText(Html.fromHtml(builder));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+
+
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return e.toString();
+                }
+            return map;
+        }
+
+        @Override
+        protected void onPostExecute(Object result) {
+            super.onPostExecute(result);
+            if(map.size()==0){
+                //устанавливаем переводы на листвью
+                StringTranslation fail=new StringTranslation();
+                fail.meaning="";
+                ArrayList<StringTranslation> stlist=new ArrayList<>();
+                stlist.add(fail);
+                TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), stlist.toArray(new StringTranslation[stlist.size()]),true,true);
+                lv.setAdapter(adapter);
+            }else{
+                StringAdapter adapter=new StringAdapter(getApplicationContext(),word_list.toArray(new String[word_list.size()]));
+                lv.setAdapter(adapter);
+            }
+
+            pb.setVisibility(View.INVISIBLE);
+            lv.setVisibility(View.VISIBLE);
+        }
+    }
+    public String requestBuilder(String word, String api_key){
+        String request="https://www.dictionaryapi.com/api/v3/references/learners/json/"+word+"?key="+api_key;
+        return request;
+    }
+
+
+
 }
