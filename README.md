@@ -3,3 +3,4 @@ This android app is for memorizing english words by the easiest way using servic
 
 https://myitschool.ru/finalists-2019/
 
+https://www.youtube.com/watch?v=1W4Mwsq1Pdk
